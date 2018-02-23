@@ -37,5 +37,56 @@ namespace Squip.Api.Controllers
             }
             return new ObjectResult(squip);
         }
+
+        [HttpPost]
+        public IActionResult Create([FromBody] SquipModel squip)
+        {
+            if (squip == null)
+            {
+                return BadRequest();
+            }
+
+            _context.Squips.Add(squip);
+            _context.SaveChanges();
+
+            return CreatedAtRoute("GetSquip", new { Id = squip.Id}, squip);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] SquipModel proposedSquip)
+        {
+            if (proposedSquip == null || proposedSquip.Id != id)
+            {
+                return BadRequest();
+            }
+
+            var actualSquip = _context.Squips.FirstOrDefault(s => s.Id == id);
+            if (actualSquip == null)
+            {
+                return NotFound();
+            }
+
+            actualSquip.Body = proposedSquip.Body;
+
+            _context.Squips.Update(actualSquip);
+            _context.SaveChanges();
+
+            return new NoContentResult();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var squipToDelete = _context.Squips.FirstOrDefault(s => s.Id == id);
+            if (squipToDelete == null)
+            {
+                return NotFound();
+            }
+
+            _context.Squips.Remove(squipToDelete);
+            _context.SaveChanges();
+
+            return new NoContentResult();
+        }
     }
 }
