@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Squip.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("/api/[controller]")]
     public class SquipController : Controller
     {
         private readonly SquipContext _context;

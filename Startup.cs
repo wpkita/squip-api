@@ -11,6 +11,7 @@ namespace Squip.Api
         {
             services.AddDbContext<SquipContext>(opt => opt.UseInMemoryDatabase("SquipList"));
             services.AddMvc();
+            services.AddCors();
         }
 
         public void Configure(IApplicationBuilder app)
