@@ -34,8 +34,8 @@ namespace squip_dotnet_api.Controllers
 
         public ValuesController(IConfiguration configuration)
         {
-            PrimaryKey = configuration["CosmosDb:AccessKey"];
-            EndpointUri = configuration["CosmosDb:EndpointUri"];
+            PrimaryKey = configuration["CosmosDbAccessKey"];
+            EndpointUri = configuration["CosmosDbEndpointUri"];
         }
 
         // GET api/values
