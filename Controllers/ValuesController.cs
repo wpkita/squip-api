@@ -8,7 +8,7 @@ using Microsoft.Azure.Documents.Client;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
-namespace squip_dotnet_api.Controllers
+namespace SquipApi.Controllers
 {
     public class Squip
     {
@@ -32,32 +32,38 @@ namespace squip_dotnet_api.Controllers
         private const string DatabaseName = "SquipDb";
         private const string CollectionName = "SquipCollection";
 
+        private readonly DocumentClient _documentClient;
+
         public SquipsController(IConfiguration configuration)
         {
             PrimaryKey = configuration["CosmosDbAccessKey"];
             EndpointUri = configuration["CosmosDbEndpointUri"];
+            _documentClient = new DocumentClient(new Uri(EndpointUri), PrimaryKey);
         }
 
         // GET api/values
         [HttpGet]
         public IEnumerable<Squip> Get()
         {
-
-            var documentClient = new DocumentClient(new Uri(EndpointUri), PrimaryKey);
-            // Set some common query options
             var queryOptions = new FeedOptions { MaxItemCount = -1 };
 
             // Here we find the Andersen family via its LastName
-            var squips = documentClient.CreateDocumentQuery<Squip>(
+            var squips = _documentClient.CreateDocumentQuery<Squip>(
                 UriFactory.CreateDocumentCollectionUri(DatabaseName, CollectionName), queryOptions);
 
-            return squips.ToList();
+
+            return squips;
         }
 
         [HttpGet("{id}")]
-        public string Get(int id)
+        public Squip Get(string id)
         {
-            return "value";
+            var queryOptions = new FeedOptions { MaxItemCount = 1 };
+
+            var squip = _documentClient.CreateDocumentQuery<Squip>(
+                UriFactory.CreateDocumentCollectionUri(DatabaseName, CollectionName)).Where(x => x.Id == id).ToList();
+
+            return squip.SingleOrDefault();
         }
 
         // POST api/values
