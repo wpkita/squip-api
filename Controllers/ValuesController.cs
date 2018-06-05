@@ -24,7 +24,7 @@ namespace SquipApi.Controllers
         }
     }
     [Route("[controller]")]
-    public class SquipsController : Controller
+    public class SquipController : Controller
     {
         private readonly string PrimaryKey;
 
@@ -34,7 +34,7 @@ namespace SquipApi.Controllers
 
         private readonly DocumentClient _documentClient;
 
-        public SquipsController(IConfiguration configuration)
+        public SquipController(IConfiguration configuration)
         {
             PrimaryKey = configuration["CosmosDbAccessKey"];
             EndpointUri = configuration["CosmosDbEndpointUri"];
@@ -68,20 +68,28 @@ namespace SquipApi.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public Squip Post([FromBody]Squip squip)
         {
+            var result = _documentClient.CreateDocumentAsync(
+                UriFactory.CreateDocumentCollectionUri(DatabaseName, CollectionName), squip);
+
+            return squip;
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody]Squip squip)
         {
+            _documentClient.ReplaceDocumentAsync(
+                UriFactory.CreateDocumentUri(DatabaseName, CollectionName, squip.Id), squip);
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete(string id)
         {
+            _documentClient.DeleteDocumentAsync(
+                UriFactory.CreateDocumentUri(DatabaseName, CollectionName, id));
         }
     }
 }
