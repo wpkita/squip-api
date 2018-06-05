@@ -23,8 +23,8 @@ namespace squip_dotnet_api.Controllers
             return JsonConvert.SerializeObject(this);
         }
     }
-    [Route("api/[controller]")]
-    public class ValuesController : Controller
+    [Route("[controller]")]
+    public class SquipsController : Controller
     {
         private readonly string PrimaryKey;
 
@@ -32,7 +32,7 @@ namespace squip_dotnet_api.Controllers
         private const string DatabaseName = "SquipDb";
         private const string CollectionName = "SquipCollection";
 
-        public ValuesController(IConfiguration configuration)
+        public SquipsController(IConfiguration configuration)
         {
             PrimaryKey = configuration["CosmosDbAccessKey"];
             EndpointUri = configuration["CosmosDbEndpointUri"];
