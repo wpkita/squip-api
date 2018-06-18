@@ -58,8 +58,10 @@ namespace SquipApi.Controllers
 
             if (squip == null)
             {
-                // not found
+                throw new Exception("Not Found");
             }
+
+            _squipRepository.Remove(squip);
         }
     }
 }

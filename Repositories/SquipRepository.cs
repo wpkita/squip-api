@@ -52,8 +52,10 @@ namespace SquipApi.Repositories
 
         public void Remove(Squip squip)
         {
-            _documentClient.DeleteDocumentAsync(
+            var result = _documentClient.DeleteDocumentAsync(
                 UriFactory.CreateDocumentUri(DatabaseName, CollectionName, squip.Id));
+
+            Console.Write("");
         }
 
         public void Update(Squip squip)
