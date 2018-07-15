@@ -1,15 +1,16 @@
 using SquipApi.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SquipApi.Repositories
 {
     public interface ISquipRepository
     {
-        IEnumerable<Squip> GetAll();
-        Squip GetById(string id);
-        void Add(Squip squip);
-        void Remove(Squip squip);
-        void Update(Squip squip);
+        Task<IEnumerable<Squip>> GetAll();
+        Task<Squip> GetById(string id);
+        Task Add(Squip squip);
+        Task Remove(Squip squip);
+        Task Update(Squip squip);
     }
  
 }

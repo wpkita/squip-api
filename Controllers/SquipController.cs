@@ -23,45 +23,45 @@ namespace SquipApi.Controllers
 
         // GET api/values
         [HttpGet]
-        public IEnumerable<Squip> Get()
+        public async Task<IEnumerable<Squip>> Get()
         {
-            return _squipRepository.GetAll();
+            return await _squipRepository.GetAll();
         }
 
         [HttpGet("{id}")]
-        public Squip Get(string id)
+        public async Task<Squip> Get(string id)
         {
-            return _squipRepository.GetById(id);
+            return await _squipRepository.GetById(id);
         }
 
         // POST api/values
         [HttpPost]
-        public Squip Post([FromBody]Squip squip)
+        public async Task<Squip> Post([FromBody]Squip squip)
         {
-            _squipRepository.Add(squip);
+            await _squipRepository.Add(squip);
 
             return squip;
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]Squip squip)
+        public async Task Put(int id, [FromBody]Squip squip)
         {
-            _squipRepository.Update(squip);
+            await _squipRepository.Update(squip);
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(string id)
+        public async Task Delete(string id)
         {
-            var squip = _squipRepository.GetById(id);
+            var squip = await _squipRepository.GetById(id);
 
             if (squip == null)
             {
                 throw new Exception("Not Found");
             }
 
-            _squipRepository.Remove(squip);
+            await _squipRepository.Remove(squip);
         }
     }
 }

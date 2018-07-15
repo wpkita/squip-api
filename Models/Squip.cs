@@ -1,11 +1,13 @@
 using System.Collections.Generic;
+using Amazon.DynamoDBv2.DataModel;
 using Newtonsoft.Json;
 
 namespace SquipApi.Models
 {
+    [DynamoDBTable("Squips")]
     public class Squip
     {
-        [JsonProperty(PropertyName = "id")]
+        [DynamoDBHashKey]
         public string Id { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }
