@@ -2,25 +2,24 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.Model;
-using Microsoft.Azure.Documents.Client;
 using Microsoft.Extensions.Configuration;
 using SquipApi.Models;
 
 namespace SquipApi.Repositories
 {
-    public class CosmosDbSquipRepository : ISquipRepository
+    public class DynamoDbSquipRepository : ISquipRepository
     {
 
         private readonly AmazonDynamoDBClient _dbClient;
         private readonly DynamoDBContext _dbContext;
-        private const string tableName = "squips";
 
-        public CosmosDbSquipRepository(IConfiguration configuration)
+        public DynamoDbSquipRepository(IConfiguration configuration)
         {
-            _dbClient = new AmazonDynamoDBClient();
+            _dbClient = new AmazonDynamoDBClient(configuration["AwsKey"], configuration["AwsToken"], RegionEndpoint.GetBySystemName(configuration["AwsRegion"]));
             _dbContext = new DynamoDBContext(_dbClient);
         }
         public async Task<IEnumerable<Squip>> GetAll()

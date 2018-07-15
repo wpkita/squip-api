@@ -1,21 +1,35 @@
 using System.Collections.Generic;
 using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2.DocumentModel;
 using Newtonsoft.Json;
 
 namespace SquipApi.Models
 {
-    [DynamoDBTable("Squips")]
+    [DynamoDBTable("squips")]
     public class Squip
     {
-        [DynamoDBHashKey]
+        [DynamoDBHashKey("squipId")]
         public string Id { get; set; }
-        public string Title { get; set; }
-        public string Body { get; set; }
-        public IEnumerable<string> Tags { get; set; }
 
-        public override string ToString()
+        [DynamoDBProperty("title")]
+        public string Title { get; set; }
+
+        [DynamoDBProperty("body")]
+        public string Body { get; set; }
+        
+        [DynamoDBProperty("tags",typeof(StringListConverter))]
+        public IList<string> Tags { get; set; }
+    }
+    public class StringListConverter : IPropertyConverter
+    {
+        public object FromEntry(DynamoDBEntry entry)
         {
-            return JsonConvert.SerializeObject(this);
+            return entry.AsListOfString();
+        }
+
+        public DynamoDBEntry ToEntry(object value)
+        {
+            return value as List<string>;
         }
     }
 }

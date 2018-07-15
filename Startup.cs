@@ -24,9 +24,10 @@ namespace SquipApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<ISquipRepository, CosmosDbSquipRepository>();
+            services.AddScoped<ISquipRepository, DynamoDbSquipRepository>();
             services.AddMvc();
-            services.AddCors();
+
+            services.AddAWSService<Amazon.DynamoDBv2.IAmazonDynamoDB>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,13 +37,6 @@ namespace SquipApi
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseCors(builder =>
-                builder.AllowAnyOrigin()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-            );
-
             app.UseMvc();
         }
     }
