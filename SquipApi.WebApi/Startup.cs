@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NSwag.AspNetCore;
 using SquipApi.WebApi.Models;
 
 namespace SquipApi.WebApi
@@ -22,6 +23,8 @@ namespace SquipApi.WebApi
         {
             services.AddDbContext<SquipContext>(opt => opt.UseInMemoryDatabase("SquipDb"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
+
+            services.AddSwagger();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -33,6 +36,7 @@ namespace SquipApi.WebApi
             }
 
             app.UseMvc();
+            app.UseSwaggerUiWithApiExplorer();
         }
     }
 }
