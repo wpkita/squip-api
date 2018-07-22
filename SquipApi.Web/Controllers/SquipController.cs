@@ -53,24 +53,38 @@ namespace SquipApi.Controllers
             return CreatedAtRoute("GetSquip", new {id = squip.Id}, squip);
         }
 
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody]Squip squip)
-        //{
-        //    _context.Update(squip);
-        //}
+        [HttpPut("{id}")]
+        public IActionResult Update(long id, [FromBody]Squip squipReq)
+        {
+            var squip = _context.Squips.Find(id);
+            if (squip == null)
+            {
+                return NotFound();
+            }
 
-        //// DELETE api/values/5
-        //[HttpDelete("{id}")]
-        //public void Delete(string id)
-        //{
-        //    var squip = _context.GetById(id);
+            squip.Title = squipReq.Title;
+            squip.Body = squipReq.Body;
 
-        //    if (squip == null)
-        //    {
-        //        throw new Exception("Not Found");
-        //    }
+            _context.Squips.Update(squip);
+            _context.SaveChanges();
 
-        //    _context.Remove(squip);
-        //}
+            return NoContent();
+        }
+
+        // DELETE api/values/5
+        [HttpDelete("{id}")]
+        public IActionResult Delete(long id)
+        {
+            var squip = _context.Squips.Find(id);
+            if (squip == null)
+            {
+                return NotFound();
+            }
+
+            _context.Squips.Remove(squip);
+            _context.SaveChanges();
+
+            return NoContent();
+        }
     }
 }
