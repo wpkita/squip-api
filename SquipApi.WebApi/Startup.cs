@@ -23,7 +23,7 @@ namespace SquipApi.WebApi
         {
             services.AddDbContext<SquipContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("SquipDb")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
-
+            services.AddCors();
             services.AddSwagger();
         }
 
@@ -35,8 +35,9 @@ namespace SquipApi.WebApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvc();
+            app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
             app.UseSwaggerUiWithApiExplorer();
+            app.UseMvc();
         }
     }
 }
