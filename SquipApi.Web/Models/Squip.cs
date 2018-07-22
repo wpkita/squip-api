@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SquipApi.Models
+namespace SquipApi.WebApi.Models
 {
     public class Squip
     {

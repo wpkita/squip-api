@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using SquipApi.Models;
 
-namespace SquipApi.Web.Models
+namespace SquipApi.WebApi.Models
 {
     public class SquipContext : DbContext
     {

@@ -1,14 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using SquipApi.Models;
-using SquipApi.Web.Models;
+using SquipApi.WebApi.Models;
 
-namespace SquipApi.Controllers
+namespace SquipApi.WebApi.Controllers
 {
     [Route("[controller]")]
     [ApiController]

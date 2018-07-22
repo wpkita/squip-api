@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SquipApi.Web.Models;
+using SquipApi.WebApi.Models;
 
-namespace SquipApi.Web
+namespace SquipApi.WebApi
 {
     public class Startup
     {
