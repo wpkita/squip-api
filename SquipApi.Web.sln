@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquipApi.Web", "SquipApi.Web\SquipApi.Web.csproj", "{AF948129-F018-4201-804C-91F80A9F498B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AF948129-F018-4201-804C-91F80A9F498B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF948129-F018-4201-804C-91F80A9F498B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF948129-F018-4201-804C-91F80A9F498B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF948129-F018-4201-804C-91F80A9F498B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F2EADBF9-837D-4B95-93BA-BE9F6EB75C6C}
+	EndGlobalSection
+EndGlobal
