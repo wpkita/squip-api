@@ -16,7 +16,7 @@ namespace SquipApi.WebApi.Controllers
         {
             _context = context;
 
-            if (_context.Squips.Count() == 0)
+            if (!_context.Squips.Any())
             {
                 _context.Squips.Add(new Squip() { Title = "My First Squip", Body = "Body goes here." });
                 _context.SaveChanges();

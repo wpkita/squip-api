@@ -13,20 +13,4 @@ namespace SquipApi.WebApi.Models
         
         public IList<SquipTag> SquipTags { get; set; }
     }
-
-    public class SquipTag
-    {
-        public long SquipId { get; set; }
-        public Squip Squip { get; set; }
-
-        public string TagName { get; set; }
-        public Tag Tag { get; set; }
-    }
-
-    public class Tag
-    {
-        public string Name { get; set; }
-
-        public IList<SquipTag> SquipTags { get; set; }
-    }
 }
