@@ -29,9 +29,11 @@ namespace SquipApi.WebApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Squip> Get()
+        public IEnumerable<SquipDto> Get()
         {
-            return _context.Squips;
+            var squips = _context.Squips.Include(s => s.SquipTags).ThenInclude(st => st.Tag).ToList();
+
+            return _mapper.Map<IEnumerable<Squip>, IEnumerable<SquipDto>>(squips);
         }
 
         [HttpGet("{id}", Name = "GetSquip")]
@@ -50,8 +52,11 @@ namespace SquipApi.WebApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody]Squip squip)
+        public IActionResult Create([FromBody]SquipDto squipFromRequest)
         {
+            var squip = new Squip();
+
+            CopySquipInfo(squipFromRequest, squip);
             _context.Squips.Add(squip);
             _context.SaveChanges();
 
@@ -68,27 +73,7 @@ namespace SquipApi.WebApi.Controllers
                 return NotFound();
             }
 
-            squip.Title = squipFromRequest.Title;
-            squip.Body = squipFromRequest.Body;
-            var newTags = new HashSet<Tag>(squipFromRequest.Tags.Select(nt => _context.Tags.SingleOrDefault(t => t.Name == nt) ?? new Tag{Name=nt}));
-            for (int i = squip.SquipTags.Count - 1; i >= 0; i--)
-            {
-                if (!newTags.Contains(squip.SquipTags[i].Tag))
-                {
-                    squip.SquipTags.RemoveAt(i);
-                }
-            }
-
-            foreach (var newTag in newTags)
-            {
-                if (!squip.SquipTags.Select(x => x.Tag).Contains(newTag))
-                {
-                    squip.SquipTags.Add(new SquipTag
-                    {
-                        Tag = newTag
-                    });
-                }
-            }
+            CopySquipInfo(squipFromRequest, squip);
 
             _context.Squips.Update(squip);
             _context.SaveChanges();
@@ -96,7 +81,33 @@ namespace SquipApi.WebApi.Controllers
             return NoContent();
         }
 
-        // DELETE api/values/5
+        private void CopySquipInfo(SquipDto fromSquip, Squip toSquip)
+        {
+            toSquip.Title = fromSquip.Title;
+            toSquip.Body = fromSquip.Body;
+
+            var newTags = new HashSet<Tag>(fromSquip.Tags.Select(nt =>
+                _context.Tags.SingleOrDefault(t => t.Name == nt) ?? new Tag {Name = nt}));
+            for (var i = toSquip.SquipTags.Count - 1; i >= 0; i--)
+            {
+                if (!newTags.Contains(toSquip.SquipTags[i].Tag))
+                {
+                    toSquip.SquipTags.RemoveAt(i);
+                }
+            }
+
+            foreach (var newTag in newTags)
+            {
+                if (!toSquip.SquipTags.Select(x => x.Tag).Contains(newTag))
+                {
+                    toSquip.SquipTags.Add(new SquipTag
+                    {
+                        Tag = newTag
+                    });
+                }
+            }
+        }
+
         [HttpDelete("{id}")]
         public IActionResult Delete(long id)
         {
