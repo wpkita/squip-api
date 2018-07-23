@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SquipApi.WebApi.Models;
 
 namespace SquipApi.WebApi.Migrations
 {
     [DbContext(typeof(SquipContext))]
-    partial class SquipContextModelSnapshot : ModelSnapshot
+    [Migration("20180723064358_JoinWithTags")]
+    partial class JoinWithTags
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
