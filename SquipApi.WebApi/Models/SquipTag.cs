@@ -5,7 +5,7 @@ namespace SquipApi.WebApi.Models
         public long SquipId { get; set; }
         public Squip Squip { get; set; }
 
-        public string TagName { get; set; }
+        public long TagId { get; set; }
         public Tag Tag { get; set; }
     }
 }

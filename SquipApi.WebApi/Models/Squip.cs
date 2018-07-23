@@ -13,4 +13,15 @@ namespace SquipApi.WebApi.Models
         
         public IList<SquipTag> SquipTags { get; set; }
     }
+
+    public class SquipDto
+    {
+        public long Id { get; set; }
+
+        public string Title { get; set; }
+
+        public string Body { get; set; }
+
+        public IList<string> Tags { get; set; }
+    }
 }

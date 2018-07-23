@@ -24,22 +24,24 @@ namespace SquipApi.WebApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Body");
+                    b.Property<string>("Body")
+                        .IsRequired();
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
-                    b.ToTable("Squips");
+                    b.ToTable("Squip");
                 });
 
             modelBuilder.Entity("SquipApi.WebApi.Models.SquipTag", b =>
                 {
-                    b.Property<string>("TagName");
+                    b.Property<long>("TagId");
 
                     b.Property<long>("SquipId");
 
-                    b.HasKey("TagName", "SquipId");
+                    b.HasKey("TagId", "SquipId");
 
                     b.HasIndex("SquipId");
 
@@ -48,12 +50,18 @@ namespace SquipApi.WebApi.Migrations
 
             modelBuilder.Entity("SquipApi.WebApi.Models.Tag", b =>
                 {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
                     b.Property<string>("Name")
-                        .ValueGeneratedOnAdd();
+                        .IsRequired();
 
-                    b.HasKey("Name");
+                    b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.HasAlternateKey("Name");
+
+                    b.ToTable("Tag");
                 });
 
             modelBuilder.Entity("SquipApi.WebApi.Models.SquipTag", b =>
@@ -65,7 +73,7 @@ namespace SquipApi.WebApi.Migrations
 
                     b.HasOne("SquipApi.WebApi.Models.Tag", "Tag")
                         .WithMany("SquipTags")
-                        .HasForeignKey("TagName")
+                        .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
