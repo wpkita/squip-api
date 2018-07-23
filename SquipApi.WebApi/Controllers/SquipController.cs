@@ -51,7 +51,7 @@ namespace SquipApi.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(long id, [FromBody]Squip squipReq)
+        public IActionResult Update(long id, [FromBody]Squip squipFromRequest)
         {
             var squip = _context.Squips.Find(id);
             if (squip == null)
@@ -59,8 +59,8 @@ namespace SquipApi.WebApi.Controllers
                 return NotFound();
             }
 
-            squip.Title = squipReq.Title;
-            squip.Body = squipReq.Body;
+            squip.Title = squipFromRequest.Title;
+            squip.Body = squipFromRequest.Body;
 
             _context.Squips.Update(squip);
             _context.SaveChanges();
