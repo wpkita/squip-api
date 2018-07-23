@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -30,6 +31,7 @@ namespace SquipApi.WebApi
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
             services.AddCors();
             services.AddSwagger();
+            services.AddAutoMapper();
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

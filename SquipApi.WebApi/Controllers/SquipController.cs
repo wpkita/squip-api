@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SquipApi.WebApi.Models;
 
 namespace SquipApi.WebApi.Controllers
@@ -12,9 +14,12 @@ namespace SquipApi.WebApi.Controllers
     public class SquipController : Controller
     {
         private readonly SquipContext _context;
-        public SquipController(SquipContext context)
+        private readonly IMapper _mapper;
+
+        public SquipController(SquipContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
 
             if (!_context.Squips.Any())
             {
@@ -30,15 +35,18 @@ namespace SquipApi.WebApi.Controllers
         }
 
         [HttpGet("{id}", Name = "GetSquip")]
-        public ActionResult<Squip> Get(long id)
+        public ActionResult<SquipDto> Get(long id)
         {
-            var squip = _context.Squips.Find(id);
+            var squip = _context.Squips.Include(s => s.SquipTags).ThenInclude(st => st.Tag)
+                .SingleOrDefault(s => s.Id == id);
             if (squip == null)
             {
                 return NotFound();
             }
 
-            return squip;
+            var dto = _mapper.Map<Squip, SquipDto>(squip);
+
+            return dto;
         }
 
         [HttpPost]
@@ -51,9 +59,10 @@ namespace SquipApi.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(long id, [FromBody]Squip squipFromRequest)
+        public IActionResult Update(long id, [FromBody]SquipDto squipFromRequest)
         {
-            var squip = _context.Squips.Find(id);
+            var squip = _context.Squips.Include(s => s.SquipTags).ThenInclude(st => st.Tag)
+                .SingleOrDefault(s => s.Id == id);
             if (squip == null)
             {
                 return NotFound();
@@ -61,6 +70,25 @@ namespace SquipApi.WebApi.Controllers
 
             squip.Title = squipFromRequest.Title;
             squip.Body = squipFromRequest.Body;
+            var newTags = new HashSet<Tag>(squipFromRequest.Tags.Select(nt => _context.Tags.SingleOrDefault(t => t.Name == nt) ?? new Tag{Name=nt}));
+            for (int i = squip.SquipTags.Count - 1; i >= 0; i--)
+            {
+                if (!newTags.Contains(squip.SquipTags[i].Tag))
+                {
+                    squip.SquipTags.RemoveAt(i);
+                }
+            }
+
+            foreach (var newTag in newTags)
+            {
+                if (!squip.SquipTags.Select(x => x.Tag).Contains(newTag))
+                {
+                    squip.SquipTags.Add(new SquipTag
+                    {
+                        Tag = newTag
+                    });
+                }
+            }
 
             _context.Squips.Update(squip);
             _context.SaveChanges();
