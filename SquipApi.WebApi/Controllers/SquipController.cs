@@ -28,7 +28,7 @@ namespace SquipApi.WebApi.Controllers
         }
 
         [HttpGet("{id}", Name = "GetSquip")]
-        public ActionResult<SquipDto> Get(long id)
+        public ActionResult<SquipDto> GetById(long id)
         {
             var squip = _context.Squips.Include(s => s.SquipTags).ThenInclude(st => st.Tag)
                 .SingleOrDefault(s => s.Id == id);

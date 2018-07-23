@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SquipApi.WebApi.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SquipApi.WebApi.Controllers
 {
@@ -19,10 +20,10 @@ namespace SquipApi.WebApi.Controllers
             return _context.Tags;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{name}")]
         public ActionResult<Tag> GetByName(string name)
         {
-            var tag = _context.Tags.Find(name);
+            var tag = _context.Tags.SingleOrDefault(t => t.Name == name);
             if (tag == null)
             {
                 return NotFound();
