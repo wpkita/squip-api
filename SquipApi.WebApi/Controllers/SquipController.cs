@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SquipApi.WebApi.Models;
 
@@ -7,6 +8,7 @@ namespace SquipApi.WebApi.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
     public class SquipController : Controller
     {
         private readonly SquipContext _context;
