@@ -1,6 +1,6 @@
 namespace SquipApi.WebApi.Models
 {
-    public class SquipTag
+    public class SquipTag : BaseEntity
     {
         public long SquipId { get; set; }
         public Squip Squip { get; set; }

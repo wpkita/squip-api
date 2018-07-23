@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using SquipApi.WebApi.Dtos;
 using SquipApi.WebApi.Models;
 
 namespace SquipApi.WebApi.Mappers

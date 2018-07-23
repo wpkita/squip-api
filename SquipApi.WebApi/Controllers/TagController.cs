@@ -1,28 +1,16 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore.Internal;
 using SquipApi.WebApi.Models;
-
+using System.Collections.Generic;
 
 namespace SquipApi.WebApi.Controllers
 {
-    [Route("[controller]")]
-    [ApiController]
-    [Authorize]
-    public class TagController : Controller
+    public class TagController : BaseController
     {
         private readonly SquipContext _context;
 
         public TagController(SquipContext context)
         {
             _context = context;
-
-            if (!_context.Tags.Any())
-            {
-                _context.Tags.Add(new Tag {Name = "azure"});
-                _context.SaveChanges();
-            }
         }
 
         [HttpGet]
@@ -49,7 +37,7 @@ namespace SquipApi.WebApi.Controllers
             _context.Tags.Add(tag);
             _context.SaveChanges();
 
-            return CreatedAtRoute("GetTag", new {name = tag.Name}, tag);
+            return CreatedAtRoute("GetTag", new { name = tag.Name }, tag);
         }
     }
 }

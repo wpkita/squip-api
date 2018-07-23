@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SquipApi.WebApi.Models;
 
 namespace SquipApi.WebApi.Migrations
 {
     [DbContext(typeof(SquipContext))]
-    partial class SquipContextModelSnapshot : ModelSnapshot
+    [Migration("20180723142647_BaseEntity")]
+    partial class BaseEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,9 +34,6 @@ namespace SquipApi.WebApi.Migrations
 
                     b.Property<DateTime>("ModifiedDateTime");
 
-                    b.Property<string>("TenantId")
-                        .IsRequired();
-
                     b.Property<string>("Title")
                         .IsRequired();
 
@@ -48,13 +47,6 @@ namespace SquipApi.WebApi.Migrations
                     b.Property<long>("TagId");
 
                     b.Property<long>("SquipId");
-
-                    b.Property<DateTime>("CreatedDateTime");
-
-                    b.Property<DateTime>("ModifiedDateTime");
-
-                    b.Property<string>("TenantId")
-                        .IsRequired();
 
                     b.HasKey("TagId", "SquipId");
 
@@ -74,9 +66,6 @@ namespace SquipApi.WebApi.Migrations
                     b.Property<DateTime>("ModifiedDateTime");
 
                     b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.Property<string>("TenantId")
                         .IsRequired();
 
                     b.HasKey("Id");

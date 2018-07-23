@@ -1,11 +1,14 @@
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -28,6 +31,8 @@ namespace SquipApi.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<SquipContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("SquipDb")));
+            services.AddScoped<ITenantProvider, HttpContextTenantProvider>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
             services.AddCors();
             services.AddSwagger();
@@ -40,6 +45,22 @@ namespace SquipApi.WebApi
             {
                 options.Authority = Configuration["Auth0:Domain"];
                 options.Audience = Configuration["Auth0:ApiIdentifier"];
+                options.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = context =>
+                    {
+                        if (context.SecurityToken is JwtSecurityToken token)
+                        {
+                            if (context.Principal.Identity is ClaimsIdentity identity)
+                            {
+                                identity.AddClaim(new Claim("access_token", token.RawData));
+                            }
+                        }
+
+                        return Task.FromResult(0);
+                    }
+
+                };
             });
         }
 

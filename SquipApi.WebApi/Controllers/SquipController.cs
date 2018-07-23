@@ -1,17 +1,14 @@
-using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SquipApi.WebApi.Dtos;
 using SquipApi.WebApi.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SquipApi.WebApi.Controllers
 {
-    [Route("[controller]")]
-    [ApiController]
-    [Authorize]
-    public class SquipController : Controller
+    public class SquipController : BaseController
     {
         private readonly SquipContext _context;
         private readonly IMapper _mapper;
@@ -20,12 +17,6 @@ namespace SquipApi.WebApi.Controllers
         {
             _context = context;
             _mapper = mapper;
-
-            if (!_context.Squips.Any())
-            {
-                _context.Squips.Add(new Squip() { Title = "My First Squip", Body = "Body goes here." });
-                _context.SaveChanges();
-            }
         }
 
         [HttpGet]
@@ -54,7 +45,7 @@ namespace SquipApi.WebApi.Controllers
         [HttpPost]
         public IActionResult Create([FromBody]SquipDto squipFromRequest)
         {
-            var squip = new Squip();
+            var squip = new Squip {SquipTags = new List<SquipTag>()};
 
             CopySquipInfo(squipFromRequest, squip);
             _context.Squips.Add(squip);
