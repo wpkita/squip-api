@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SquipApi.Pocos", "SquipApi.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquipApi.EntityFramework", "SquipApi.EntityFramework\SquipApi.EntityFramework.csproj", "{4D2118CF-C764-4687-9CF2-952F61C3515E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquipApi.Common", "SquipApi.Common\SquipApi.Common.csproj", "{F5C07E23-0821-41F2-89D8-DC2A745930D2}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{4D2118CF-C764-4687-9CF2-952F61C3515E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D2118CF-C764-4687-9CF2-952F61C3515E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D2118CF-C764-4687-9CF2-952F61C3515E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F5C07E23-0821-41F2-89D8-DC2A745930D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F5C07E23-0821-41F2-89D8-DC2A745930D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F5C07E23-0821-41F2-89D8-DC2A745930D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F5C07E23-0821-41F2-89D8-DC2A745930D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

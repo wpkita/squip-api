@@ -1,17 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using SquipApi.Pocos;
-using SquipApi.WebApi;
 
 namespace SquipApi.EntityFramework
 {
     public class SquipContext : DbContext
     {
-        private readonly ITenantProvider _tenantProvider;
-
-        public SquipContext(DbContextOptions<SquipContext> options, ITenantProvider tenantProvider)
+        public SquipContext(DbContextOptions<SquipContext> options)
             : base(options)
         {
-            _tenantProvider = tenantProvider;
         }
 
         public DbSet<Squip> Squips { get; set; }
@@ -20,7 +16,6 @@ namespace SquipApi.EntityFramework
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Squip>().HasQueryFilter(s => s.TenantId == _tenantProvider.TenantId);
             modelBuilder.Entity<Squip>(b =>
             {
                 b.ToTable("Squip");
@@ -57,7 +52,6 @@ namespace SquipApi.EntityFramework
                     if (changedEntity.State == EntityState.Added)
                     {
                         entity.OnBeforeInsert();
-                        entity.TenantId = _tenantProvider.TenantId;
                     }
                     else if (changedEntity.State == EntityState.Modified)
                     {
