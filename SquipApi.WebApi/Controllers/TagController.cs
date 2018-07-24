@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using SquipApi.WebApi.Models;
 using System.Collections.Generic;
 using System.Linq;
+using SquipApi.Pocos;
 
 namespace SquipApi.WebApi.Controllers
 {

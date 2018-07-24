@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using SquipApi.Pocos;
 
-namespace SquipApi.WebApi.Models
+namespace SquipApi.Pocos
 {
     public class Tag : BaseEntity
     {

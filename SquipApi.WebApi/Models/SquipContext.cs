@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SquipApi.Pocos;
 
 namespace SquipApi.WebApi.Models
 {

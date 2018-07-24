@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SquipApi.WebApi.Models
+namespace SquipApi.Pocos
 {
     public class Squip : BaseEntity
     {

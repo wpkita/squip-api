@@ -1,4 +1,4 @@
-namespace SquipApi.WebApi.Models
+namespace SquipApi.Pocos
 {
     public class SquipTag : BaseEntity
     {
