@@ -2,6 +2,8 @@ namespace SquipApi.Pocos
 {
     public class SquipTag : BaseEntity
     {
+        public long Id { get; set; }
+
         public long SquipId { get; set; }
         public Squip Squip { get; set; }
 

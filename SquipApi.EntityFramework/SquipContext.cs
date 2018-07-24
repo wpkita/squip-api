@@ -34,7 +34,8 @@ namespace SquipApi.EntityFramework
             modelBuilder.Entity<SquipTag>(b =>
             {
                 b.ToTable("SquipTag");
-                b.HasKey(k => new { k.TagId, k.SquipId });
+                b.HasKey(k => k.Id);
+                b.HasAlternateKey(k => new { k.TagId, k.SquipId });
                 b.HasOne(st => st.Squip).WithMany(s => s.SquipTags)
                     .HasForeignKey(st => st.SquipId);
                 b.HasOne(st => st.Tag).WithMany(t => t.SquipTags)
