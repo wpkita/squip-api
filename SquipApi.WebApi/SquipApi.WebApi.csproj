@@ -21,6 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SquipApi.Common\SquipApi.Common.csproj" />
+    <ProjectReference Include="..\SquipApi.EntityFramework\SquipApi.EntityFramework.csproj" />
     <ProjectReference Include="..\SquipApi.Pocos\SquipApi.Pocos.csproj" />
   </ItemGroup>
 

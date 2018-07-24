@@ -2,9 +2,9 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SquipApi.WebApi.Dtos;
-using SquipApi.WebApi.Models;
 using System.Collections.Generic;
 using System.Linq;
+using SquipApi.EntityFramework;
 using SquipApi.Pocos;
 
 namespace SquipApi.WebApi.Controllers

@@ -17,7 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NSwag;
 using NSwag.AspNetCore;
 using NSwag.SwaggerGeneration.Processors.Security;
-using SquipApi.WebApi.Models;
+using SquipApi.EntityFramework;
 
 namespace SquipApi.WebApi
 {

@@ -1,7 +1,7 @@
 using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace SquipApi.WebApi.Migrations
+namespace SquipApi.EntityFramework.Migrations
 {
     public partial class BaseEntity : Migration
     {

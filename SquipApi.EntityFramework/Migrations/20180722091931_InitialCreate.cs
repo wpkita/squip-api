@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace SquipApi.WebApi.Migrations
+namespace SquipApi.EntityFramework.Migrations
 {
     public partial class InitialCreate : Migration
     {

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using SquipApi.Pocos;
 using SquipApi.WebApi.Dtos;
-using SquipApi.WebApi.Models;
+
 
 namespace SquipApi.WebApi.Mappers
 {
