@@ -7,7 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SquipApi.WebApi", "SquipApi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SquipApi.Pocos", "SquipApi.Pocos\SquipApi.Pocos.csproj", "{FA0AB765-0B42-4E1E-B786-51948BC8C43D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquipApi.EntityFramework", "SquipApi.EntityFramework\SquipApi.EntityFramework.csproj", "{4D2118CF-C764-4687-9CF2-952F61C3515E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SquipApi.EntityFramework", "SquipApi.EntityFramework\SquipApi.EntityFramework.csproj", "{4D2118CF-C764-4687-9CF2-952F61C3515E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{922167F0-8D23-4AAB-960D-6C2252A29EB4}"
+	ProjectSection(SolutionItems) = preProject
+		Add-Migration.ps1 = Add-Migration.ps1
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
