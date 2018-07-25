@@ -15,6 +15,8 @@ namespace SquipApi.WebApi.Mappers
         {
             CreateMap<Squip, SquipDto>().ForMember(dto => dto.Tags,
                 orig => orig.MapFrom(src => src.SquipTags.Select(st => st.Tag.Name)));
+
+            CreateMap<Tag, TagDto>().ForMember(t => t.Squips, opt => opt.Ignore());
         }
     }
 }
