@@ -8,11 +8,11 @@ namespace SquipApi.Pocos
         [Required]
         public DateTime CreatedDateTime { get; set; }
         [Required]
-        public User CreatedByUser { get; set; }
+        public long CreatedByUserId { get; set; }
         [Required]
         public DateTime ModifiedDateTime { get; set; }
         [Required]
-        public User ModifiedByUser { get; set; }
+        public long ModifiedByUserId { get; set; }
 
         public void OnBeforeInsert()
         {

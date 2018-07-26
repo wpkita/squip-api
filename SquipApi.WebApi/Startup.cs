@@ -37,7 +37,7 @@ namespace SquipApi.WebApi
         {
             services.AddDbContext<SquipContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("SquipDb"),
                 a => a.MigrationsAssembly("SquipApi.EntityFramework")));
-            services.AddDbContext<UserContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("SquipDb")));
+            services.AddDbContext<UserContext>(opt =>opt.UseSqlServer(Configuration.GetConnectionString("SquipDb")));
             services.AddScoped<IUserService, UserService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);

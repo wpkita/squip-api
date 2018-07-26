@@ -22,16 +22,9 @@ namespace SquipApi.EntityFramework
         public DbSet<Squip> Squips { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Tag> SquipTags { get; set; }
-        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>(b =>
-            {
-                b.ToTable("User");
-                b.HasKey(u => u.Id);
-                b.HasAlternateKey(u => u.ThirdPartyId);
-            });
             modelBuilder.Entity<Squip>(b =>
             {
                 b.ToTable("Squip");
@@ -70,13 +63,14 @@ namespace SquipApi.EntityFramework
                     {
                         entity.OnBeforeInsert();
                         // TODO: Use await here!
-                        entity.CreatedByUser = _userService.GetCurrentUser().Result;
+                        entity.CreatedByUserId = _userService.GetCurrentUser().Result.Id;
+                        entity.ModifiedByUserId = _userService.GetCurrentUser().Result.Id;
                     }
                     else if (changedEntity.State == EntityState.Modified)
                     {
                         entity.OnBeforeUpdate();
                         // TODO: Use await here!
-                        entity.ModifiedByUser = _userService.GetCurrentUser().Result;
+                        entity.ModifiedByUserId = _userService.GetCurrentUser().Result.Id;
                     }
                 }
             }
