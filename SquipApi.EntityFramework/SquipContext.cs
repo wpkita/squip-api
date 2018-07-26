@@ -25,12 +25,20 @@ namespace SquipApi.EntityFramework
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>(b =>
+            {
+                b.ToTable("User");
+                b.HasKey(u => u.Id);
+                b.HasAlternateKey(u => u.ThirdPartyId);
+            });
+
             modelBuilder.Entity<Squip>(b =>
             {
                 b.ToTable("Squip");
                 b.HasKey(s => s.Id);
                 b.Property(s => s.Title).IsRequired();
                 b.Property(s => s.Body).IsRequired();
+                b.HasQueryFilter(s => !s.IsSoftDeleted);
             });
 
             modelBuilder.Entity<Tag>(b =>
@@ -38,6 +46,7 @@ namespace SquipApi.EntityFramework
                 b.ToTable("Tag");
                 b.HasKey(t => t.Id);
                 b.HasAlternateKey(t => t.Name);
+                b.HasQueryFilter(t => !t.IsSoftDeleted);
             });
 
             modelBuilder.Entity<SquipTag>(b =>
@@ -49,6 +58,7 @@ namespace SquipApi.EntityFramework
                     .HasForeignKey(st => st.SquipId);
                 b.HasOne(st => st.Tag).WithMany(t => t.SquipTags)
                     .HasForeignKey(st => st.TagId);
+                b.HasQueryFilter(st => !st.IsSoftDeleted);
             });
         }
 
@@ -71,6 +81,15 @@ namespace SquipApi.EntityFramework
                         entity.OnBeforeUpdate();
                         // TODO: Use await here!
                         entity.ModifiedByUserId = _userService.GetCurrentUser().Result.Id;
+                    }
+                    else if
+                        (changedEntity.State == EntityState.Deleted)
+                    {
+                        entity.OnBeforeUpdate();
+                        // TODO: Use await here!
+                        entity.ModifiedByUserId = _userService.GetCurrentUser().Result.Id;
+                        entity.IsSoftDeleted = true;
+                        changedEntity.State = EntityState.Modified;
                     }
                 }
             }
