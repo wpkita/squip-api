@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SquipApi.EntityFramework;
 
 namespace SquipApi.EntityFramework.Migrations
 {
     [DbContext(typeof(SquipContext))]
-    partial class SquipContextModelSnapshot : ModelSnapshot
+    [Migration("20180726091726_AddUsers")]
+    partial class AddUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,6 +35,9 @@ namespace SquipApi.EntityFramework.Migrations
                     b.Property<DateTime>("CreatedDateTime");
 
                     b.Property<DateTime>("ModifiedDateTime");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired();
 
                     b.Property<string>("Title")
                         .IsRequired();
@@ -58,6 +63,9 @@ namespace SquipApi.EntityFramework.Migrations
 
                     b.Property<long>("TagId");
 
+                    b.Property<string>("TenantId")
+                        .IsRequired();
+
                     b.HasKey("Id");
 
                     b.HasAlternateKey("TagId", "SquipId");
@@ -78,6 +86,9 @@ namespace SquipApi.EntityFramework.Migrations
                     b.Property<DateTime>("ModifiedDateTime");
 
                     b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<string>("TenantId")
                         .IsRequired();
 
                     b.HasKey("Id");
@@ -104,6 +115,9 @@ namespace SquipApi.EntityFramework.Migrations
                     b.Property<DateTime>("ModifiedDateTime");
 
                     b.Property<string>("Picture");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired();
 
                     b.Property<string>("ThirdPartyId")
                         .IsRequired();

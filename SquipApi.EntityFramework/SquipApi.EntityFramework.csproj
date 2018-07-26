@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SquipApi.Identity\SquipApi.Identity.csproj" />
     <ProjectReference Include="..\SquipApi.Pocos\SquipApi.Pocos.csproj" />
   </ItemGroup>
 

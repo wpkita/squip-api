@@ -1,10 +1,19 @@
 using Microsoft.EntityFrameworkCore;
+using SquipApi.Identity;
 using SquipApi.Pocos;
 
 namespace SquipApi.EntityFramework
 {
     public class SquipContext : DbContext
     {
+        private readonly IUserService _userService;
+
+        public SquipContext(DbContextOptions<SquipContext> options, IUserService userService)
+            : base(options)
+        {
+            _userService = userService;
+        }
+
         public SquipContext(DbContextOptions<SquipContext> options)
             : base(options)
         {
@@ -13,9 +22,16 @@ namespace SquipApi.EntityFramework
         public DbSet<Squip> Squips { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Tag> SquipTags { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>(b =>
+            {
+                b.ToTable("User");
+                b.HasKey(u => u.Id);
+                b.HasAlternateKey(u => u.ThirdPartyId);
+            });
             modelBuilder.Entity<Squip>(b =>
             {
                 b.ToTable("Squip");
@@ -53,10 +69,14 @@ namespace SquipApi.EntityFramework
                     if (changedEntity.State == EntityState.Added)
                     {
                         entity.OnBeforeInsert();
+                        // TODO: Use await here!
+                        entity.CreatedByUser = _userService.GetCurrentUser().Result;
                     }
                     else if (changedEntity.State == EntityState.Modified)
                     {
                         entity.OnBeforeUpdate();
+                        // TODO: Use await here!
+                        entity.ModifiedByUser = _userService.GetCurrentUser().Result;
                     }
                 }
             }
