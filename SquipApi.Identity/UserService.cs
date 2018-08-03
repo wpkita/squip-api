@@ -75,6 +75,7 @@ namespace SquipApi.Identity
                 };
 
                 await _context.Users.AddAsync(squipUser);
+                await _context.SaveChangesAsync();
 
                 return squipUser;
             }
