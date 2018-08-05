@@ -68,7 +68,9 @@ namespace SquipApi.WebApi.Controllers
             _context.Squips.Add(squip);
             _context.SaveChanges();
 
-            return CreatedAtRoute("GetSquip", new {id = squip.Id}, squip);
+            var dto = _mapper.Map<Squip, SquipDto>(squip);
+
+            return CreatedAtRoute("GetSquip", new {id = dto.Id}, dto);
         }
 
         [HttpPut("{id}")]
