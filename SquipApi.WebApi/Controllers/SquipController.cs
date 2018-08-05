@@ -1,3 +1,4 @@
+using System;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,21 @@ namespace SquipApi.WebApi.Controllers
             var squips = _context.Squips.Include(s => s.SquipTags).ThenInclude(st => st.Tag).ToList();
 
             return _mapper.Map<IEnumerable<Squip>, IEnumerable<SquipDto>>(squips);
+        }
+
+        [HttpGet("random")]
+        public ActionResult<SquipDto> GetRandomSquip()
+        {
+            var squip = _context.Squips.OrderBy(s => Guid.NewGuid())
+                .Include(s => s.SquipTags).ThenInclude(st => st.Tag).FirstOrDefault();
+            if (squip == null)
+            {
+                return NotFound();
+            }
+
+            var dto = _mapper.Map<Squip, SquipDto>(squip);
+
+            return dto;
         }
 
         [HttpGet("{id}", Name = "GetSquip")]
