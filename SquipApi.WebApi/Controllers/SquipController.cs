@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using SquipApi.WebApi.Dtos;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using SquipApi.EntityFramework;
 using SquipApi.Pocos;
 
@@ -29,6 +30,7 @@ namespace SquipApi.WebApi.Controllers
             return _mapper.Map<IEnumerable<Squip>, IEnumerable<SquipDto>>(squips);
         }
 
+        [AllowAnonymous]
         [HttpGet("random")]
         public ActionResult<SquipDto> GetRandomSquip()
         {
