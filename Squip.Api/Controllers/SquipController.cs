@@ -5,36 +5,31 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Squip.Api.Models;
+using Squip.Api.Repositories;
 
 namespace Squip.Api.Controllers
 {
     [Route("api/squips")]
     [ApiController]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class SquipController : ControllerBase
     {
-        private readonly SquipContext _context;
-
-        public SquipController(SquipContext context)
+        private readonly ISquipRepository _squipRepository;
+        public SquipController(ISquipRepository squipRepository)
         {
-            _context = context;
-
-            if (_context.Squips.Count() == 0)
-            {
-                _context.Squips.Add(new SquipDto { Title = "title 1" });
-                _context.SaveChanges();
-            }
+            _squipRepository = squipRepository;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<SquipDto>>> GetSquips()
+        public async Task<IEnumerable<SquipDto>> GetSquips()
         {
-            return await _context.Squips.ToListAsync();
+            return await _squipRepository.GetMostRecentSquipsAsync();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<SquipDto>> GetSquip(long id)
         {
-            var squip = await _context.Squips.FindAsync(id);
+            var squip = await _squipRepository.GetSquipByIdAsync(id);
 
             if (squip == null)
             {
@@ -47,8 +42,7 @@ namespace Squip.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<SquipDto>> PostSquip(SquipDto squip)
         {
-            _context.Squips.Add(squip);
-            await _context.SaveChangesAsync();
+            await _squipRepository.CreateSquipAsync(squip);
 
             return CreatedAtAction("GetSquip", new { id = squip.Id }, squip);
         }
@@ -61,24 +55,26 @@ namespace Squip.Api.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(squip).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            var squipFromDb = await _squipRepository.GetSquipByIdAsync(id);
+            if (squipFromDb == null)
+            {
+                return NotFound();
+            }
 
+            await _squipRepository.UpdateSquipAsync(squip);
             return NoContent();
         }
 
         [HttpDelete]
         public async Task<ActionResult<SquipDto>> DeleteSquip(long id)
         {
-            var squip = await _context.Squips.FindAsync(id);
+            var squip = await _squipRepository.GetSquipByIdAsync(id);
             if (squip == null)
             {
                 return NotFound();
             }
 
-            _context.Squips.Remove(squip);
-            await _context.SaveChangesAsync();
-
+            await _squipRepository.DeleteSquipAsync(squip);
             return squip;
         }
     }

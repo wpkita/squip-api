@@ -1,6 +1,6 @@
 namespace Squip.Api.Models
 {
-    public class SquipDto
+    public class SquipDto : BaseEntity
     {
         public long Id { get; set; }
         public string Title { get; set; }
