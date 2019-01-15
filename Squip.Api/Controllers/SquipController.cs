@@ -60,7 +60,7 @@ namespace Squip.Api.Controllers
             return CreatedAtAction("GetSquip", new { id = squipDto.Id }, squipDto);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> PutSquip(long id, SquipDto squipDto)
         {
             if (id != squipDto.Id)
@@ -80,7 +80,7 @@ namespace Squip.Api.Controllers
             return NoContent();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<SquipDto>> DeleteSquip(long id)
         {
             var squipPoco = await _squipRepository.GetSquipByIdAsync(id);
