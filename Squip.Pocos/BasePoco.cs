@@ -8,6 +8,10 @@ namespace Squip.Pocos
 
         public DateTime UpdatedAt { get; private set; }
 
+        public DateTime DeletedAt { get; private set; }
+
+        public bool IsSoftDeleted { get; set; }
+
         public void OnBeforeInsert()
         {
             CreatedAt = DateTime.UtcNow;
@@ -17,6 +21,12 @@ namespace Squip.Pocos
         public void OnBeforeUpdate()
         {
             UpdatedAt = DateTime.UtcNow;
+        }
+
+        public void OnBeforeDelete()
+        {
+            DeletedAt = DateTime.UtcNow;
+            IsSoftDeleted = true;
         }
     }
 }

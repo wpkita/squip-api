@@ -22,6 +22,7 @@ namespace Squip.EntityFramework
                 e.HasKey(s => s.Id);
                 e.Property(s => s.Title).IsRequired();
                 e.Property(s => s.Content).IsRequired();
+                e.HasQueryFilter(s => !s.IsSoftDeleted);
             });
         }
 
@@ -39,6 +40,11 @@ namespace Squip.EntityFramework
                     else if (changedEntity.State == EntityState.Modified)
                     {
                         baseEntity.OnBeforeUpdate();
+                    }
+                    else if (changedEntity.State == EntityState.Deleted)
+                    {
+                        baseEntity.OnBeforeDelete();
+                        changedEntity.State = EntityState.Modified;
                     }
                 }
             }
