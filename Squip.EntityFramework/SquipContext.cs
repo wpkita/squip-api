@@ -1,21 +1,22 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Squip.Pocos;
 
-namespace Squip.Api.Models
+namespace Squip.EntityFramework
 {
     public class SquipContext : DbContext
     {
         public SquipContext(DbContextOptions<SquipContext> options) : base(options)
         {
         }
-        public DbSet<SquipDto> Squips { get; set; }
+        public DbSet<SquipPoco> Squips { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseNpgsql("Host=localhost;Database=squip_db;Username=postgres;password=postgres");
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<SquipDto>(e =>
+            modelBuilder.Entity<SquipPoco>(e =>
             {
                 e.ToTable("squips");
                 e.HasKey(s => s.Id);
@@ -29,7 +30,7 @@ namespace Squip.Api.Models
             var changedEntities = ChangeTracker.Entries();
             foreach (var changedEntity in changedEntities)
             {
-                if (changedEntity.Entity is BaseEntity baseEntity)
+                if (changedEntity.Entity is BasePoco baseEntity)
                 {
                     if (changedEntity.State == EntityState.Added)
                     {

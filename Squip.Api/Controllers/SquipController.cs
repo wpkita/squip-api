@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Squip.Api.Models;
-using Squip.Api.Repositories;
+using Squip.EntityFramework.Repositories;
+using Squip.Pocos;
 
 namespace Squip.Api.Controllers
 {
@@ -15,67 +17,79 @@ namespace Squip.Api.Controllers
     public class SquipController : ControllerBase
     {
         private readonly ISquipRepository _squipRepository;
-        public SquipController(ISquipRepository squipRepository)
+        private readonly IMapper _mapper;
+        public SquipController(IMapper mapper, ISquipRepository squipRepository)
         {
+            _mapper = mapper;
             _squipRepository = squipRepository;
         }
 
         [HttpGet]
         public async Task<IEnumerable<SquipDto>> GetSquips()
         {
-            return await _squipRepository.GetMostRecentSquipsAsync();
+            var squipPocos = await _squipRepository.GetMostRecentSquipsAsync();
+            var squipDtos = _mapper.Map<IEnumerable<SquipPoco>, IEnumerable<SquipDto>>(squipPocos);
+
+            return squipDtos;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<SquipDto>> GetSquip(long id)
         {
-            var squip = await _squipRepository.GetSquipByIdAsync(id);
+            var squipPoco = await _squipRepository.GetSquipByIdAsync(id);
 
-            if (squip == null)
+            if (squipPoco == null)
             {
                 return NotFound();
             }
 
-            return squip;
+            var squipDto = _mapper.Map<SquipPoco, SquipDto>(squipPoco);
+
+            return squipDto;
         }
 
         [HttpPost]
-        public async Task<ActionResult<SquipDto>> PostSquip(SquipDto squip)
+        public async Task<ActionResult<SquipDto>> PostSquip(SquipDto squipDto)
         {
-            await _squipRepository.CreateSquipAsync(squip);
+            var squipPoco = _mapper.Map<SquipDto, SquipPoco>(squipDto);
+            await _squipRepository.CreateSquipAsync(squipPoco);
 
-            return CreatedAtAction("GetSquip", new { id = squip.Id }, squip);
+            return CreatedAtAction("GetSquip", new { id = squipPoco.Id }, squipPoco);
         }
 
         [HttpPut]
-        public async Task<IActionResult> PutSquip(long id, SquipDto squip)
+        public async Task<IActionResult> PutSquip(long id, SquipDto squipDto)
         {
-            if (id != squip.Id)
+            if (id != squipDto.Id)
             {
                 return BadRequest();
             }
 
-            var squipFromDb = await _squipRepository.GetSquipByIdAsync(id);
-            if (squipFromDb == null)
+            var squipPoco = await _squipRepository.GetSquipByIdAsync(id);
+            if (squipPoco == null)
             {
                 return NotFound();
             }
 
-            await _squipRepository.UpdateSquipAsync(squip);
+            _mapper.Map<SquipDto, SquipPoco>(squipDto, squipPoco);
+
+            await _squipRepository.UpdateSquipAsync(squipPoco);
             return NoContent();
         }
 
         [HttpDelete]
         public async Task<ActionResult<SquipDto>> DeleteSquip(long id)
         {
-            var squip = await _squipRepository.GetSquipByIdAsync(id);
-            if (squip == null)
+            var squipPoco = await _squipRepository.GetSquipByIdAsync(id);
+            if (squipPoco == null)
             {
                 return NotFound();
             }
 
-            await _squipRepository.DeleteSquipAsync(squip);
-            return squip;
+            await _squipRepository.DeleteSquipAsync(squipPoco);
+
+            var squipDto = _mapper.Map<SquipPoco, SquipDto>(squipPoco);
+            return squipDto;
         }
     }
 }
