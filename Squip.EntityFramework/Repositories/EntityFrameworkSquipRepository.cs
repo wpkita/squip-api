@@ -8,6 +8,7 @@ namespace Squip.EntityFramework.Repositories
 {
     public class EntityFrameworkSquipRepository : ISquipRepository
     {
+        private const int PageSize = 10;
         private readonly SquipContext _context;
 
         public EntityFrameworkSquipRepository(SquipContext context)
@@ -33,7 +34,10 @@ namespace Squip.EntityFramework.Repositories
 
         public async Task<IEnumerable<SquipPoco>> GetMostRecentSquipsAsync()
         {
-            var squips = await _context.Squips.OrderByDescending(s => s.CreatedAt).ToListAsync();
+
+            var squips = await _context.Squips.OrderByDescending(s => s.CreatedAt)
+            .Include(s => s.TagPocos)
+            .Take(PageSize).ToListAsync();
 
             return squips;
         }
@@ -50,6 +54,40 @@ namespace Squip.EntityFramework.Repositories
             _context.Entry(squip).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return squip;
+        }
+
+        public async Task<IEnumerable<TagPoco>> GetTagsBySquipId(long squipId)
+        {
+            var tagPocos = await _context.Tags.Where(st => st.SquipId == squipId).ToListAsync();
+
+            return tagPocos;
+        }
+
+        public async Task AddTagToSquip(SquipPoco squip, string tagName)
+        {
+            var tag = await _context.Tags.FindAsync(squip.Id, tagName);
+
+            if (tag == null)
+            {
+                await _context.Tags.AddAsync(new TagPoco
+                {
+                    SquipPoco = squip,
+                    Name = tagName
+                });
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveTagFromSquip(SquipPoco squip, string tagName)
+        {
+            var tag = await _context.Tags.FindAsync(squip.Id, tagName);
+
+            if (tag != null)
+            {
+                _context.Tags.Remove(tag);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

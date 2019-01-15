@@ -1,5 +1,6 @@
 using AutoMapper;
 using Squip.Pocos;
+using System.Linq;
 
 namespace Squip.Api.Models
 {
@@ -9,6 +10,8 @@ namespace Squip.Api.Models
         {
             CreateMap<SquipDto, SquipPoco>();
             CreateMap<SquipPoco, SquipDto>();
+
+            CreateMap<SquipPoco, SquipSummaryDto>().ForMember(dto => dto.Tags, opt => opt.MapFrom(s => s.TagPocos.Select(st => st.Name)));
         }
     }
 }

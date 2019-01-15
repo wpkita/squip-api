@@ -42,6 +42,33 @@ namespace Squip.EntityFramework.Migrations
 
                     b.ToTable("squips");
                 });
+
+            modelBuilder.Entity("Squip.Pocos.TagPoco", b =>
+                {
+                    b.Property<long>("SquipId");
+
+                    b.Property<string>("Name");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<DateTime>("DeletedAt");
+
+                    b.Property<bool>("IsSoftDeleted");
+
+                    b.Property<DateTime>("UpdatedAt");
+
+                    b.HasKey("SquipId", "Name");
+
+                    b.ToTable("tags");
+                });
+
+            modelBuilder.Entity("Squip.Pocos.TagPoco", b =>
+                {
+                    b.HasOne("Squip.Pocos.SquipPoco", "SquipPoco")
+                        .WithMany("TagPocos")
+                        .HasForeignKey("SquipId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
 #pragma warning restore 612, 618
         }
     }

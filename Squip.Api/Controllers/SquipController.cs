@@ -52,9 +52,12 @@ namespace Squip.Api.Controllers
         public async Task<ActionResult<SquipDto>> PostSquip(SquipDto squipDto)
         {
             var squipPoco = _mapper.Map<SquipDto, SquipPoco>(squipDto);
+
             await _squipRepository.CreateSquipAsync(squipPoco);
 
-            return CreatedAtAction("GetSquip", new { id = squipPoco.Id }, squipPoco);
+            _mapper.Map<SquipPoco, SquipDto>(squipPoco, squipDto);
+
+            return CreatedAtAction("GetSquip", new { id = squipDto.Id }, squipDto);
         }
 
         [HttpPut]

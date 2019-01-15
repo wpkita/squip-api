@@ -11,6 +11,7 @@ namespace Squip.EntityFramework
         {
         }
         public DbSet<SquipPoco> Squips { get; set; }
+        public DbSet<TagPoco> Tags { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseNpgsql("Host=localhost;Database=squip_db;Username=postgres;password=postgres");
 
@@ -22,6 +23,14 @@ namespace Squip.EntityFramework
                 e.HasKey(s => s.Id);
                 e.Property(s => s.Title).IsRequired();
                 e.Property(s => s.Content).IsRequired();
+                e.HasMany(s => s.TagPocos).WithOne(t => t.SquipPoco).HasForeignKey(s => s.SquipId);
+                e.HasQueryFilter(s => !s.IsSoftDeleted);
+            });
+
+            modelBuilder.Entity<TagPoco>(e =>
+            {
+                e.ToTable("tags");
+                e.HasKey(t => new { t.SquipId, t.Name });
                 e.HasQueryFilter(s => !s.IsSoftDeleted);
             });
         }

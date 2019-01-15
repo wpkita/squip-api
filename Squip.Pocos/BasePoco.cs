@@ -15,7 +15,6 @@ namespace Squip.Pocos
         public void OnBeforeInsert()
         {
             CreatedAt = DateTime.UtcNow;
-            UpdatedAt = DateTime.UtcNow;
         }
 
         public void OnBeforeUpdate()
