@@ -26,7 +26,7 @@ namespace Squip.EntityFramework.Repositories
 
         public async Task<SquipPoco> CreateSquipAsync(SquipPoco squip)
         {
-            _context.Squips.Add(squip);
+            await _context.Squips.AddAsync(squip);
             await _context.SaveChangesAsync();
 
             return squip;
