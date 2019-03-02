@@ -3,91 +3,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Squip.Pocos;
+using Google.Cloud.Firestore;
 
 namespace Squip.EntityFramework.Repositories
 {
     public class EntityFrameworkSquipRepository : ISquipRepository
     {
-        private const int PageSize = 10;
-        private readonly SquipContext _context;
-
-        public EntityFrameworkSquipRepository(SquipContext context)
-        {
-            _context = context;
-        }
-
-        public async Task<SquipPoco> DeleteSquipAsync(SquipPoco squip)
-        {
-            _context.Squips.Remove(squip);
-            await _context.SaveChangesAsync();
-
-            return squip;
-        }
-
-        public async Task<SquipPoco> CreateSquipAsync(SquipPoco squip)
-        {
-            await _context.Squips.AddAsync(squip);
-            await _context.SaveChangesAsync();
-
-            return squip;
-        }
 
         public async Task<IEnumerable<SquipPoco>> GetMostRecentSquipsAsync()
         {
 
-            var squips = await _context.Squips.OrderByDescending(s => s.CreatedAt)
-            .Include(s => s.TagPocos)
-            .Take(PageSize).ToListAsync();
-
-            return squips;
-        }
-
-        public async Task<SquipPoco> GetSquipByIdAsync(long id)
-        {
-            var squip = await _context.Squips.FindAsync(id);
-
-            return squip;
-        }
-
-        public async Task<SquipPoco> UpdateSquipAsync(SquipPoco squip)
-        {
-            _context.Entry(squip).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return squip;
-        }
-
-        public async Task<IEnumerable<TagPoco>> GetTagsBySquipId(long squipId)
-        {
-            var tagPocos = await _context.Tags.Where(st => st.SquipId == squipId).ToListAsync();
-
-            return tagPocos;
-        }
-
-        public async Task AddTagToSquip(SquipPoco squip, string tagName)
-        {
-            var tag = await _context.Tags.FindAsync(squip.Id, tagName);
-
-            if (tag == null)
+            var db = FirestoreDb.Create("squip-183202");
+            DocumentReference docRef = db.Collection("squips").Document("106jp9WkoLcPUytIUjFi");
+            DocumentSnapshot docSnap = await docRef.GetSnapshotAsync();
+            SquipPoco squip = null;
+            if (docSnap.Exists)
             {
-                await _context.Tags.AddAsync(new TagPoco
-                {
-                    SquipPoco = squip,
-                    Name = tagName
-                });
+                var docDict = docSnap.ToDictionary();
+                squip = new SquipPoco { Id = docSnap.Id, Title = docDict["title"].ToString(), Content = docDict["content"].ToString() };
             }
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task RemoveTagFromSquip(SquipPoco squip, string tagName)
-        {
-            var tag = await _context.Tags.FindAsync(squip.Id, tagName);
-
-            if (tag != null)
-            {
-                _context.Tags.Remove(tag);
-                await _context.SaveChangesAsync();
-            }
+            return new List<SquipPoco>() { squip };
         }
     }
 }

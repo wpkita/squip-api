@@ -2,12 +2,12 @@ using System.Collections.Generic;
 
 namespace Squip.Pocos
 {
-    public class SquipPoco : BasePoco
+    public class SquipPoco
     {
-        public long Id { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
 
-        public IEnumerable<TagPoco> TagPocos { get; set; }
+        // public IEnumerable<string> Tags { get; set; }
     }
 }

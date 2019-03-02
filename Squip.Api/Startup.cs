@@ -32,7 +32,6 @@ namespace Squip.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper();
-            services.AddEntityFrameworkNpgsql().AddDbContext<SquipContext>().BuildServiceProvider();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSwaggerGen(c =>
