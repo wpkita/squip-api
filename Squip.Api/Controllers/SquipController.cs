@@ -2,35 +2,29 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Squip.Api.Repositories;
 using Squip.Api.Models;
-using Squip.EntityFramework.Repositories;
-using Squip.Pocos;
 
 namespace Squip.Api.Controllers
 {
-    [Route("api/squips")]
+    [Route("api/squip")]
     [ApiController]
     [ApiConventionType(typeof(DefaultApiConventions))]
     public class SquipController : ControllerBase
     {
         private readonly ISquipRepository _squipRepository;
-        private readonly IMapper _mapper;
-        public SquipController(IMapper mapper, ISquipRepository squipRepository)
+        public SquipController(ISquipRepository squipRepository)
         {
-            _mapper = mapper;
             _squipRepository = squipRepository;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<SquipDto>> GetSquips()
+        public async Task<SquipDto> GetSquip()
         {
-            var squipPocos = await _squipRepository.GetMostRecentSquipsAsync();
-            var squipDtos = _mapper.Map<IEnumerable<SquipPoco>, IEnumerable<SquipDto>>(squipPocos);
+            var squip = await _squipRepository.GetSquip();
 
-            return squipDtos;
+            return squip;
         }
     }
 }

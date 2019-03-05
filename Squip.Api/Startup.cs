@@ -13,9 +13,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Squip.Api.Models;
 using Swashbuckle.AspNetCore.Swagger;
-using AutoMapper;
-using Squip.EntityFramework;
-using Squip.EntityFramework.Repositories;
+using Squip.Api.Repositories;
 
 namespace Squip.Api
 {
@@ -31,7 +29,6 @@ namespace Squip.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAutoMapper();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSwaggerGen(c =>
@@ -39,7 +36,7 @@ namespace Squip.Api
                 c.SwaggerDoc("v1", new Info { Title = "Squip API", Version = "v1" });
             });
 
-            services.AddTransient<ISquipRepository, EntityFrameworkSquipRepository>();
+            services.AddTransient<ISquipRepository, FirestoreSquipRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
