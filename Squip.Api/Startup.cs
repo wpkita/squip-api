@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using Squip.Api.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Squip.Api.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Squip.Api
 {
@@ -29,6 +31,20 @@ namespace Squip.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.Authority = "https://securetoken.google.com/squip-183202";
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = "https://securetoken.google.com/squip-183202",
+                    ValidateAudience = true,
+                    ValidAudience = "squip-183202",
+                    ValidateLifetime = true,
+                };
+            });
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
@@ -49,6 +65,7 @@ namespace Squip.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseAuthentication();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
