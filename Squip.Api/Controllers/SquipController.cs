@@ -4,7 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Squip.Api.Repositories;
-using Squip.Api.Models;
+using Squip.Api.Dtos;
+using Squip.Api.Services;
 
 namespace Squip.Api.Controllers
 {
@@ -13,18 +14,31 @@ namespace Squip.Api.Controllers
     [ApiConventionType(typeof(DefaultApiConventions))]
     public class SquipController : ControllerBase
     {
-        private readonly ISquipRepository _squipRepository;
-        public SquipController(ISquipRepository squipRepository)
+        private readonly ISquipService _squipService;
+        public SquipController(ISquipService squipService)
         {
-            _squipRepository = squipRepository;
+            _squipService = squipService;
         }
 
         [HttpGet]
-        public async Task<SquipDto> GetSquip()
+        public async Task<PresentationDto> InquirePresent()
         {
-            var squip = await _squipRepository.GetSquip();
+            var presentation = await _squipService.Present();
 
-            return squip;
+            return presentation;
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<PresentationDto>> ReactPresent(ReactionDto reactionDto)
+        {
+            if (reactionDto.PresentationId == null || reactionDto.ReactionCategory == null)
+            {
+                return BadRequest();
+            }
+
+            var presentation = await _squipService.ProcessReactionThenPresent(reactionDto);
+
+            return presentation;
         }
     }
 }

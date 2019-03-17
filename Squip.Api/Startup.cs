@@ -11,11 +11,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
-using Squip.Api.Models;
+using Squip.Api.Dtos;
 using Swashbuckle.AspNetCore.Swagger;
 using Squip.Api.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Squip.Api.Services;
 
 namespace Squip.Api
 {
@@ -59,6 +60,7 @@ namespace Squip.Api
                 c.SwaggerDoc("v1", new Info { Title = "Squip API", Version = "v1" });
             });
 
+            services.AddTransient<ISquipService, SquipService>();
             services.AddTransient<ISquipRepository, FirestoreSquipRepository>();
         }
 
