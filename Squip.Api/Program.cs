@@ -6,19 +6,48 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
 
 namespace Squip.Api
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            // Must read this manually (i.e. not from IConfiguration) since pre-bootstrap
+            var logglyCustomerToken = Environment.GetEnvironmentVariable("LOGGLY_CUSTOMER_TOKEN") ?? string.Empty;
+
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .Enrich.WithMachineName()
+                .Enrich.WithEnvironmentUserName()
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .WriteTo.Loggly(customerToken: logglyCustomerToken)
+                .CreateLogger();
+
+            try
+            {
+                Log.Information("Starting web host");
+                CreateWebHostBuilder(args).Build().Run();
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Host terminated unexpectedly");
+                return 1;
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                .UseSerilog();
     }
 }

@@ -21,7 +21,7 @@ namespace Squip.Api.Repositories
                 object value = property.GetValue(source);
                 if (IsOfType<T>(value))
                 {
-                    dictionary.Add(property.Name., (T)value);
+                    dictionary.Add(property.Name, (T)value);
                 }
             }
             return dictionary;
