@@ -19,6 +19,7 @@ namespace Squip.Api.Services
         public async Task<PresentationDto> Present(IUser user)
         {
             var squip = await _squipRepository.GetSquip();
+
             var presentationSecret = new PresentationSecret
             {
                 UserId = user.Id,
@@ -30,7 +31,8 @@ namespace Squip.Api.Services
             return new PresentationDto
             {
                 Id = presentationSecret.Id,
-                Content = squip.Content
+                Content = squip.Content,
+                Tags = squip.Tags
             };
         }
 

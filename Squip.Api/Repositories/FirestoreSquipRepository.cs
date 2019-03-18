@@ -34,16 +34,8 @@ namespace Squip.Api.Repositories
             if (docSnap.Exists)
             {
                 var docDict = docSnap.ToDictionary();
-                if (docDict.ContainsKey("content"))
-                {
-                    squip = new SquipSecret { Id = docSnap.Id, Content = docDict["content"].ToString() };
-                }
-                else
-                {
-                    // Delete the Squip if it does not have a content field. This is simple housekeeping
-                    await docRef.DeleteAsync();
-                    Ids.RemoveAt(index);
-                }
+                squip = new SquipSecret(docDict);
+                squip.Id = docSnap.Id;
             }
             return squip;
         }
