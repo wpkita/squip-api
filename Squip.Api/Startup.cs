@@ -16,6 +16,7 @@ using Squip.Api.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Squip.Api.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace Squip.Api
 {
@@ -59,8 +60,10 @@ namespace Squip.Api
                 c.SwaggerDoc("v1", new Info { Title = "Squip API", Version = "v1" });
             });
 
+            services.AddHttpContextAccessor();
             services.AddTransient<ISquipService, SquipService>();
             services.AddTransient<ISquipRepository, FirestoreSquipRepository>();
+            services.AddTransient<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
