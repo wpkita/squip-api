@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Events;
+using Serilog.Sinks.GoogleCloudLogging;
 
 namespace Squip.Api
 {
@@ -25,6 +26,7 @@ namespace Squip.Api
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
                 .WriteTo.Loggly(customerToken: logglyCustomerToken)
+                .WriteTo.GoogleCloudLogging("squip-183202")
                 .CreateLogger();
 
             try

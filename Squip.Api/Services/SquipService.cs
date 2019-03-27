@@ -14,8 +14,22 @@ namespace Squip.Api.Services
         public SquipService(ISquipRepository squipRepository)
         {
             this._squipRepository = squipRepository;
-
         }
+
+        public async Task<ValidationDto> Ideate(IUser user, IdeaDto ideaDto)
+        {
+            var ideaSecret = new IdeaSecret
+            {
+                UserId = user.Id,
+                Content = ideaDto.Content,
+                Tags = ideaDto.Tags
+            };
+
+            await _squipRepository.AddIdea(ideaSecret);
+
+            return new ValidationDto();
+        }
+
         public async Task<PresentationDto> Present(IUser user)
         {
             var squip = await _squipRepository.GetSquip();
@@ -26,7 +40,7 @@ namespace Squip.Api.Services
                 SquipId = squip.Id
             };
 
-            await _squipRepository.AddPresentation(presentationSecret);
+            presentationSecret = await _squipRepository.AddPresentation(presentationSecret);
 
             return new PresentationDto
             {
@@ -36,13 +50,8 @@ namespace Squip.Api.Services
             };
         }
 
-        public async Task<PresentationDto> ProcessReactionThenPresent(IUser user, ReactionDto reactionDto)
+        public async Task<PresentationDto> React(IUser user, ReactionDto reactionDto)
         {
-            var doesPresentationExist = await _squipRepository.DoesPresentationExist(reactionDto.PresentationId);
-            if (!doesPresentationExist)
-            {
-                throw new Exception("NONE");
-            }
             var reactionSecret = new ReactionSecret
             {
                 UserId = user.Id,

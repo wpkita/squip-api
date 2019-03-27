@@ -4,37 +4,41 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Google.Cloud.Firestore;
+using Microsoft.Extensions.Configuration;
 using Squip.Api.Dtos;
 using Squip.Api.Secrets;
+using StackExchange.Redis;
 
 namespace Squip.Api.Repositories
 {
     public class FirestoreSquipRepository : ISquipRepository
     {
-        static Random r;
-        static IList<string> Ids;
-        static FirestoreDb db;
+        private const string SquipCollectionName = "squips";
+        private const string PresentationCollectionName = "presentations";
+        private const string ReactionCollectionName = "reactions";
+        private const string IdeaCollectionName = "ideas";
+        private readonly FirestoreDb firestoreDb;
 
-        static FirestoreSquipRepository()
+        //"localhost:6379,password=rediskita");
+        private readonly IDatabase redisDb;
+
+        public FirestoreSquipRepository(IConfiguration config)
         {
-            r = new Random();
-            db = FirestoreDb.Create("squip-183202");
-            CollectionReference colRef = db.Collection("squips");
-            QuerySnapshot querySnapshot = colRef.GetSnapshotAsync().Result;
-            Ids = querySnapshot.Documents.Select(d => d.Id).ToList();
+            var redis = ConnectionMultiplexer.Connect(config["REDIS_CONNECTION_STRING"]);
+            redisDb = redis.GetDatabase();
+            firestoreDb = FirestoreDb.Create(config["FIREBASE_PROJECT_ID"]);
         }
 
-        public async Task<SquipSecret> GetSquip()
+        public async Task<IdeaSecret> GetSquip()
         {
-            var index = r.Next(Ids.Count);
-            var randomId = Ids[index];
-            DocumentReference docRef = db.Document($"squips/{randomId}");
+            var randomId = await redisDb.SetRandomMemberAsync(SquipCollectionName);
+            DocumentReference docRef = firestoreDb.Document($"{SquipCollectionName}/{randomId}");
             DocumentSnapshot docSnap = await docRef.GetSnapshotAsync();
-            SquipSecret squip = null;
+            IdeaSecret squip = null;
             if (docSnap.Exists)
             {
                 var docDict = docSnap.ToDictionary();
-                squip = new SquipSecret(docDict);
+                squip = new IdeaSecret(docDict);
                 squip.Id = docSnap.Id;
             }
             return squip;
@@ -43,7 +47,7 @@ namespace Squip.Api.Repositories
         public async Task<PresentationSecret> AddPresentation(PresentationSecret presentation)
         {
             var presDict = ObjectToDictionaryHelper.ToDictionary(presentation);
-            DocumentReference documentReference = await db.Collection("presentations").AddAsync(presDict);
+            DocumentReference documentReference = await firestoreDb.Collection("presentations").AddAsync(presDict);
             presentation.Id = documentReference.Id;
             return presentation;
         }
@@ -51,17 +55,16 @@ namespace Squip.Api.Repositories
         public async Task<ReactionSecret> AddReaction(ReactionSecret reaction)
         {
             var reacDict = ObjectToDictionaryHelper.ToDictionary(reaction);
-            DocumentReference documentReference = await db.Collection("reactions").AddAsync(reacDict);
+            DocumentReference documentReference = await firestoreDb.Collection("reactions").AddAsync(reacDict);
             reaction.Id = documentReference.Id;
             return reaction;
         }
 
-        public async Task<bool> DoesPresentationExist(string id)
+        public async Task<IdeaSecret> AddIdea(IdeaSecret idea)
         {
-            DocumentReference docRef = db.Document($"presentations/{id}");
-            DocumentSnapshot docSnap = await docRef.GetSnapshotAsync();
-
-            return docSnap.Exists;
+            await firestoreDb.Collection(IdeaCollectionName).AddAsync(idea);
+            var ideaRef = await redisDb.SetAddAsync(IdeaCollectionName, idea.Id);
+            return new IdeaSecret(new Dictionary<string, object>());
         }
     }
 }

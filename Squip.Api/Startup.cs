@@ -62,8 +62,8 @@ namespace Squip.Api
 
             services.AddHttpContextAccessor();
             services.AddTransient<ISquipService, SquipService>();
-            services.AddTransient<ISquipRepository, FirestoreSquipRepository>();
-            services.AddTransient<IUserService, UserService>();
+            services.AddSingleton<ISquipRepository, FirestoreSquipRepository>();
+            services.AddTransient<IUserService, FirebaseUserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

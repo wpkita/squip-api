@@ -7,6 +7,7 @@ using Squip.Api.Repositories;
 using Squip.Api.Dtos;
 using Squip.Api.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Squip.Api.Controllers
 {
@@ -25,7 +26,7 @@ namespace Squip.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<PresentationDto> InquirePresent()
+        public async Task<PresentationDto> Inquire()
         {
             var user = _userService.GetCurrentUser();
             var presentation = await _squipService.Present(user);
@@ -33,8 +34,24 @@ namespace Squip.Api.Controllers
             return presentation;
         }
 
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult<ValidationDto>> Ideate(IdeaDto ideaDto)
+        {
+            var user = _userService.GetCurrentUser();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var validationDto = await _squipService.Ideate(user, ideaDto);
+
+            return validationDto;
+        }
+
+        [Authorize]
         [HttpPut]
-        public async Task<ActionResult<PresentationDto>> ReactPresent(ReactionDto reactionDto)
+        public async Task<ActionResult<PresentationDto>> React(ReactionDto reactionDto)
         {
             var user = _userService.GetCurrentUser();
             if (reactionDto.PresentationId == null || reactionDto.ReactionCategory == null)
@@ -42,7 +59,7 @@ namespace Squip.Api.Controllers
                 return BadRequest();
             }
 
-            var presentation = await _squipService.ProcessReactionThenPresent(user, reactionDto);
+            var presentation = await _squipService.React(user, reactionDto);
 
             return presentation;
         }

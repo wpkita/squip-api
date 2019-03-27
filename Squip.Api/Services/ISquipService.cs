@@ -7,6 +7,7 @@ namespace Squip.Api.Services
     public interface ISquipService
     {
         Task<PresentationDto> Present(IUser user);
-        Task<PresentationDto> ProcessReactionThenPresent(IUser user, ReactionDto reaction);
+        Task<PresentationDto> React(IUser user, ReactionDto reaction);
+        Task<ValidationDto> Ideate(IUser user, IdeaDto ideaDto);
     }
 }

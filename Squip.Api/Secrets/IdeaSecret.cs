@@ -4,11 +4,15 @@ using System.Linq;
 
 namespace Squip.Api.Secrets
 {
-    public class SquipSecret
+    public class IdeaSecret
     {
-        public SquipSecret(IDictionary<string, object> dict)
+        public IdeaSecret()
+        { }
+
+        public IdeaSecret(IDictionary<string, object> dict)
         {
             Id = dict.TryGetValue("id", out var id) ? id.ToString() : null;
+            UserId = dict.TryGetValue("userId", out var userId) ? userId.ToString() : null;
             Content = dict.TryGetValue("content", out var content) ? content.ToString() : null;
             Tags = dict.TryGetValue("tags", out var tags) ? ((tags as IEnumerable<object>) ?? new string[0]).Cast<string>() : null;
         }
@@ -16,5 +20,6 @@ namespace Squip.Api.Secrets
         public string Id { get; set; }
         public string Content { get; set; }
         public IEnumerable<string> Tags { get; set; }
+        public string UserId { get; set; }
     }
 }

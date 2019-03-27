@@ -6,12 +6,12 @@ using Squip.Api.Identity;
 
 namespace Squip.Api.Services
 {
-    public class UserService : IUserService
+    public class FirebaseUserService : IUserService
     {
         private const string FirebaseUserIdKey = "user_id";
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserService(IHttpContextAccessor httpContextAccessor)
+        public FirebaseUserService(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
         }
