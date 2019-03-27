@@ -16,10 +16,7 @@ namespace Squip.Api.Repositories
         private const string SquipCollectionName = "squips";
         private const string PresentationCollectionName = "presentations";
         private const string ReactionCollectionName = "reactions";
-        private const string IdeaCollectionName = "ideas";
         private readonly FirestoreDb firestoreDb;
-
-        //"localhost:6379,password=rediskita");
         private readonly IDatabase redisDb;
 
         public FirestoreSquipRepository(IConfiguration config)
@@ -62,9 +59,20 @@ namespace Squip.Api.Repositories
 
         public async Task<IdeaSecret> AddIdea(IdeaSecret idea)
         {
-            await firestoreDb.Collection(IdeaCollectionName).AddAsync(idea);
-            var ideaRef = await redisDb.SetAddAsync(IdeaCollectionName, idea.Id);
-            return new IdeaSecret(new Dictionary<string, object>());
+            // Firestore
+            var firestoreCompatibleIdea = new
+            {
+                Content = idea.Content,
+                UserId = idea.UserId,
+                Tags = idea.Tags.ToArray()
+            };
+            DocumentReference documentReference = await firestoreDb.Collection(SquipCollectionName).AddAsync(firestoreCompatibleIdea);
+            idea.Id = documentReference.Id;
+
+            // Redis
+            var ideaRef = await redisDb.SetAddAsync(SquipCollectionName, idea.Id);
+
+            return idea;
         }
     }
 }
