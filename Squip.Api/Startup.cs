@@ -50,7 +50,12 @@ namespace Squip.Api
             {
                 options.AddDefaultPolicy(builder =>
                 {
-                    builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+                    builder.WithOrigins("https://app.squip.io").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+                });
+
+                options.AddPolicy("local", builder =>
+                {
+                    builder.WithOrigins("http://localhost:8080").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
                 });
             });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -73,14 +78,14 @@ namespace Squip.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseCors("local");
             }
             else
             {
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+                app.UseCors();
             }
-
-            app.UseCors();
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
