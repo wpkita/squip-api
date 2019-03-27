@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Squip.Api.Dtos;
 using Squip.Api.Identity;
@@ -22,7 +23,7 @@ namespace Squip.Api.Services
             {
                 UserId = user.Id,
                 Content = ideaDto.Content,
-                Tags = ideaDto.Tags
+                Tags = ideaDto.Tags.ToArray()
             };
 
             await _squipRepository.AddIdea(ideaSecret);
@@ -32,11 +33,11 @@ namespace Squip.Api.Services
 
         public async Task<PresentationDto> Present(IUser user)
         {
-            var squip = await _squipRepository.GetSquip();
+            var squip = await _squipRepository.GetIdea();
 
             var presentationSecret = new PresentationSecret
             {
-                UserId = user.Id,
+                UserId = user?.Id,
                 SquipId = squip.Id
             };
 

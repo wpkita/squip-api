@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Google.Cloud.Firestore;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Squip.Api.Dtos;
 using Squip.Api.Secrets;
 using StackExchange.Redis;
@@ -13,9 +15,10 @@ namespace Squip.Api.Repositories
 {
     public class FirestoreSquipRepository : ISquipRepository
     {
-        private const string SquipCollectionName = "squips";
+        private const string IdeaCollectionName = "ideas";
         private const string PresentationCollectionName = "presentations";
         private const string ReactionCollectionName = "reactions";
+        private const string RejectCollectionName = "rejects";
         private readonly FirestoreDb firestoreDb;
         private readonly IDatabase redisDb;
 
@@ -26,51 +29,53 @@ namespace Squip.Api.Repositories
             firestoreDb = FirestoreDb.Create(config["FIREBASE_PROJECT_ID"]);
         }
 
-        public async Task<IdeaSecret> GetSquip()
+        public async Task<IdeaSecret> GetIdea()
         {
-            var randomId = await redisDb.SetRandomMemberAsync(SquipCollectionName);
-            DocumentReference docRef = firestoreDb.Document($"{SquipCollectionName}/{randomId}");
+            var randomIdeaId = await redisDb.SetRandomMemberAsync(IdeaCollectionName);
+            DocumentReference docRef = firestoreDb.Document($"{IdeaCollectionName}/{randomIdeaId}");
             DocumentSnapshot docSnap = await docRef.GetSnapshotAsync();
-            IdeaSecret squip = null;
-            if (docSnap.Exists)
+
+            IdeaSecret idea = null;
+            try
             {
-                var docDict = docSnap.ToDictionary();
-                squip = new IdeaSecret(docDict);
-                squip.Id = docSnap.Id;
+                idea = docSnap.ConvertTo<IdeaSecret>();
             }
-            return squip;
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                await redisDb.SetMoveAsync(IdeaCollectionName, RejectCollectionName, randomIdeaId);
+            }
+
+            return idea;
         }
 
         public async Task<PresentationSecret> AddPresentation(PresentationSecret presentation)
         {
-            var presDict = ObjectToDictionaryHelper.ToDictionary(presentation);
-            DocumentReference documentReference = await firestoreDb.Collection("presentations").AddAsync(presDict);
-            presentation.Id = documentReference.Id;
+            presentation.Id = firestoreDb.Collection(PresentationCollectionName).Document().Id;
+
+            var presentationJson = JsonConvert.SerializeObject(presentation, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
+            await redisDb.ListRightPushAsync(PresentationCollectionName, presentationJson);
             return presentation;
         }
 
         public async Task<ReactionSecret> AddReaction(ReactionSecret reaction)
         {
-            var reacDict = ObjectToDictionaryHelper.ToDictionary(reaction);
-            DocumentReference documentReference = await firestoreDb.Collection("reactions").AddAsync(reacDict);
-            reaction.Id = documentReference.Id;
+            reaction.Id = firestoreDb.Collection(ReactionCollectionName).Document().Id;
+
+            var reactionJson = JsonConvert.SerializeObject(reaction, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
+            await redisDb.ListRightPushAsync(ReactionCollectionName, reactionJson);
             return reaction;
         }
 
         public async Task<IdeaSecret> AddIdea(IdeaSecret idea)
         {
+            idea.Id = firestoreDb.Collection(IdeaCollectionName).Document().Id;
+
             // Firestore
-            var firestoreCompatibleIdea = new
-            {
-                Content = idea.Content,
-                UserId = idea.UserId,
-                Tags = idea.Tags.ToArray()
-            };
-            DocumentReference documentReference = await firestoreDb.Collection(SquipCollectionName).AddAsync(firestoreCompatibleIdea);
-            idea.Id = documentReference.Id;
+            await firestoreDb.Collection(IdeaCollectionName).Document(idea.Id).SetAsync(idea);
 
             // Redis
-            var ideaRef = await redisDb.SetAddAsync(SquipCollectionName, idea.Id);
+            var ideaRef = await redisDb.SetAddAsync(IdeaCollectionName, idea.Id);
 
             return idea;
         }

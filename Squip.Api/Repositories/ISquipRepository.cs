@@ -10,7 +10,7 @@ namespace Squip.Api.Repositories
 
     public interface ISquipRepository
     {
-        Task<IdeaSecret> GetSquip();
+        Task<IdeaSecret> GetIdea();
         Task<PresentationSecret> AddPresentation(PresentationSecret presentation);
         Task<ReactionSecret> AddReaction(ReactionSecret reaction);
         Task<IdeaSecret> AddIdea(IdeaSecret idea);
