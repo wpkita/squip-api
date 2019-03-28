@@ -41,7 +41,7 @@ namespace Squip.Api.Controllers
             var user = _userService.GetCurrentUser();
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest();
             }
 
             var validationDto = await _squipService.Ideate(user, ideaDto);
@@ -54,7 +54,7 @@ namespace Squip.Api.Controllers
         public async Task<ActionResult<PresentationDto>> React(ReactionDto reactionDto)
         {
             var user = _userService.GetCurrentUser();
-            if (reactionDto.PresentationId == null || reactionDto.ReactionCategory == null)
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
