@@ -39,6 +39,7 @@ namespace Squip.Api.Repositories
             try
             {
                 idea = docSnap.ConvertTo<IdeaSecret>();
+                idea.Id = docSnap.Id;
             }
             catch (Exception ex)
             {
