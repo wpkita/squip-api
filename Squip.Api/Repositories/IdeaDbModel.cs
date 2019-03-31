@@ -1,3 +1,4 @@
+using System;
 using Google.Cloud.Firestore;
 using NodaTime;
 using Squip.Api.DomainModels;
@@ -18,6 +19,6 @@ namespace Squip.Api.Repositories
         public string UserId { get; set; }
 
         [FirestoreProperty("instantCreatedAt")]
-        public Instant InstantCreatedAt { get; set; }
+        public DateTime InstantCreatedAt { get; set; }
     }
 }

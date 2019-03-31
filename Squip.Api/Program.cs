@@ -20,11 +20,10 @@ namespace Squip.Api
             var firebaseProjectId = Environment.GetEnvironmentVariable("FIREBASE_PROJECT_ID") ?? string.Empty;
 
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
+                .MinimumLevel.Information()
                 .Enrich.WithMachineName()
                 .Enrich.WithEnvironmentUserName()
                 .Enrich.FromLogContext()
-                .WriteTo.Console()
                 .WriteTo.GoogleCloudLogging(firebaseProjectId)
                 .CreateLogger();
 

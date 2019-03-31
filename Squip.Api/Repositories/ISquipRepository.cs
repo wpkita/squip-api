@@ -7,6 +7,7 @@ namespace Squip.Api.Repositories
     public interface ISquipRepository
     {
         Task<string> GetRandomIdeaId();
+        string GetNextIdeaId();
         string GetNextPresentationId();
         string GetNextReactionId();
         Task<Idea> GetIdea(string id);

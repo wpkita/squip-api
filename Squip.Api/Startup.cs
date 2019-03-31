@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using NodaTime;
 using Squip.Api.DomainModels;
 using Squip.Api.Dtos;
 using Squip.Api.Repositories;
@@ -101,8 +102,13 @@ namespace Squip.Api
             Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<IdeaDto, Idea>();
-                cfg.CreateMap<Idea, IdeaDbModel>().ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags.ToArray()));
-                cfg.CreateMap<IdeaDbModel, Idea>();
+                cfg.CreateMap<Idea, IdeaDbModel>()
+                    .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags.ToArray()))
+                    .ForMember(dest => dest.InstantCreatedAt, opt => opt.MapFrom(src => src.InstantCreatedAt.ToDateTimeUtc()));
+                cfg.CreateMap<IdeaDbModel, Idea>()
+                    .ForMember(dest => dest.InstantCreatedAt,
+                        opt => opt.MapFrom(src =>
+                            Instant.FromDateTimeUtc(DateTime.SpecifyKind(src.InstantCreatedAt, DateTimeKind.Utc))));
                 cfg.CreateMap<Idea, Presentation>().ForMember(dest => dest.SquipId, opt => opt.MapFrom(src => src.Id));
                 cfg.CreateMap<Presentation, PresentationDto>();
                 cfg.CreateMap<ReactionDto, Reaction>();

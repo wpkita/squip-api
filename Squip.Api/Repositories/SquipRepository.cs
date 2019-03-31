@@ -41,6 +41,11 @@ namespace Squip.Api.Repositories
             return randomIdeaId;
         }
 
+        public string GetNextIdeaId()
+        {
+            return firestoreDb.Collection(IdeaCollectionName).Document().Id;
+        }
+
         public string GetNextPresentationId()
         {
             return firestoreDb.Collection(PresentationCollectionName).Document().Id;

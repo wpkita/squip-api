@@ -21,6 +21,7 @@ namespace Squip.Api.Services
         public async Task Ideate(Idea idea)
         {
             idea.PreCreate();
+            idea.Id = _squipRepository.GetNextIdeaId();
             await _squipRepository.CreateIdea(idea);
         }
 
