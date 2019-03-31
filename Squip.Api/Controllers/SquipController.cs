@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Squip.Api.Repositories;
-using Squip.Api.Dtos;
-using Squip.Api.Services;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authorization;
-using Squip.Api.DomainModels;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Squip.Api.DomainModels;
+using Squip.Api.Dtos;
+using Squip.Api.Repositories;
+using Squip.Api.Services;
 
 namespace Squip.Api.Controllers
 {

@@ -1,11 +1,11 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Squip.Api.DomainModels;
 using Squip.Api.Dtos;
 using Squip.Api.Identity;
 using Squip.Api.Repositories;
-using Squip.Api.DomainModels;
-using AutoMapper;
 
 namespace Squip.Api.Services
 {

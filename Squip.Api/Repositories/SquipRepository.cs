@@ -3,16 +3,16 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Google.Cloud.Firestore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Squip.Api.Dtos;
-using Squip.Api.DomainModels;
-using StackExchange.Redis;
-using AutoMapper;
-using NodaTime.Serialization.JsonNet;
 using NodaTime;
+using NodaTime.Serialization.JsonNet;
+using Squip.Api.DomainModels;
+using Squip.Api.Dtos;
+using StackExchange.Redis;
 
 namespace Squip.Api.Repositories
 {

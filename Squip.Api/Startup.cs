@@ -1,24 +1,24 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Microsoft.EntityFrameworkCore;
-using Squip.Api.Dtos;
-using Swashbuckle.AspNetCore.Swagger;
-using Squip.Api.Repositories;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Squip.Api.Services;
-using Microsoft.AspNetCore.Http;
-using AutoMapper;
 using Squip.Api.DomainModels;
+using Squip.Api.Dtos;
+using Squip.Api.Repositories;
+using Squip.Api.Services;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Squip.Api
 {
@@ -35,19 +35,19 @@ namespace Squip.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services
-            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                options.Authority = "https://securetoken.google.com/squip-183202";
-                options.TokenValidationParameters = new TokenValidationParameters
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
                 {
-                    ValidateIssuer = true,
-                    ValidIssuer = "https://securetoken.google.com/squip-183202",
-                    ValidateAudience = true,
-                    ValidAudience = "squip-183202",
-                    ValidateLifetime = true,
-                };
-            });
+                    options.Authority = "https://securetoken.google.com/squip-183202";
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = "https://securetoken.google.com/squip-183202",
+                        ValidateAudience = true,
+                        ValidAudience = "squip-183202",
+                        ValidateLifetime = true,
+                    };
+                });
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
