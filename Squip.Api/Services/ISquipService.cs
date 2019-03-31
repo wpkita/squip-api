@@ -1,13 +1,13 @@
 using System.Threading.Tasks;
-using Squip.Api.Dtos;
+using Squip.Api.DomainModels;
 using Squip.Api.Identity;
 
 namespace Squip.Api.Services
 {
     public interface ISquipService
     {
-        Task<PresentationDto> Present(IUser user);
-        Task<PresentationDto> React(IUser user, ReactionDto reaction);
-        Task<ValidationDto> Ideate(IUser user, IdeaDto ideaDto);
+        Task<Presentation> Inquire(Inquiry inquiry);
+        Task<Presentation> React(Reaction reaction);
+        Task Ideate(Idea idea);
     }
 }

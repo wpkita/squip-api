@@ -8,6 +8,8 @@ using Squip.Api.Dtos;
 using Squip.Api.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
+using Squip.Api.DomainModels;
+using AutoMapper;
 
 namespace Squip.Api.Controllers
 {
@@ -28,40 +30,65 @@ namespace Squip.Api.Controllers
         [HttpGet]
         public async Task<PresentationDto> Inquire()
         {
+            // Map to domain model
             var user = _userService.GetCurrentUser();
-            var presentation = await _squipService.Present(user);
+            var inquiry = new Inquiry { UserId = user.Id };
 
-            return presentation;
+            // Call service
+            var presentation = await _squipService.Inquire(inquiry);
+
+            // Map to dto
+            var presentationDto = Mapper.Map<PresentationDto>(presentation);
+
+            // Return dto
+            return presentationDto;
         }
 
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<ValidationDto>> Ideate(IdeaDto ideaDto)
+        public async Task<IActionResult> Ideate(IdeaDto ideaDto)
         {
-            var user = _userService.GetCurrentUser();
+            // Validate dto
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            var validationDto = await _squipService.Ideate(user, ideaDto);
+            // Map to domain model
+            var idea = Mapper.Map<Idea>(ideaDto);
+            var user = _userService.GetCurrentUser();
+            idea.UserId = user.Id;
 
-            return validationDto;
+            // Call service
+            await _squipService.Ideate(idea);
+
+            // Return dto
+            return Ok();
         }
 
         [Authorize]
         [HttpPut]
         public async Task<ActionResult<PresentationDto>> React(ReactionDto reactionDto)
         {
-            var user = _userService.GetCurrentUser();
+            // Validate dto
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            var presentation = await _squipService.React(user, reactionDto);
+            // Map to domain model
+            var reaction = Mapper.Map<Reaction>(reactionDto);
+            var user = _userService.GetCurrentUser();
+            reaction.UserId = user.Id;
 
-            return presentation;
+            // Call service
+            var presentation = await _squipService.React(reaction);
+
+            // Map to dto
+            var presentationDto = Mapper.Map<PresentationDto>(presentation);
+
+            // Return dto
+            return presentationDto;
         }
     }
 }

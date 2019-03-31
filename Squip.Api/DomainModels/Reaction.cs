@@ -1,6 +1,6 @@
-namespace Squip.Api.Secrets
+namespace Squip.Api.DomainModels
 {
-    public class ReactionSecret
+    public class Reaction : DomainModelBase
     {
         public string Id { get; set; }
         public string UserId { get; set; }

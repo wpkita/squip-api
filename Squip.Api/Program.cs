@@ -17,7 +17,7 @@ namespace Squip.Api
         public static int Main(string[] args)
         {
             // Must read this manually (i.e. not from IConfiguration) since pre-bootstrap
-            var logglyCustomerToken = Environment.GetEnvironmentVariable("LOGGLY_CUSTOMER_TOKEN") ?? string.Empty;
+            var firebaseProjectId = Environment.GetEnvironmentVariable("FIREBASE_PROJECT_ID") ?? string.Empty;
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
@@ -25,8 +25,7 @@ namespace Squip.Api
                 .Enrich.WithEnvironmentUserName()
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
-                .WriteTo.Loggly(customerToken: logglyCustomerToken)
-                .WriteTo.GoogleCloudLogging("squip-183202")
+                .WriteTo.GoogleCloudLogging(firebaseProjectId)
                 .CreateLogger();
 
             try

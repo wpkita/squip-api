@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 using Squip.Api.Dtos;
 using Squip.Api.Identity;
 using Squip.Api.Repositories;
-using Squip.Api.Secrets;
+using Squip.Api.DomainModels;
+using AutoMapper;
 
 namespace Squip.Api.Services
 {
@@ -14,55 +15,41 @@ namespace Squip.Api.Services
 
         public SquipService(ISquipRepository squipRepository)
         {
-            this._squipRepository = squipRepository;
+            _squipRepository = squipRepository;
         }
 
-        public async Task<ValidationDto> Ideate(IUser user, IdeaDto ideaDto)
+        public async Task Ideate(Idea idea)
         {
-            var ideaSecret = new IdeaSecret
-            {
-                UserId = user.Id,
-                Content = ideaDto.Content,
-                Tags = ideaDto.Tags.ToArray()
-            };
-
-            await _squipRepository.AddIdea(ideaSecret);
-
-            return new ValidationDto();
+            idea.PreCreate();
+            await _squipRepository.CreateIdea(idea);
         }
 
-        public async Task<PresentationDto> Present(IUser user)
+        public async Task<Presentation> Inquire(Inquiry inquiry)
         {
-            var squip = await _squipRepository.GetIdea();
+            // Get random idea
+            var randomIdeaId = await _squipRepository.GetRandomIdeaId();
+            var idea = await _squipRepository.GetIdea(randomIdeaId);
 
-            var presentationSecret = new PresentationSecret
-            {
-                UserId = user?.Id,
-                SquipId = squip.Id
-            };
+            // Build presentation
+            var presentation = Mapper.Map<Presentation>(idea);
+            presentation.Id = _squipRepository.GetNextPresentationId();
+            presentation.UserId = inquiry.UserId;
+            presentation.PreCreate();
+            presentation = await _squipRepository.CreatePresentation(presentation);
 
-            presentationSecret = await _squipRepository.AddPresentation(presentationSecret);
-
-            return new PresentationDto
-            {
-                Id = presentationSecret.Id,
-                Content = squip.Content,
-                Tags = squip.Tags
-            };
+            return presentation;
         }
 
-        public async Task<PresentationDto> React(IUser user, ReactionDto reactionDto)
+        public async Task<Presentation> React(Reaction reaction)
         {
-            var reactionSecret = new ReactionSecret
-            {
-                UserId = user.Id,
-                PresentationId = reactionDto.PresentationId,
-                ReactionCategory = reactionDto.ReactionCategory
-            };
+            // Create reaction
+            reaction.PreCreate();
+            reaction.Id = _squipRepository.GetNextReactionId();
+            reaction = await _squipRepository.CreateReaction(reaction);
 
-            await _squipRepository.AddReaction(reactionSecret);
-
-            var presentation = await Present(user);
+            // Get next presentation
+            var inquiry = new Inquiry { UserId = reaction.UserId };
+            var presentation = await Inquire(inquiry);
 
             return presentation;
         }

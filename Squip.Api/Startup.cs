@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Squip.Api.Services;
 using Microsoft.AspNetCore.Http;
+using AutoMapper;
+using Squip.Api.DomainModels;
 
 namespace Squip.Api
 {
@@ -67,7 +69,7 @@ namespace Squip.Api
 
             services.AddHttpContextAccessor();
             services.AddTransient<ISquipService, SquipService>();
-            services.AddSingleton<ISquipRepository, FirestoreSquipRepository>();
+            services.AddSingleton<ISquipRepository, SquipRepository>();
             services.AddTransient<IUserService, FirebaseUserService>();
         }
 
@@ -95,6 +97,16 @@ namespace Squip.Api
 
             app.UseHttpsRedirection();
             app.UseMvc();
+
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<IdeaDto, Idea>();
+                cfg.CreateMap<Idea, IdeaDbModel>().ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags.ToArray()));
+                cfg.CreateMap<IdeaDbModel, Idea>();
+                cfg.CreateMap<Idea, Presentation>().ForMember(dest => dest.SquipId, opt => opt.MapFrom(src => src.Id));
+                cfg.CreateMap<Presentation, PresentationDto>();
+                cfg.CreateMap<ReactionDto, Reaction>();
+            });
         }
     }
 }

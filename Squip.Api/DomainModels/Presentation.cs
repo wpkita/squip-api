@@ -1,14 +1,13 @@
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
-namespace Squip.Api.Dtos
+namespace Squip.Api.DomainModels
 {
-    public class PresentationDto
+    public class Presentation : DomainModelBase
     {
         public string Id { get; set; }
-
+        public string UserId { get; set; }
+        public string SquipId { get; set; }
         public string Content { get; set; }
-
         public IEnumerable<string> Tags { get; set; }
     }
 }
