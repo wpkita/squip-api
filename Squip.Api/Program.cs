@@ -17,7 +17,7 @@ namespace Squip.Api
         public static int Main(string[] args)
         {
             // Must read this manually (i.e. not from IConfiguration) since pre-bootstrap
-            var firebaseProjectId = Environment.GetEnvironmentVariable("FIREBASE_PROJECT_ID") ?? string.Empty;
+            var firebaseProjectId = Environment.GetEnvironmentVariable("GCP_PROJECT_ID") ?? string.Empty;
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()

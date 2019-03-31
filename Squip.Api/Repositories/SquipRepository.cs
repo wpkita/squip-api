@@ -30,7 +30,7 @@ namespace Squip.Api.Repositories
         {
             var redis = ConnectionMultiplexer.Connect(config["REDIS_CONNECTION_STRING"]);
             redisDb = redis.GetDatabase();
-            firestoreDb = FirestoreDb.Create(config["FIREBASE_PROJECT_ID"]);
+            firestoreDb = FirestoreDb.Create(config["GCP_PROJECT_ID"]);
             JsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
         }
 

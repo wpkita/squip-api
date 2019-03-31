@@ -35,20 +35,27 @@ namespace Squip.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services
-                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.Authority = "https://securetoken.google.com/squip-183202";
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidIssuer = "https://securetoken.google.com/squip-183202",
-                        ValidateAudience = true,
-                        ValidAudience = "squip-183202",
-                        ValidateLifetime = true,
-                    };
-                });
+            Auth(services);
+            Cors(services);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Squip API", Version = "v1" });
+            });
+            IoC(services);
+        }
+
+        private void IoC(IServiceCollection services)
+        {
+            services.AddHttpContextAccessor();
+            services.AddTransient<ISquipService, SquipService>();
+            services.AddSingleton<ISquipRepository, SquipRepository>();
+            services.AddTransient<IUserService, FirebaseUserService>();
+        }
+
+        private void Cors(IServiceCollection services)
+        {
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
@@ -61,17 +68,24 @@ namespace Squip.Api
                     builder.WithOrigins("http://localhost:8080").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
                 });
             });
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+        }
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info { Title = "Squip API", Version = "v1" });
-            });
-
-            services.AddHttpContextAccessor();
-            services.AddTransient<ISquipService, SquipService>();
-            services.AddSingleton<ISquipRepository, SquipRepository>();
-            services.AddTransient<IUserService, FirebaseUserService>();
+        private void Auth(IServiceCollection services)
+        {
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = "https://securetoken.google.com/squip-183202";
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = "https://securetoken.google.com/squip-183202",
+                        ValidateAudience = true,
+                        ValidAudience = Configuration[("GCP_PROJECT_ID")],
+                        ValidateLifetime = true,
+                    };
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -98,7 +112,11 @@ namespace Squip.Api
 
             app.UseHttpsRedirection();
             app.UseMvc();
+            AutoMapper();
+        }
 
+        private void AutoMapper()
+        {
             Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<IdeaDto, Idea>();
