@@ -16,6 +16,7 @@
     <PackageReference Include="NodaTime" Version="2.4.5"/>
     <PackageReference Include="AutoMapper" Version="8.0.0"/>
     <PackageReference Include="NodaTime.Serialization.JsonNet" Version="2.1.0"/>
+    <PackageReference Include="Okta.AspNetCore" Version="1.1.5"/>
   </ItemGroup>
   <ItemGroup>
     <None Update="app.yaml">

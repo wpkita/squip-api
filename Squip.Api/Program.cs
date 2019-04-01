@@ -17,14 +17,14 @@ namespace Squip.Api
         public static int Main(string[] args)
         {
             // Must read this manually (i.e. not from IConfiguration) since pre-bootstrap
-            var firebaseProjectId = Environment.GetEnvironmentVariable("GCP_PROJECT_ID") ?? string.Empty;
+            var gcpProjectId = Environment.GetEnvironmentVariable("GCP_PROJECT_ID") ?? string.Empty;
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
                 .Enrich.WithMachineName()
                 .Enrich.WithEnvironmentUserName()
                 .Enrich.FromLogContext()
-                .WriteTo.GoogleCloudLogging(firebaseProjectId)
+                .WriteTo.GoogleCloudLogging(gcpProjectId)
                 .CreateLogger();
 
             try

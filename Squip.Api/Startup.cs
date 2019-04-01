@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using NodaTime;
+using Okta.AspNetCore;
 using Squip.Api.DomainModels;
 using Squip.Api.Dtos;
 using Squip.Api.Repositories;
@@ -51,7 +52,7 @@ namespace Squip.Api
             services.AddHttpContextAccessor();
             services.AddTransient<ISquipService, SquipService>();
             services.AddSingleton<ISquipRepository, SquipRepository>();
-            services.AddTransient<IUserService, FirebaseUserService>();
+            services.AddTransient<IUserService, OktaUserService>();
         }
 
         private void Cors(IServiceCollection services)
@@ -72,19 +73,15 @@ namespace Squip.Api
 
         private void Auth(IServiceCollection services)
         {
-            services
-                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
+            services.AddAuthentication(options =>
                 {
-                    options.Authority = "https://securetoken.google.com/squip-183202";
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidIssuer = "https://securetoken.google.com/squip-183202",
-                        ValidateAudience = true,
-                        ValidAudience = Configuration[("GCP_PROJECT_ID")],
-                        ValidateLifetime = true,
-                    };
+                    options.DefaultAuthenticateScheme = OktaDefaults.ApiAuthenticationScheme;
+                    options.DefaultChallengeScheme = OktaDefaults.ApiAuthenticationScheme;
+                    options.DefaultSignInScheme = OktaDefaults.ApiAuthenticationScheme;
+                })
+                .AddOktaWebApi(new OktaWebApiOptions()
+                {
+                    OktaDomain = "https://dev-334709.okta.com"
                 });
         }
 

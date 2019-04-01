@@ -6,12 +6,12 @@ using Squip.Api.Identity;
 
 namespace Squip.Api.Services
 {
-    public class FirebaseUserService : IUserService
+    public class OktaUserService : IUserService
     {
-        private const string FirebaseUserIdKey = "user_id";
+        private const string UserIdClaimType = "uid";
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public FirebaseUserService(IHttpContextAccessor httpContextAccessor)
+        public OktaUserService(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
         }
@@ -19,10 +19,10 @@ namespace Squip.Api.Services
         {
             IUser user = null;
 
-            var claimsPrincipal = _httpContextAccessor.HttpContext.User as ClaimsPrincipal;
+            var claimsPrincipal = _httpContextAccessor.HttpContext.User.Identity as ClaimsIdentity;
             if (claimsPrincipal != null)
             {
-                var userId = claimsPrincipal.Claims.SingleOrDefault(c => c.Type == FirebaseUserIdKey)?.Value;
+                var userId = claimsPrincipal.Claims.SingleOrDefault(c => c.Type == UserIdClaimType)?.Value;
                 user = new User
                 {
                     Id = userId
