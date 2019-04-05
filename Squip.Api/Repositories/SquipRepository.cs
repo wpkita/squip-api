@@ -70,23 +70,17 @@ namespace Squip.Api.Repositories
 
         public async Task<Idea> GetIdea(string id)
         {
-            var ideaDocRef = firestoreDb.Document($"{IdeaCollectionName}/{id}");
-            var ideaDocSnapshot = await ideaDocRef.GetSnapshotAsync();
-
             Idea idea = null;
 
             try
             {
-                var ideaDbModel = ideaDocSnapshot.ConvertTo<IdeaDbModel>();
-                idea = Mapper.Map<Idea>(ideaDbModel);
-                idea.Id = ideaDocSnapshot.Id;
+                var ideaJson = await redisDb.StringGetAsync($"idea:{id}");
+                idea = JsonConvert.DeserializeObject<Idea>(ideaJson);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Console.WriteLine(ex.Message);
                 await redisDb.SetMoveAsync(IdeaCollectionName, RejectCollectionName, id);
             }
-
             return idea;
         }
 
