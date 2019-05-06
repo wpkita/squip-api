@@ -77,7 +77,7 @@ namespace Squip.Api.Repositories
                 var ideaJson = await redisDb.StringGetAsync($"idea:{id}");
                 idea = JsonConvert.DeserializeObject<Idea>(ideaJson);
             }
-            catch (Exception e)
+            catch
             {
                 await redisDb.SetMoveAsync(IdeaCollectionName, RejectCollectionName, id);
             }
