@@ -10,9 +10,9 @@ namespace Squip.Api.Controllers
     [Route("api/idea")]
     [ApiController]
     [ApiConventionType(typeof(DefaultApiConventions))]
-    [Authorize]
+    // [Authorize]
 
-    public class IdeaController
+    public class IdeaController : ControllerBase
     {
         private readonly IRepository<Idea> ideaRepository;
 
@@ -27,6 +27,14 @@ namespace Squip.Api.Controllers
             var ideas = await ideaRepository.GetAll();
 
             return ideas;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostIdea(Idea idea)
+        {
+            await ideaRepository.Insert(idea);
+
+            return Ok();
         }
     }
 }

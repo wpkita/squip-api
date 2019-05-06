@@ -1,29 +1,38 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using NodaTime;
+using NodaTime.Serialization.JsonNet;
 using Squip.Api.DomainModels;
 using StackExchange.Redis;
 
 namespace Squip.Api.Repositories
 {
-    public interface IRepository<T> where T : class
+    public interface IRepository<T> where T : IDomainModel
     {
-        Task<T> GetById(object id);
+        Task<T> GetById(string id);
         Task<IEnumerable<T>> GetAll();
         Task Insert(T t);
-        Task Update(T t);
     }
 
-    public abstract class RedisRepository<T> : IRepository<T> where T : class
+    public abstract class RedisRepository<T> : IRepository<T> where T : IDomainModel
     {
         private readonly IDatabase redisDb;
+        private readonly JsonSerializerSettings JsonSerializerSettings;
 
         public RedisRepository(IConfiguration config)
         {
             var redis = ConnectionMultiplexer.Connect(config["REDIS_CONNECTION_STRING"]);
             redisDb = redis.GetDatabase();
+
+            JsonSerializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            }.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
         }
         protected abstract string entityName { get; }
 
@@ -43,18 +52,18 @@ namespace Squip.Api.Repositories
             }
         }
 
-        public async Task<T> GetById(object id)
+        public async Task<T> GetById(string id)
         {
             T entity = default(T);
 
             try
             {
                 var entityJson = await redisDb.StringGetAsync($"{entityName}:{id}");
-                entity = JsonConvert.DeserializeObject<T>(entityJson);
+                entity = JsonConvert.DeserializeObject<T>(entityJson, JsonSerializerSettings);
             }
             catch
             {
-                await redisDb.SetMoveAsync(entityName, archiveName, id.ToString());
+                await redisDb.SetMoveAsync(setName, archiveName, id);
             }
 
             return entity;
@@ -74,14 +83,15 @@ namespace Squip.Api.Repositories
             return entities;
         }
 
-        public Task Insert(T t)
+        public async Task Insert(T t)
         {
-            throw new System.NotImplementedException();
-        }
+            t.PreCreate();
+            var entityJson = JsonConvert.SerializeObject(t, JsonSerializerSettings);
 
-        public Task Update(T t)
-        {
-            throw new System.NotImplementedException();
+            // Save entity
+            await redisDb.StringSetAsync($"{entityName}:{t.Id}", entityJson);
+
+            await redisDb.SetAddAsync(setName, t.Id);
         }
     }
 

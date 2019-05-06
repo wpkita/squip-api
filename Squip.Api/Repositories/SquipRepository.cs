@@ -31,7 +31,10 @@ namespace Squip.Api.Repositories
             var redis = ConnectionMultiplexer.Connect(config["REDIS_CONNECTION_STRING"]);
             redisDb = redis.GetDatabase();
             firestoreDb = FirestoreDb.Create(config["GCP_PROJECT_ID"]);
-            JsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+            JsonSerializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            }.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
         }
 
         public async Task<string> GetRandomIdeaId()
@@ -75,7 +78,7 @@ namespace Squip.Api.Repositories
             try
             {
                 var ideaJson = await redisDb.StringGetAsync($"idea:{id}");
-                idea = JsonConvert.DeserializeObject<Idea>(ideaJson);
+                idea = JsonConvert.DeserializeObject<Idea>(ideaJson, JsonSerializerSettings);
             }
             catch
             {
