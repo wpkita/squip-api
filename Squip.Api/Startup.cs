@@ -52,6 +52,7 @@ namespace Squip.Api
             services.AddHttpContextAccessor();
             services.AddTransient<ISquipService, SquipService>();
             services.AddSingleton<ISquipRepository, SquipRepository>();
+            services.AddTransient<IRepository<Idea>, IdeaRepository>();
             services.AddTransient<IUserService, OktaUserService>();
         }
 
