@@ -6,10 +6,16 @@ namespace Squip.Api.DomainModels
     {
         public string Id { get; set; }
         public Instant InstantCreatedAt { get; set; }
+        public Instant InstantUpdatedAt { get; set; }
 
         public void PreCreate()
         {
             InstantCreatedAt = SystemClock.Instance.GetCurrentInstant();
+        }
+
+        public void PreUpdate()
+        {
+            InstantUpdatedAt = SystemClock.Instance.GetCurrentInstant();
         }
     }
 }

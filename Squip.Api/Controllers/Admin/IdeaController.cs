@@ -21,8 +21,21 @@ namespace Squip.Api.Controllers
             this.ideaRepository = ideaRepository;
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Idea>> GetById(string id)
+        {
+            var idea = await ideaRepository.GetById(id);
+
+            if (idea == null)
+            {
+                return NotFound();
+            }
+
+            return idea;
+        }
+
         [HttpGet]
-        public async Task<IEnumerable<Idea>> GetIdeas()
+        public async Task<IEnumerable<Idea>> GetAll()
         {
             var ideas = await ideaRepository.GetAll();
 
@@ -30,11 +43,35 @@ namespace Squip.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostIdea(Idea idea)
+        public async Task<IActionResult> Post(Idea idea)
         {
-            await ideaRepository.Insert(idea);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
-            return Ok();
+            idea = await ideaRepository.Create(idea);
+
+            return CreatedAtAction(nameof(GetById), new { id = idea.Id }, idea);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(string id, Idea idea)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var doesIdeaExist = await ideaRepository.DoesExistById(id);
+            if (!doesIdeaExist)
+            {
+                return NotFound();
+            }
+
+            idea = await ideaRepository.Update(idea);
+
+            return NoContent();
         }
     }
 }
