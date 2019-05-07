@@ -13,13 +13,19 @@ namespace Squip.Api.Services
     {
         private readonly ISquipRepository _squipRepository;
         private readonly IRepository<Idea> _ideaRepository;
+        private readonly IRepository<Reaction> _reactionRepository;
+        private readonly IRepository<Presentation> _presentationRepository;
 
         public SquipService(
             ISquipRepository squipRepository,
-            IRepository<Idea> ideaRepository)
+            IRepository<Idea> ideaRepository,
+            IRepository<Reaction> reactionRepository,
+            IRepository<Presentation> presentationRepository)
         {
             _squipRepository = squipRepository;
             _ideaRepository = ideaRepository;
+            _reactionRepository = reactionRepository;
+            _presentationRepository = presentationRepository;
         }
 
         public async Task Ideate(Idea idea)
@@ -39,7 +45,7 @@ namespace Squip.Api.Services
             presentation.Id = _squipRepository.GetNextPresentationId();
             presentation.UserId = inquiry.UserId;
             presentation.PreCreate();
-            presentation = await _squipRepository.CreatePresentation(presentation);
+            presentation = await _presentationRepository.Create(presentation);
 
             return presentation;
         }
@@ -49,7 +55,7 @@ namespace Squip.Api.Services
             // Create reaction
             reaction.PreCreate();
             reaction.Id = _squipRepository.GetNextReactionId();
-            reaction = await _squipRepository.CreateReaction(reaction);
+            reaction = await _reactionRepository.Create(reaction);
 
             // Get next presentation
             var inquiry = new Inquiry { UserId = reaction.UserId };

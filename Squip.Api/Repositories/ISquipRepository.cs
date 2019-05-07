@@ -10,8 +10,5 @@ namespace Squip.Api.Repositories
         string GetNextIdeaId();
         string GetNextPresentationId();
         string GetNextReactionId();
-        Task<Presentation> CreatePresentation(Presentation presentation);
-        Task<Reaction> CreateReaction(Reaction reaction);
-        Task<Idea> CreateIdea(Idea idea);
     }
 }

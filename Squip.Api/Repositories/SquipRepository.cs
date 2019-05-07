@@ -58,38 +58,5 @@ namespace Squip.Api.Repositories
         {
             return firestoreDb.Collection(ReactionCollectionName).Document().Id;
         }
-
-        public async Task<Idea> CreateIdea(Idea idea)
-        {
-            // Save idea to Firestore
-            var ideaDbModel = Mapper.Map<IdeaDbModel>(idea);
-            await firestoreDb.Collection(IdeaCollectionName).Document(idea.Id).SetAsync(ideaDbModel);
-
-            return idea;
-        }
-
-        public async Task<Presentation> CreatePresentation(Presentation presentation)
-        {
-            var presentationDbModel = Mapper.Map<PresentationDbModel>(presentation);
-
-            // Serialize presentation to JSON string
-            var presentationJson = JsonConvert.SerializeObject(presentationDbModel, JsonSerializerSettings);
-
-            // Save presentation to Redis list for later processing
-            await redisDb.ListRightPushAsync(PresentationCollectionName, presentationJson);
-
-            return presentation;
-        }
-
-        public async Task<Reaction> CreateReaction(Reaction reaction)
-        {
-            // Serialize reaction to JSON string
-            var reactionJson = JsonConvert.SerializeObject(reaction, JsonSerializerSettings);
-
-            // Save reaction to Redis list for later processing
-            await redisDb.ListRightPushAsync(ReactionCollectionName, reactionJson);
-
-            return reaction;
-        }
     }
 }
