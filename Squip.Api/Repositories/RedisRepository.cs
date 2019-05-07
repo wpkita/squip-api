@@ -69,7 +69,8 @@ namespace Squip.Api.Repositories
             }
             catch
             {
-                await redisDb.SetMoveAsync(activeEntityIdsSetName, archivedEntityIdsSetName, id);
+                // This is technically business logic? Hmm
+                await Archive(id);
             }
 
             return entity;
@@ -112,6 +113,13 @@ namespace Squip.Api.Repositories
             await redisDb.StringSetAsync(entityRedisKey(entity.Id), entityJson);
 
             return entity;
+        }
+
+        public async Task<bool> Archive(string id)
+        {
+            var didSucceed = await redisDb.SetMoveAsync(activeEntityIdsSetName, archivedEntityIdsSetName, id);
+
+            return didSucceed;
         }
     }
 }

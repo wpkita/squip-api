@@ -11,5 +11,6 @@ namespace Squip.Api.Repositories
         Task<IEnumerable<T>> GetAll();
         Task<T> Create(T t);
         Task<T> Update(T t);
+        Task<bool> Archive(string id);
     }
 }

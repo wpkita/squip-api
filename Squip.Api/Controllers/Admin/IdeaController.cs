@@ -69,7 +69,21 @@ namespace Squip.Api.Controllers
                 return NotFound();
             }
 
-            idea = await ideaRepository.Update(idea);
+            await ideaRepository.Update(idea);
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var doesIdeaExist = await ideaRepository.DoesExistById(id);
+            if (!doesIdeaExist)
+            {
+                return NotFound();
+            }
+
+            await ideaRepository.Archive(id);
 
             return NoContent();
         }
