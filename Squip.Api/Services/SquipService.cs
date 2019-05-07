@@ -12,24 +12,27 @@ namespace Squip.Api.Services
     public class SquipService : ISquipService
     {
         private readonly ISquipRepository _squipRepository;
+        private readonly IRepository<Idea> _ideaRepository;
 
-        public SquipService(ISquipRepository squipRepository)
+        public SquipService(
+            ISquipRepository squipRepository,
+            IRepository<Idea> ideaRepository)
         {
             _squipRepository = squipRepository;
+            _ideaRepository = ideaRepository;
         }
 
         public async Task Ideate(Idea idea)
         {
-            idea.PreCreate();
             idea.Id = _squipRepository.GetNextIdeaId();
-            await _squipRepository.CreateIdea(idea);
+            await _ideaRepository.Create(idea);
         }
 
         public async Task<Presentation> Inquire(Inquiry inquiry)
         {
             // Get random idea
             var randomIdeaId = await _squipRepository.GetRandomIdeaId();
-            var idea = await _squipRepository.GetIdea(randomIdeaId);
+            var idea = await _ideaRepository.GetById(randomIdeaId);
 
             // Build presentation
             var presentation = Mapper.Map<Presentation>(idea);

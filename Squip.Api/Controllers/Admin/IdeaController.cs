@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Squip.Api.DomainModels;
 using Squip.Api.Repositories;
+using Squip.Api.Services;
 
 namespace Squip.Api.Controllers
 {
@@ -15,10 +16,14 @@ namespace Squip.Api.Controllers
     public class IdeaController : ControllerBase
     {
         private readonly IRepository<Idea> ideaRepository;
+        private readonly ISquipService squipService;
 
-        public IdeaController(IRepository<Idea> ideaRepository)
+        public IdeaController(
+            IRepository<Idea> ideaRepository,
+            ISquipService squipService)
         {
             this.ideaRepository = ideaRepository;
+            this.squipService = squipService;
         }
 
         [HttpGet("{id}")]
@@ -50,7 +55,7 @@ namespace Squip.Api.Controllers
                 return BadRequest();
             }
 
-            idea = await ideaRepository.Create(idea);
+            await squipService.Ideate(idea);
 
             return CreatedAtAction(nameof(GetById), new { id = idea.Id }, idea);
         }

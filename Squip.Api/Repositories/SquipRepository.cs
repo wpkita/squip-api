@@ -39,7 +39,7 @@ namespace Squip.Api.Repositories
 
         public async Task<string> GetRandomIdeaId()
         {
-            var randomIdeaId = await redisDb.SetRandomMemberAsync(IdeaCollectionName);
+            var randomIdeaId = await redisDb.SetRandomMemberAsync("ideaIds");
 
             return randomIdeaId;
         }
@@ -65,25 +65,6 @@ namespace Squip.Api.Repositories
             var ideaDbModel = Mapper.Map<IdeaDbModel>(idea);
             await firestoreDb.Collection(IdeaCollectionName).Document(idea.Id).SetAsync(ideaDbModel);
 
-            // Save id to a Redis set so it can later be randomly chosen
-            await redisDb.SetAddAsync(IdeaCollectionName, idea.Id);
-
-            return idea;
-        }
-
-        public async Task<Idea> GetIdea(string id)
-        {
-            Idea idea = null;
-
-            try
-            {
-                var ideaJson = await redisDb.StringGetAsync($"idea:{id}");
-                idea = JsonConvert.DeserializeObject<Idea>(ideaJson, JsonSerializerSettings);
-            }
-            catch
-            {
-                await redisDb.SetMoveAsync(IdeaCollectionName, RejectCollectionName, id);
-            }
             return idea;
         }
 
