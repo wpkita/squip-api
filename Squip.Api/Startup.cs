@@ -36,18 +36,22 @@ namespace Squip.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            Auth(services);
-            Cors(services);
+            AddAuth(services);
+            AddCors(services);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            AddSwagger(services);
+            AddIoc(services);
+        }
 
+        private void AddSwagger(IServiceCollection services)
+        {
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "Squip API", Version = "v1" });
             });
-            IoC(services);
         }
 
-        private void IoC(IServiceCollection services)
+        private void AddIoc(IServiceCollection services)
         {
             services.AddHttpContextAccessor();
             services.AddTransient<ISquipService, SquipService>();
@@ -58,7 +62,7 @@ namespace Squip.Api
             services.AddTransient<IUserService, OktaUserService>();
         }
 
-        private void Cors(IServiceCollection services)
+        private void AddCors(IServiceCollection services)
         {
             services.AddCors(options =>
             {
@@ -74,7 +78,7 @@ namespace Squip.Api
             });
         }
 
-        private void Auth(IServiceCollection services)
+        private void AddAuth(IServiceCollection services)
         {
             services.AddAuthentication(options =>
                 {
@@ -104,18 +108,23 @@ namespace Squip.Api
                 app.UseCors();
             }
 
+            UseSwagger(app);
+
+            app.UseHttpsRedirection();
+            app.UseMvc();
+            UseAutoMapper();
+        }
+
+        private static void UseSwagger(IApplicationBuilder app)
+        {
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Squip API v1");
             });
-
-            app.UseHttpsRedirection();
-            app.UseMvc();
-            AutoMapper();
         }
 
-        private void AutoMapper()
+        private void UseAutoMapper()
         {
             Mapper.Initialize(cfg =>
             {
