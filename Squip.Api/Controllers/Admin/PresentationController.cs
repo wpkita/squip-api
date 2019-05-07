@@ -11,7 +11,7 @@ namespace Squip.Api.Controllers
     [Route("api/presentation")]
     [ApiController]
     [ApiConventionType(typeof(DefaultApiConventions))]
-    // [Authorize]
+    [Authorize]
     public class PresentationController : ControllerBase
     {
         private readonly IRepository<Presentation> presentationRepository;

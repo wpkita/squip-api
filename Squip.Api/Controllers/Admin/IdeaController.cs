@@ -11,7 +11,7 @@ namespace Squip.Api.Controllers
     [Route("api/idea")]
     [ApiController]
     [ApiConventionType(typeof(DefaultApiConventions))]
-    // [Authorize]
+    [Authorize]
 
     public class IdeaController : ControllerBase
     {
