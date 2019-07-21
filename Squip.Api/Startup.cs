@@ -16,10 +16,10 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using NodaTime;
 using Okta.AspNetCore;
-using Squip.Api.DomainModels;
+using Squip.DomainModels;
 using Squip.Api.Dtos;
-using Squip.Api.Repositories;
 using Squip.Api.Services;
+using Squip.Repositories;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace Squip.Api

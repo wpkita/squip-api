@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Cloud.Firestore" Version="1.0.0" />
+    <PackageReference Include="NodaTime.Serialization.JsonNet" Version="2.2.0" />
+    <PackageReference Include="StackExchange.Redis" Version="2.0.601" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Squip.DomainModels\Squip.DomainModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.EntityFrameworkCore">
+      <HintPath>..\..\..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.entityframeworkcore\2.2.0\lib\netstandard2.0\Microsoft.EntityFrameworkCore.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Abstractions">
+      <HintPath>..\..\..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.configuration.abstractions\2.2.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
@@ -17,6 +17,10 @@
     <PackageReference Include="AutoMapper" Version="8.1.1" />
     <PackageReference Include="NodaTime.Serialization.JsonNet" Version="2.2.0" />
     <PackageReference Include="Okta.AspNetCore" Version="1.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Squip.DomainModels\Squip.DomainModels.csproj" />
+    <ProjectReference Include="..\Squip.Repositories\Squip.Repositories.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="app.yaml">

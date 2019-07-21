@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Squip.Api.DomainModels;
+using Squip.DomainModels;
 
-namespace Squip.Api.Repositories
+namespace Squip.Repositories
 {
     public interface IRepository<T> where T : IDomainModel
     {

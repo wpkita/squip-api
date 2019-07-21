@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Squip.Api.DomainModels
+namespace Squip.DomainModels
 {
     public class Presentation : DomainModelBase
     {

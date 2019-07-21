@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
-using Squip.Api.DomainModels;
+using Squip.DomainModels;
 
-namespace Squip.Api.Repositories
+namespace Squip.Repositories
 {
     public class IdeaRepository : RedisRepository<Idea>
         {

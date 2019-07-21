@@ -1,9 +1,7 @@
 using System;
 using Google.Cloud.Firestore;
-using NodaTime;
-using Squip.Api.DomainModels;
 
-namespace Squip.Api.Repositories
+namespace Squip.Repositories
 {
     [FirestoreData]
     public class IdeaDbModel

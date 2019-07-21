@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Squip.Api.DomainModels;
-using Squip.Api.Repositories;
+using Squip.DomainModels;
 using Squip.Api.Services;
+using Squip.Repositories;
 
 namespace Squip.Api.Controllers
 {

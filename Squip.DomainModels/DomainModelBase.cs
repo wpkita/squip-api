@@ -1,6 +1,6 @@
 using NodaTime;
 
-namespace Squip.Api.DomainModels
+namespace Squip.DomainModels
 {
     public abstract class DomainModelBase : IDomainModel
     {

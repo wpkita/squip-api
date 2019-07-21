@@ -1,9 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using Google.Cloud.Firestore;
 
-namespace Squip.Api.DomainModels
+namespace Squip.DomainModels
 {
     public class Idea : DomainModelBase
     {

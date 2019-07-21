@@ -6,9 +6,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Squip.Api.DomainModels;
+using Squip.DomainModels;
 using Squip.Api.Dtos;
-using Squip.Api.Repositories;
 using Squip.Api.Services;
 
 namespace Squip.Api.Controllers

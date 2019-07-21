@@ -1,4 +1,4 @@
-namespace Squip.Api.DomainModels
+namespace Squip.DomainModels
 {
     public class Inquiry : DomainModelBase
     {

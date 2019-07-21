@@ -1,16 +1,15 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NodaTime;
 using NodaTime.Serialization.JsonNet;
-using Squip.Api.DomainModels;
+using Squip.DomainModels;
 using StackExchange.Redis;
 
-namespace Squip.Api.Repositories
+namespace Squip.Repositories
 {
     public abstract class RedisRepository<T> : IRepository<T> where T : IDomainModel
     {
