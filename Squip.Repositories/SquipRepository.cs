@@ -7,7 +7,7 @@ using NodaTime;
 using NodaTime.Serialization.JsonNet;
 using StackExchange.Redis;
 
-namespace Squip.Repositories
+namespace Squip.Data
 {
     public class SquipRepository : ISquipRepository
     {

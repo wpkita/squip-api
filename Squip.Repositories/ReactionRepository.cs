@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
-using Squip.DomainModels;
+using Squip.Domain;
 
-namespace Squip.Repositories
+namespace Squip.Data
 {
     public class ReactionRepository : RedisRepository<Reaction>
         {

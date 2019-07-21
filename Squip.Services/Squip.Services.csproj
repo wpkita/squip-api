@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NodaTime" Version="2.4.6" />
+    <ProjectReference Include="..\Squip.DomainModels\Squip.Domain.csproj" />
+    <ProjectReference Include="..\Squip.Repositories\Squip.Data.csproj" />
   </ItemGroup>
 
 </Project>

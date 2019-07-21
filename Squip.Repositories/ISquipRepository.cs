@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace Squip.Repositories
+namespace Squip.Data
 {
     public interface ISquipRepository
     {

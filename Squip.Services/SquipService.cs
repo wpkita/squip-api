@@ -1,13 +1,9 @@
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Squip.DomainModels;
-using Squip.Api.Dtos;
-using Squip.Api.Identity;
-using Squip.Repositories;
+using Squip.Data;
+using Squip.Domain;
 
-namespace Squip.Api.Services
+namespace Squip.Services
 {
     public class SquipService : ISquipService
     {

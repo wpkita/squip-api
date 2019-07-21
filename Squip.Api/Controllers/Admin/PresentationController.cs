@@ -2,11 +2,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Squip.DomainModels;
-using Squip.Api.Services;
-using Squip.Repositories;
+using Squip.Data;
+using Squip.Domain;
 
-namespace Squip.Api.Controllers
+namespace Squip.Api.Controllers.Admin
 {
     [Route("api/presentation")]
     [ApiController]

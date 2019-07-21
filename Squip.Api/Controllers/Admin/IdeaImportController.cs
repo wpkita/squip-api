@@ -2,12 +2,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Squip.DomainModels;
-using Squip.Api.Services;
+using Squip.Domain;
+using Squip.Services;
 
-namespace Squip.Api.Controllers
+namespace Squip.Api.Controllers.Admin
 {
     [Route("api/ideaImport")]
     [ApiController]

@@ -6,10 +6,10 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NodaTime;
 using NodaTime.Serialization.JsonNet;
-using Squip.DomainModels;
+using Squip.Domain;
 using StackExchange.Redis;
 
-namespace Squip.Repositories
+namespace Squip.Data
 {
     public abstract class RedisRepository<T> : IRepository<T> where T : IDomainModel
     {

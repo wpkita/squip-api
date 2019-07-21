@@ -1,6 +1,6 @@
 using NodaTime;
 
-namespace Squip.Repositories
+namespace Squip.Data
 {
     public class PresentationDbModel
     {

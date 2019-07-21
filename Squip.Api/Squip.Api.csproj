@@ -19,8 +19,8 @@
     <PackageReference Include="Okta.AspNetCore" Version="1.2.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Squip.DomainModels\Squip.DomainModels.csproj" />
-    <ProjectReference Include="..\Squip.Repositories\Squip.Repositories.csproj" />
+    <ProjectReference Include="..\Squip.DomainModels\Squip.Domain.csproj" />
+    <ProjectReference Include="..\Squip.Services\Squip.Services.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="app.yaml">

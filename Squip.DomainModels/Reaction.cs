@@ -1,4 +1,4 @@
-namespace Squip.DomainModels
+namespace Squip.Domain
 {
     public class Reaction : DomainModelBase
     {

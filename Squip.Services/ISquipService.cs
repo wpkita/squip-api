@@ -1,8 +1,7 @@
 using System.Threading.Tasks;
-using Squip.DomainModels;
-using Squip.Api.Identity;
+using Squip.Domain;
 
-namespace Squip.Api.Services
+namespace Squip.Services
 {
     public interface ISquipService
     {
