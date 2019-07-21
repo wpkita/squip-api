@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squip.Api", "Squip.Api\Squip.Api.csproj", "{3BF6B8A5-0A7B-4AEF-80B3-9E6A8E464AAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squip.Api", "Squip.Api\Squip.Api.csproj", "{3BF6B8A5-0A7B-4AEF-80B3-9E6A8E464AAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,9 +13,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{3BF6B8A5-0A7B-4AEF-80B3-9E6A8E464AAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -30,5 +27,11 @@ Global
 		{3BF6B8A5-0A7B-4AEF-80B3-9E6A8E464AAE}.Release|x64.Build.0 = Release|Any CPU
 		{3BF6B8A5-0A7B-4AEF-80B3-9E6A8E464AAE}.Release|x86.ActiveCfg = Release|Any CPU
 		{3BF6B8A5-0A7B-4AEF-80B3-9E6A8E464AAE}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {89875088-83CB-4C75-90A0-695EA34B3FCF}
 	EndGlobalSection
 EndGlobal
