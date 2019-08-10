@@ -13,18 +13,18 @@ namespace Squip.Api.Controllers.Admin
     [Authorize]
     public class PresentationController : ControllerBase
     {
-        private readonly IRepository<Presentation> presentationRepository;
+        private readonly IRepository<Presentation> _presentationRepository;
 
         public PresentationController(
             IRepository<Presentation> presentationRepository)
         {
-            this.presentationRepository = presentationRepository;
+            _presentationRepository = presentationRepository;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Presentation>> GetById(string id)
         {
-            var presentation = await presentationRepository.GetById(id);
+            var presentation = await _presentationRepository.GetById(id);
 
             if (presentation == null)
             {
@@ -37,7 +37,7 @@ namespace Squip.Api.Controllers.Admin
         [HttpGet]
         public async Task<IEnumerable<Presentation>> GetAll()
         {
-            var presentations = await presentationRepository.GetAll();
+            var presentations = await _presentationRepository.GetAll();
 
             return presentations;
         }
@@ -50,7 +50,7 @@ namespace Squip.Api.Controllers.Admin
                 return BadRequest();
             }
 
-            await presentationRepository.Create(presentation);
+            await _presentationRepository.Create(presentation);
 
             return CreatedAtAction(nameof(GetById), new { id = presentation.Id }, presentation);
         }
@@ -63,13 +63,13 @@ namespace Squip.Api.Controllers.Admin
                 return BadRequest();
             }
 
-            var doesPresentationExist = await presentationRepository.DoesExistById(id);
+            var doesPresentationExist = await _presentationRepository.DoesExistById(id);
             if (!doesPresentationExist)
             {
                 return NotFound();
             }
 
-            await presentationRepository.Update(presentation);
+            await _presentationRepository.Update(presentation);
 
             return NoContent();
         }
@@ -77,13 +77,13 @@ namespace Squip.Api.Controllers.Admin
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var doesPresentationExist = await presentationRepository.DoesExistById(id);
+            var doesPresentationExist = await _presentationRepository.DoesExistById(id);
             if (!doesPresentationExist)
             {
                 return NotFound();
             }
 
-            await presentationRepository.Archive(id);
+            await _presentationRepository.Archive(id);
 
             return NoContent();
         }

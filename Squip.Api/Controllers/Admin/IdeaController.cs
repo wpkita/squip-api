@@ -15,21 +15,21 @@ namespace Squip.Api.Controllers.Admin
 
     public class IdeaController : ControllerBase
     {
-        private readonly IRepository<Idea> ideaRepository;
-        private readonly ISquipService squipService;
+        private readonly IRepository<Idea> _ideaRepository;
+        private readonly ISquipService _squipService;
 
         public IdeaController(
             IRepository<Idea> ideaRepository,
             ISquipService squipService)
         {
-            this.ideaRepository = ideaRepository;
-            this.squipService = squipService;
+            _ideaRepository = ideaRepository;
+            _squipService = squipService;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Idea>> GetById(string id)
         {
-            var idea = await ideaRepository.GetById(id);
+            var idea = await _ideaRepository.GetById(id);
 
             if (idea == null)
             {
@@ -42,7 +42,7 @@ namespace Squip.Api.Controllers.Admin
         [HttpGet]
         public async Task<IEnumerable<Idea>> GetAll()
         {
-            var ideas = await ideaRepository.GetAll();
+            var ideas = await _ideaRepository.GetAll();
 
             return ideas;
         }
@@ -55,7 +55,7 @@ namespace Squip.Api.Controllers.Admin
                 return BadRequest();
             }
 
-            await squipService.Ideate(idea);
+            await _squipService.Ideate(idea);
 
             return CreatedAtAction(nameof(GetById), new { id = idea.Id }, idea);
         }
@@ -68,13 +68,13 @@ namespace Squip.Api.Controllers.Admin
                 return BadRequest();
             }
 
-            var doesIdeaExist = await ideaRepository.DoesExistById(id);
+            var doesIdeaExist = await _ideaRepository.DoesExistById(id);
             if (!doesIdeaExist)
             {
                 return NotFound();
             }
 
-            await ideaRepository.Update(idea);
+            await _ideaRepository.Update(idea);
 
             return NoContent();
         }
@@ -82,13 +82,13 @@ namespace Squip.Api.Controllers.Admin
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var doesIdeaExist = await ideaRepository.DoesExistById(id);
+            var doesIdeaExist = await _ideaRepository.DoesExistById(id);
             if (!doesIdeaExist)
             {
                 return NotFound();
             }
 
-            await ideaRepository.Archive(id);
+            await _ideaRepository.Archive(id);
 
             return NoContent();
         }

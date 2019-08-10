@@ -6,6 +6,6 @@ namespace Squip.Data
     public class PresentationRepository : RedisRepository<Presentation>
         {
             public PresentationRepository(IConfiguration config) : base(config) { }
-            protected override string entityName => "presentation";
+            protected override string EntityName => "presentation";
         }
 }

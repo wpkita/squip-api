@@ -6,6 +6,6 @@ namespace Squip.Data
     public class ReactionRepository : RedisRepository<Reaction>
         {
             public ReactionRepository(IConfiguration config) : base(config) { }
-            protected override string entityName => "reaction";
+            protected override string EntityName => "reaction";
         }
 }

@@ -15,12 +15,12 @@ namespace Squip.Api.Controllers.Admin
 
     public class IdeaImportController : ControllerBase
     {
-        private readonly ISquipService squipService;
+        private readonly ISquipService _squipService;
 
         public IdeaImportController(
             ISquipService squipService)
         {
-            this.squipService = squipService;
+            _squipService = squipService;
         }
 
         [HttpPost]
@@ -41,7 +41,7 @@ namespace Squip.Api.Controllers.Admin
                     Content = $"# {ideaJson.title}\n![alt text]({ideaJson.media} \"{ideaJson.title}\")"
                 };
 
-                await squipService.Ideate(idea);
+                await _squipService.Ideate(idea);
 
                 ideas.Add(idea);
             }

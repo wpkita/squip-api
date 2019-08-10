@@ -15,21 +15,21 @@ namespace Squip.Api.Controllers.Admin
 
     public class ReactionController : ControllerBase
     {
-        private readonly IRepository<Reaction> reactionRepository;
-        private readonly ISquipService squipService;
+        private readonly IRepository<Reaction> _reactionRepository;
+        private readonly ISquipService _squipService;
 
         public ReactionController(
             IRepository<Reaction> reactionRepository,
             ISquipService squipService)
         {
-            this.reactionRepository = reactionRepository;
-            this.squipService = squipService;
+            this._reactionRepository = reactionRepository;
+            this._squipService = squipService;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Reaction>> GetById(string id)
         {
-            var reaction = await reactionRepository.GetById(id);
+            var reaction = await _reactionRepository.GetById(id);
 
             if (reaction == null)
             {
@@ -42,7 +42,7 @@ namespace Squip.Api.Controllers.Admin
         [HttpGet]
         public async Task<IEnumerable<Reaction>> GetAll()
         {
-            var reactions = await reactionRepository.GetAll();
+            var reactions = await _reactionRepository.GetAll();
 
             return reactions;
         }
@@ -55,7 +55,7 @@ namespace Squip.Api.Controllers.Admin
                 return BadRequest();
             }
 
-            await squipService.React(reaction);
+            await _squipService.React(reaction);
 
             return CreatedAtAction(nameof(GetById), new { id = reaction.Id }, reaction);
         }
@@ -68,13 +68,13 @@ namespace Squip.Api.Controllers.Admin
                 return BadRequest();
             }
 
-            var doesReactionExist = await reactionRepository.DoesExistById(id);
+            var doesReactionExist = await _reactionRepository.DoesExistById(id);
             if (!doesReactionExist)
             {
                 return NotFound();
             }
 
-            await reactionRepository.Update(reaction);
+            await _reactionRepository.Update(reaction);
 
             return NoContent();
         }
@@ -82,13 +82,13 @@ namespace Squip.Api.Controllers.Admin
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var doesReactionExist = await reactionRepository.DoesExistById(id);
+            var doesReactionExist = await _reactionRepository.DoesExistById(id);
             if (!doesReactionExist)
             {
                 return NotFound();
             }
 
-            await reactionRepository.Archive(id);
+            await _reactionRepository.Archive(id);
 
             return NoContent();
         }

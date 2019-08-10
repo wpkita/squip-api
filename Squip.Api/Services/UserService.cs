@@ -1,8 +1,7 @@
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Squip.Api.Identity;
+using System.Linq;
+using System.Security.Claims;
 
 namespace Squip.Api.Services
 {
@@ -17,17 +16,13 @@ namespace Squip.Api.Services
         }
         public IUser GetCurrentUser()
         {
-            IUser user = null;
+            if (!(_httpContextAccessor.HttpContext.User.Identity is ClaimsIdentity claimsPrincipal)) return null;
 
-            var claimsPrincipal = _httpContextAccessor.HttpContext.User.Identity as ClaimsIdentity;
-            if (claimsPrincipal != null)
+            var userId = claimsPrincipal.Claims.SingleOrDefault(c => c.Type == UserIdClaimType)?.Value;
+            var user = new User
             {
-                var userId = claimsPrincipal.Claims.SingleOrDefault(c => c.Type == UserIdClaimType)?.Value;
-                user = new User
-                {
-                    Id = userId
-                };
-            }
+                Id = userId
+            };
 
             return user;
         }

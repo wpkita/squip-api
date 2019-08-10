@@ -13,58 +13,46 @@ namespace Squip.Data
 {
     public abstract class RedisRepository<T> : IRepository<T> where T : IDomainModel
     {
-        private readonly IDatabase redisDb;
-        private readonly JsonSerializerSettings JsonSerializerSettings;
+        private readonly IDatabase _redisDb;
+        private readonly JsonSerializerSettings _jsonSerializerSettings;
 
-        public RedisRepository(IConfiguration config)
+        protected RedisRepository(IConfiguration config)
         {
             var redis = ConnectionMultiplexer.Connect(config["REDIS_CONNECTION_STRING"]);
-            redisDb = redis.GetDatabase();
+            _redisDb = redis.GetDatabase();
 
-            JsonSerializerSettings = new JsonSerializerSettings
+            _jsonSerializerSettings = new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             }.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
         }
 
-        protected abstract string entityName { get; }
+        protected abstract string EntityName { get; }
 
-        private string archivedEntityIdsSetName
-        {
-            get
-            {
-                return $"{entityName}IdsArchived";
-            }
-        }
+        private string ArchivedEntityIdsSetName => $"{EntityName}IdsArchived";
 
-        private string activeEntityIdsSetName
-        {
-            get
-            {
-                return $"{entityName}Ids";
-            }
-        }
+        private string ActiveEntityIdsSetName => $"{EntityName}Ids";
 
-        private string entityRedisKey(string id)
+        private string EntityRedisKey(string id)
         {
-            return $"{entityName}:{id}";
+            return $"{EntityName}:{id}";
         }
 
         public async Task<bool> DoesExistById(string id)
         {
-            var doesExist = await redisDb.KeyExistsAsync(entityRedisKey(id));
+            var doesExist = await _redisDb.KeyExistsAsync(EntityRedisKey(id));
 
             return doesExist;
         }
 
         public async Task<T> GetById(string id)
         {
-            T entity = default(T);
+            var entity = default(T);
 
             try
             {
-                var entityJson = await redisDb.StringGetAsync(entityRedisKey(id));
-                entity = JsonConvert.DeserializeObject<T>(entityJson, JsonSerializerSettings);
+                var entityJson = await _redisDb.StringGetAsync(EntityRedisKey(id));
+                entity = JsonConvert.DeserializeObject<T>(entityJson, _jsonSerializerSettings);
             }
             catch
             {
@@ -79,7 +67,7 @@ namespace Squip.Data
         {
             ICollection<T> entities = new Collection<T>();
 
-            var entityIds = await redisDb.SetMembersAsync(activeEntityIdsSetName);
+            var entityIds = await _redisDb.SetMembersAsync(ActiveEntityIdsSetName);
             foreach (var entityId in entityIds)
             {
                 var entity = await GetById(entityId);
@@ -92,13 +80,12 @@ namespace Squip.Data
         public async Task<T> Create(T entity)
         {
             entity.PreCreate();
-            var entityJson = JsonConvert.SerializeObject(entity, JsonSerializerSettings);
+            var entityJson = JsonConvert.SerializeObject(entity, _jsonSerializerSettings);
 
-            // Save entity
-            await redisDb.StringSetAsync(entityRedisKey(entity.Id), entityJson);
+            await _redisDb.StringSetAsync(EntityRedisKey(entity.Id), entityJson);
 
             // Cache Id for random selection later
-            await redisDb.SetAddAsync(activeEntityIdsSetName, entity.Id);
+            await _redisDb.SetAddAsync(ActiveEntityIdsSetName, entity.Id);
 
             return entity;
         }
@@ -106,17 +93,16 @@ namespace Squip.Data
         public async Task<T> Update(T entity)
         {
             entity.PreUpdate();
-            var entityJson = JsonConvert.SerializeObject(entity, JsonSerializerSettings);
+            var entityJson = JsonConvert.SerializeObject(entity, _jsonSerializerSettings);
 
-            // Save entity
-            await redisDb.StringSetAsync(entityRedisKey(entity.Id), entityJson);
+            await _redisDb.StringSetAsync(EntityRedisKey(entity.Id), entityJson);
 
             return entity;
         }
 
         public async Task<bool> Archive(string id)
         {
-            var didSucceed = await redisDb.SetMoveAsync(activeEntityIdsSetName, archivedEntityIdsSetName, id);
+            var didSucceed = await _redisDb.SetMoveAsync(ActiveEntityIdsSetName, ArchivedEntityIdsSetName, id);
 
             return didSucceed;
         }
