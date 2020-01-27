@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace Squip.Web.Controllers
+namespace Squip.RestApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]

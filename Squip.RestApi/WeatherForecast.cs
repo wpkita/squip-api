@@ -1,6 +1,6 @@
 using System;
 
-namespace Squip.Web
+namespace Squip.RestApi
 {
     public class WeatherForecast
     {
