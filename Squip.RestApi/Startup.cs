@@ -10,6 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Squip.Data;
+using Squip.Domain;
+using AutoMapper;
 
 namespace Squip.RestApi
 {
@@ -26,6 +29,8 @@ namespace Squip.RestApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddSingleton<IRepository<Idea>, InMemoryRepository<Idea>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
