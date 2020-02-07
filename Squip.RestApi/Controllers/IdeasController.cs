@@ -23,6 +23,7 @@ namespace Squip.RestApi.Controllers
         }
 
         [HttpGet]
+        [HttpHead]
         public async Task<IEnumerable<IdeaDto>> GetIdeas()
         {
             var ideasFromRepo = await _ideasRepository.GetAll();
