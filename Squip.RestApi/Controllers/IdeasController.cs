@@ -53,5 +53,18 @@ namespace Squip.RestApi.Controllers
             var ideaToReturn = _mapper.Map<IdeaDto>(ideaEntity);
             return CreatedAtRoute("GetIdea", new {ideaId = ideaToReturn.Id}, ideaToReturn);
         }
+
+        [HttpDelete("{ideaId}")]
+        public async Task<IActionResult> DeleteIdea(Guid ideaId)
+        {
+            if (!await _ideasRepository.DoesExistById(ideaId.ToString()))
+            {
+                return NotFound();
+            }
+
+            await _ideasRepository.Archive(ideaId.ToString());
+
+            return NoContent();
+        }
     }
 }
