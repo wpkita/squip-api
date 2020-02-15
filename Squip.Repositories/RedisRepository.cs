@@ -13,7 +13,7 @@ namespace Squip.Data
 {
     public abstract class RedisRepository<T> : IRepository<T> where T : IDomainModel
     {
-        private readonly IDatabase _redisDb;
+        protected readonly IDatabase _redisDb;
         private readonly JsonSerializerSettings _jsonSerializerSettings;
 
         protected RedisRepository(IConfiguration config)
@@ -31,7 +31,7 @@ namespace Squip.Data
 
         private string ArchivedEntityIdsSetName => $"{EntityName}IdsArchived";
 
-        private string ActiveEntityIdsSetName => $"{EntityName}Ids";
+        protected string ActiveEntityIdsSetName => $"{EntityName}Ids";
 
         private string EntityRedisKey(string id)
         {

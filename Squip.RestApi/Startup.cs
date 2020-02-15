@@ -30,6 +30,7 @@ namespace Squip.RestApi
         {
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddTransient<ISquipRepository, IdeaRepository>();
             services.AddSingleton<IRepository<Idea>, IdeaRepository>();
         }
 
