@@ -1,19 +1,14 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NodaTime;
+using Microsoft.Extensions.Hosting;
 using Okta.AspNetCore;
-using Squip.Api.Dtos;
 using Squip.Api.Services;
 using Squip.Data;
 using Squip.Domain;
-using Squip.Services;
 using Swashbuckle.AspNetCore.Swagger;
-using System;
-using System.Linq;
 
 namespace Squip.Api
 {
@@ -31,7 +26,7 @@ namespace Squip.Api
         {
             AddAuth(services);
             AddCors(services);
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc();
             AddSwagger(services);
             AddIoc(services);
         }
@@ -47,11 +42,8 @@ namespace Squip.Api
         private void AddIoc(IServiceCollection services)
         {
             services.AddHttpContextAccessor();
-            services.AddTransient<ISquipService, SquipService>();
             services.AddSingleton<ISquipRepository, SquipRepository>();
             services.AddTransient<IRepository<Idea>, IdeaRepository>();
-            services.AddTransient<IRepository<Reaction>, ReactionRepository>();
-            services.AddTransient<IRepository<Presentation>, PresentationRepository>();
             services.AddTransient<IUserService, OktaUserService>();
         }
 
@@ -86,7 +78,7 @@ namespace Squip.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseAuthentication();
             if (env.IsDevelopment())
@@ -104,8 +96,7 @@ namespace Squip.Api
             UseSwagger(app);
 
             app.UseHttpsRedirection();
-            app.UseMvc();
-            UseAutoMapper();
+            app.UseRouting();
         }
 
         private static void UseSwagger(IApplicationBuilder app)
@@ -114,24 +105,6 @@ namespace Squip.Api
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Squip API v1");
-            });
-        }
-
-        private void UseAutoMapper()
-        {
-            Mapper.Initialize(cfg =>
-            {
-                cfg.CreateMap<IdeaDto, Idea>();
-                cfg.CreateMap<Idea, IdeaDbModel>()
-                    .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags.ToArray()))
-                    .ForMember(dest => dest.InstantCreatedAt, opt => opt.MapFrom(src => src.InstantCreatedAt.ToDateTimeUtc()));
-                cfg.CreateMap<IdeaDbModel, Idea>()
-                    .ForMember(dest => dest.InstantCreatedAt,
-                        opt => opt.MapFrom(src =>
-                            Instant.FromDateTimeUtc(DateTime.SpecifyKind(src.InstantCreatedAt, DateTimeKind.Utc))));
-                cfg.CreateMap<Idea, Presentation>().ForMember(dest => dest.SquipId, opt => opt.MapFrom(src => src.Id));
-                cfg.CreateMap<Presentation, PresentationDto>();
-                cfg.CreateMap<ReactionDto, Reaction>();
             });
         }
     }
