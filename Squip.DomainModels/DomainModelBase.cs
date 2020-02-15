@@ -1,3 +1,4 @@
+using System;
 using NodaTime;
 
 namespace Squip.Domain
@@ -10,6 +11,8 @@ namespace Squip.Domain
 
         public void PreCreate()
         {
+            Id ??= Guid.NewGuid().ToString();
+
             InstantCreatedAt = SystemClock.Instance.GetCurrentInstant();
         }
 
