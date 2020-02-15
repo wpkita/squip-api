@@ -30,7 +30,7 @@ namespace Squip.RestApi
         {
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddSingleton<IRepository<Idea>, InMemoryRepository<Idea>>();
+            services.AddSingleton<IRepository<Idea>, IdeaRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

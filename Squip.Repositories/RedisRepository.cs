@@ -18,7 +18,7 @@ namespace Squip.Data
 
         protected RedisRepository(IConfiguration config)
         {
-            var redis = ConnectionMultiplexer.Connect(config["REDIS_CONNECTION_STRING"]);
+            var redis = ConnectionMultiplexer.Connect(config["RedisConnectionString"]);
             _redisDb = redis.GetDatabase();
 
             _jsonSerializerSettings = new JsonSerializerSettings

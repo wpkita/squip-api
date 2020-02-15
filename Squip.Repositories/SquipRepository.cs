@@ -15,7 +15,7 @@ namespace Squip.Data
 
         public SquipRepository(IConfiguration config)
         {
-            var redis = ConnectionMultiplexer.Connect(config["REDIS_CONNECTION_STRING"]);
+            var redis = ConnectionMultiplexer.Connect(config["RedisConnectionString"]);
             _redisDb = redis.GetDatabase();
             _firestoreDb = FirestoreDb.Create(config["GCP_PROJECT_ID"]);
         }
