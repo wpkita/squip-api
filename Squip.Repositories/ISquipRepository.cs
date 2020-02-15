@@ -1,12 +1,10 @@
 using System.Threading.Tasks;
+using Squip.Domain;
 
 namespace Squip.Data
 {
     public interface ISquipRepository
     {
-        Task<string> GetRandomIdeaId();
-        string GetNextIdeaId();
-        string GetNextPresentationId();
-        string GetNextReactionId();
+        Task<Idea> GetRandomIdea();
     }
 }
