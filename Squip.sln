@@ -9,9 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squip.Domain", "Squip.Domai
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squip.Data", "Squip.Repositories\Squip.Data.csproj", "{DFF03D2F-AC32-4E44-94AE-7D649B553D9E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squip.Services", "Squip.Services\Squip.Services.csproj", "{99136B9A-2D9D-427A-B47F-9836602A8987}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squip.RestApi", "Squip.RestApi\Squip.RestApi.csproj", "{8FDF7C51-8093-48D3-B76F-7899DBCE16F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squip.RestApi", "Squip.RestApi\Squip.RestApi.csproj", "{8FDF7C51-8093-48D3-B76F-7899DBCE16F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,18 +57,6 @@ Global
 		{DFF03D2F-AC32-4E44-94AE-7D649B553D9E}.Release|x64.Build.0 = Release|Any CPU
 		{DFF03D2F-AC32-4E44-94AE-7D649B553D9E}.Release|x86.ActiveCfg = Release|Any CPU
 		{DFF03D2F-AC32-4E44-94AE-7D649B553D9E}.Release|x86.Build.0 = Release|Any CPU
-		{99136B9A-2D9D-427A-B47F-9836602A8987}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{99136B9A-2D9D-427A-B47F-9836602A8987}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{99136B9A-2D9D-427A-B47F-9836602A8987}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{99136B9A-2D9D-427A-B47F-9836602A8987}.Debug|x64.Build.0 = Debug|Any CPU
-		{99136B9A-2D9D-427A-B47F-9836602A8987}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{99136B9A-2D9D-427A-B47F-9836602A8987}.Debug|x86.Build.0 = Debug|Any CPU
-		{99136B9A-2D9D-427A-B47F-9836602A8987}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{99136B9A-2D9D-427A-B47F-9836602A8987}.Release|Any CPU.Build.0 = Release|Any CPU
-		{99136B9A-2D9D-427A-B47F-9836602A8987}.Release|x64.ActiveCfg = Release|Any CPU
-		{99136B9A-2D9D-427A-B47F-9836602A8987}.Release|x64.Build.0 = Release|Any CPU
-		{99136B9A-2D9D-427A-B47F-9836602A8987}.Release|x86.ActiveCfg = Release|Any CPU
-		{99136B9A-2D9D-427A-B47F-9836602A8987}.Release|x86.Build.0 = Release|Any CPU
 		{8FDF7C51-8093-48D3-B76F-7899DBCE16F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8FDF7C51-8093-48D3-B76F-7899DBCE16F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FDF7C51-8093-48D3-B76F-7899DBCE16F1}.Debug|x64.ActiveCfg = Debug|Any CPU
