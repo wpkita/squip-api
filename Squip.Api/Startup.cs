@@ -42,7 +42,6 @@ namespace Squip.Api
         private void AddIoc(IServiceCollection services)
         {
             services.AddHttpContextAccessor();
-            services.AddSingleton<ISquipRepository, SquipRepository>();
             services.AddTransient<IRepository<Idea>, IdeaRepository>();
             services.AddTransient<IUserService, OktaUserService>();
         }
