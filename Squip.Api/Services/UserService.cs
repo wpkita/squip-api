@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Http;
 using Squip.Api.Identity;
 using System.Linq;
@@ -16,15 +17,25 @@ namespace Squip.Api.Services
         }
         public IUser GetCurrentUser()
         {
-            if (!(_httpContextAccessor.HttpContext.User.Identity is ClaimsIdentity claimsPrincipal)) return null;
+            if (!(_httpContextAccessor.HttpContext.User.Identity is ClaimsIdentity claimsIdentity)) return null;
 
-            var userId = claimsPrincipal.Claims.SingleOrDefault(c => c.Type == UserIdClaimType)?.Value;
+            var userId = GetUserIdFromClaimsIdentity(claimsIdentity);
             var user = new User
             {
                 Id = userId
             };
 
             return user;
+        }
+
+        public string GetUserIdFromClaimsIdentity(ClaimsIdentity claimsIdentity)
+        {
+            if (claimsIdentity == null)
+            {
+                throw new ArgumentNullException(nameof(claimsIdentity));
+            }
+
+            return claimsIdentity.Claims.SingleOrDefault(c => c.Type == UserIdClaimType)?.Value;
         }
     }
 }
