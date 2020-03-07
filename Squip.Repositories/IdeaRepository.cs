@@ -11,7 +11,7 @@ namespace Squip.Data
 
         public async Task<Idea> GetRandomIdea()
         {
-            var randomIdeaId = await _redisDb.SetRandomMemberAsync(ActiveEntityIdsSetName);
+            var randomIdeaId = await RedisDb.SetRandomMemberAsync(ActiveEntityIdsSetName);
 
             var randomIdea = await GetById(randomIdeaId);
 

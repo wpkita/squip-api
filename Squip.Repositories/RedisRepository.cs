@@ -13,13 +13,13 @@ namespace Squip.Data
 {
     public abstract class RedisRepository<T> : IRepository<T> where T : IDomainModel
     {
-        protected readonly IDatabase _redisDb;
+        protected readonly IDatabase RedisDb;
         private readonly JsonSerializerSettings _jsonSerializerSettings;
 
         protected RedisRepository(IConfiguration config)
         {
             var redis = ConnectionMultiplexer.Connect(config["RedisConnectionString"]);
-            _redisDb = redis.GetDatabase();
+            RedisDb = redis.GetDatabase();
 
             _jsonSerializerSettings = new JsonSerializerSettings
             {
@@ -40,7 +40,7 @@ namespace Squip.Data
 
         public async Task<bool> DoesExistById(string id)
         {
-            var doesExist = await _redisDb.KeyExistsAsync(EntityRedisKey(id));
+            var doesExist = await RedisDb.KeyExistsAsync(EntityRedisKey(id));
 
             return doesExist;
         }
@@ -51,7 +51,7 @@ namespace Squip.Data
 
             try
             {
-                var entityJson = await _redisDb.StringGetAsync(EntityRedisKey(id));
+                var entityJson = await RedisDb.StringGetAsync(EntityRedisKey(id));
                 entity = JsonConvert.DeserializeObject<T>(entityJson, _jsonSerializerSettings);
             }
             catch
@@ -67,7 +67,7 @@ namespace Squip.Data
         {
             ICollection<T> entities = new Collection<T>();
 
-            var entityIds = await _redisDb.SetMembersAsync(ActiveEntityIdsSetName);
+            var entityIds = await RedisDb.SetMembersAsync(ActiveEntityIdsSetName);
             foreach (var entityId in entityIds)
             {
                 var entity = await GetById(entityId);
@@ -82,10 +82,10 @@ namespace Squip.Data
             entity.PreCreate();
             var entityJson = JsonConvert.SerializeObject(entity, _jsonSerializerSettings);
 
-            await _redisDb.StringSetAsync(EntityRedisKey(entity.Id), entityJson);
+            await RedisDb.StringSetAsync(EntityRedisKey(entity.Id), entityJson);
 
             // Cache Id for random selection later
-            await _redisDb.SetAddAsync(ActiveEntityIdsSetName, entity.Id);
+            await RedisDb.SetAddAsync(ActiveEntityIdsSetName, entity.Id);
 
             return entity;
         }
@@ -95,14 +95,14 @@ namespace Squip.Data
             entity.PreUpdate();
             var entityJson = JsonConvert.SerializeObject(entity, _jsonSerializerSettings);
 
-            await _redisDb.StringSetAsync(EntityRedisKey(entity.Id), entityJson);
+            await RedisDb.StringSetAsync(EntityRedisKey(entity.Id), entityJson);
 
             return entity;
         }
 
         public async Task<bool> Archive(string id)
         {
-            var didSucceed = await _redisDb.SetMoveAsync(ActiveEntityIdsSetName, ArchivedEntityIdsSetName, id);
+            var didSucceed = await RedisDb.SetMoveAsync(ActiveEntityIdsSetName, ArchivedEntityIdsSetName, id);
 
             return didSucceed;
         }
