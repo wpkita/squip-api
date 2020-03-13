@@ -20,8 +20,10 @@ steps:
   inputs:
     packageType: 'sdk'
     version: '3.x'
-    
+
 - task: NuGetToolInstaller@1
+  inputs:
+    versionSpec: '4.x'
 
 - task: DotNetCoreCLI@2
   inputs:
