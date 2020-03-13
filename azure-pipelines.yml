@@ -38,3 +38,9 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: true
+    zipAfterPublish: true
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'squip-api'
