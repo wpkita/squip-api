@@ -44,11 +44,11 @@ namespace Squip.TestPlayground
             IsOn = isOn;
         }
 
+        public bool IsOn { get; private set; }
+
         public void Toggle()
         {
             IsOn = !IsOn;
         }
-
-        public bool IsOn { get; private set; }
     }
 }
