@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Squip.Rest.Domain;
+using Squip.Rest.Repositories;
 
 namespace Squip.Rest
 {
@@ -27,6 +30,8 @@ namespace Squip.Rest
         {
             services.AddControllers();
             services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddSingleton<IRepository<Tile>, InMemoryRepository<Tile>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

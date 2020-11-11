@@ -3,15 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squip.Domain", "Squip.DomainModels\Squip.Domain.csproj", "{4FA846D7-48C5-4C9A-9B02-2B9AEF066958}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squip.Data", "Squip.Repositories\Squip.Data.csproj", "{DFF03D2F-AC32-4E44-94AE-7D649B553D9E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squip.RestApi", "Squip.RestApi\Squip.RestApi.csproj", "{8FDF7C51-8093-48D3-B76F-7899DBCE16F1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squip.TestPlayground", "Squip.TestPlayground\Squip.TestPlayground.csproj", "{7E6FE4E1-F551-4B8B-993F-458B922919EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squip.Rest", "Squip.Rest\Squip.Rest.csproj", "{D1A5936C-3842-4EF5-AE59-440302DD8E0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squip.Rest", "Squip.Rest\Squip.Rest.csproj", "{D1A5936C-3842-4EF5-AE59-440302DD8E0E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,30 +19,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4FA846D7-48C5-4C9A-9B02-2B9AEF066958}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4FA846D7-48C5-4C9A-9B02-2B9AEF066958}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4FA846D7-48C5-4C9A-9B02-2B9AEF066958}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{4FA846D7-48C5-4C9A-9B02-2B9AEF066958}.Debug|x64.Build.0 = Debug|Any CPU
-		{4FA846D7-48C5-4C9A-9B02-2B9AEF066958}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{4FA846D7-48C5-4C9A-9B02-2B9AEF066958}.Debug|x86.Build.0 = Debug|Any CPU
-		{4FA846D7-48C5-4C9A-9B02-2B9AEF066958}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4FA846D7-48C5-4C9A-9B02-2B9AEF066958}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4FA846D7-48C5-4C9A-9B02-2B9AEF066958}.Release|x64.ActiveCfg = Release|Any CPU
-		{4FA846D7-48C5-4C9A-9B02-2B9AEF066958}.Release|x64.Build.0 = Release|Any CPU
-		{4FA846D7-48C5-4C9A-9B02-2B9AEF066958}.Release|x86.ActiveCfg = Release|Any CPU
-		{4FA846D7-48C5-4C9A-9B02-2B9AEF066958}.Release|x86.Build.0 = Release|Any CPU
-		{DFF03D2F-AC32-4E44-94AE-7D649B553D9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DFF03D2F-AC32-4E44-94AE-7D649B553D9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DFF03D2F-AC32-4E44-94AE-7D649B553D9E}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{DFF03D2F-AC32-4E44-94AE-7D649B553D9E}.Debug|x64.Build.0 = Debug|Any CPU
-		{DFF03D2F-AC32-4E44-94AE-7D649B553D9E}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{DFF03D2F-AC32-4E44-94AE-7D649B553D9E}.Debug|x86.Build.0 = Debug|Any CPU
-		{DFF03D2F-AC32-4E44-94AE-7D649B553D9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DFF03D2F-AC32-4E44-94AE-7D649B553D9E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DFF03D2F-AC32-4E44-94AE-7D649B553D9E}.Release|x64.ActiveCfg = Release|Any CPU
-		{DFF03D2F-AC32-4E44-94AE-7D649B553D9E}.Release|x64.Build.0 = Release|Any CPU
-		{DFF03D2F-AC32-4E44-94AE-7D649B553D9E}.Release|x86.ActiveCfg = Release|Any CPU
-		{DFF03D2F-AC32-4E44-94AE-7D649B553D9E}.Release|x86.Build.0 = Release|Any CPU
 		{8FDF7C51-8093-48D3-B76F-7899DBCE16F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8FDF7C51-8093-48D3-B76F-7899DBCE16F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FDF7C51-8093-48D3-B76F-7899DBCE16F1}.Debug|x64.ActiveCfg = Debug|Any CPU
