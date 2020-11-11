@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using Squip.Domain;
+using Squip.Rest.Domain;
 
-namespace Squip.Data
+namespace Squip.Rest.Repositories
 {
     public class IdeaRepository : RedisRepository<Idea>, ISquipRepository
     {

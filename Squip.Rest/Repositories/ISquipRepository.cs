@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using Squip.Domain;
+using Squip.Rest.Domain;
 
-namespace Squip.Data
+namespace Squip.Rest.Repositories
 {
     public interface ISquipRepository
     {

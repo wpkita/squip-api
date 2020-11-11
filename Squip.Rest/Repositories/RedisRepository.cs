@@ -5,11 +5,11 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NodaTime;
-using NodaTime.Serialization.JsonNet;
-using Squip.Domain;
+using Squip.Rest.Domain;
 using StackExchange.Redis;
+using NodaTime.Serialization.JsonNet;
 
-namespace Squip.Data
+namespace Squip.Rest.Repositories
 {
     public abstract class RedisRepository<T> : IRepository<T> where T : IDomainModel
     {

@@ -1,7 +1,7 @@
 using AutoMapper;
-using Squip.Domain;
+using Squip.Rest.Domain;
 
-namespace Squip.RestApi.Dtos
+namespace Squip.Rest.Dtos
 {
     public class IdeasProfile : Profile
     {

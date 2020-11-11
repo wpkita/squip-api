@@ -1,6 +1,6 @@
 using NodaTime;
 
-namespace Squip.Domain
+namespace Squip.Rest.Domain
 {
     public interface IDomainModel
     {

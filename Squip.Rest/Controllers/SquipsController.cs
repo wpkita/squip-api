@@ -1,10 +1,10 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Squip.Data;
-using Squip.RestApi.Dtos;
+using Squip.Rest.Dtos;
+using Squip.Rest.Repositories;
 
-namespace Squip.RestApi.Controllers
+namespace Squip.Rest.Controllers
 {
     [Route("api/squips")]
     [ApiController]

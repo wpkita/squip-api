@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Squip.Domain
+namespace Squip.Rest.Domain
 {
     public class Idea : DomainModelBase
     {

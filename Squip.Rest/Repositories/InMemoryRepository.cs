@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Squip.Domain;
+using Squip.Rest.Domain;
 
-namespace Squip.Data
+namespace Squip.Rest.Repositories
 {
     public class InMemoryRepository<T> : IRepository<T> where T : IDomainModel
     {

@@ -1,13 +1,13 @@
-using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using Squip.Data;
-using Squip.Domain;
-using Squip.RestApi.Dtos;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Squip.Rest.Domain;
+using Squip.Rest.Dtos;
+using Squip.Rest.Repositories;
 
-namespace Squip.RestApi.Controllers
+namespace Squip.Rest.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

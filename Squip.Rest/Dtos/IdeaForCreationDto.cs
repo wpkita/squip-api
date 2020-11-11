@@ -1,4 +1,4 @@
-namespace Squip.RestApi.Dtos
+namespace Squip.Rest.Dtos
 {
     public class IdeaForCreationDto
     {
