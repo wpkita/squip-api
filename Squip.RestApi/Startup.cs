@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Squip.Data;
-using Squip.Domain;
 using System;
 
 namespace Squip.RestApi
@@ -24,9 +22,6 @@ namespace Squip.RestApi
         {
             services.AddApplicationInsightsTelemetry();
             services.AddControllers();
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddTransient<ISquipRepository, IdeaRepository>();
-            services.AddSingleton<IRepository<Idea>, IdeaRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
