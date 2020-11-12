@@ -7,14 +7,16 @@ using Squip.Rest.Domain;
 
 namespace Squip.Rest.Repositories
 {
-    public class CosmosTilesRepository
+    public abstract class CosmosTilesRepository<T> : IRepository<T> where T : IDomainModel
     {
         readonly CosmosClient _client;
 
-        public CosmosTilesRepository(IConfiguration configuration)
+        protected CosmosTilesRepository(IConfiguration configuration)
         {
             _client = new CosmosClient(configuration["COSMOS_DB_CONN_STRING"]);
         }
+
+        protected abstract string CollectionName { get; }
 
         public async Task<IEnumerable<Tile>> Get()
         {
@@ -36,6 +38,36 @@ namespace Squip.Rest.Repositories
             }
 
             return results;
+        }
+
+        public async Task<bool> DoesExistById(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<T> GetById(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<T>> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<T> Create(T t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<T> Update(T t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<bool> Archive(string id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
