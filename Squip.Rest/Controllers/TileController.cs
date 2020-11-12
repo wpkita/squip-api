@@ -24,7 +24,7 @@ namespace Squip.Rest.Controllers
 
         [HttpGet]
         [HttpHead]
-        public async Task<IEnumerable<TileDto>> GetTiles()
+        public async Task<IEnumerable<TileDto>> GetAll()
         {
             var tilesFromRepo = await _tileRepository.GetAll();
 
