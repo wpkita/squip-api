@@ -1,5 +1,6 @@
 Requirements
 ============
-
-* Redis server is running at **localhost:6379**.
-* Environment variable APPINSIGHTS_INSTRUMENTATIONKEY is set to the Guid of the Application Insights Instrumentation Key.
+Set the following environment variables:
+* `COSMOS_DB_CONN_STRING`
+* `COSMOS_DB_NAME`
+* `APPINSIGHTS_INSTRUMENTATIONKEY`
