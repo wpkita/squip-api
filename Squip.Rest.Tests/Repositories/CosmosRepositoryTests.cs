@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
@@ -40,7 +41,6 @@ namespace Squip.Rest.Tests.Repositories
         {
             var unitUnderTest = new TileCosmosRepository(_configuration);
 
-            (await unitUnderTest.GetAll()).Count().Should().Be(0);
 
             var newTile = new Tile
             {
@@ -50,9 +50,8 @@ namespace Squip.Rest.Tests.Repositories
 
             await unitUnderTest.Create(newTile);
 
-            (await unitUnderTest.GetAll()).Count().Should().Be(1);
             (await unitUnderTest.Archive(newTile.Id)).Should().Be(true);
-            (await unitUnderTest.GetAll()).Count().Should().Be(0);
+            (await unitUnderTest.GetById(newTile.Id)).Should().BeNull();
         }
 
         [Fact]
@@ -60,9 +59,10 @@ namespace Squip.Rest.Tests.Repositories
         {
             var unitUnderTest = new TileCosmosRepository(_configuration);
 
-            (await unitUnderTest.GetAll()).Count().Should().Be(0);
-            (await unitUnderTest.Archive(string.Empty)).Should().Be(false);
-            (await unitUnderTest.GetAll()).Count().Should().Be(0);
+            var tileId = Guid.NewGuid().ToString();
+
+            (await unitUnderTest.Archive(tileId)).Should().Be(false);
+            (await unitUnderTest.GetById(tileId)).Should().BeNull();
         }
 
         [Fact]
@@ -70,30 +70,28 @@ namespace Squip.Rest.Tests.Repositories
         {
             var unitUnderTest = new TileCosmosRepository(_configuration);
 
-            var oldName = "My test tile";
-            var oldType = "My type";
-            var updatedName = "My new updated name";
-            var updatedType = "My new type";
+            const string oldName = "My test tile";
+            const string oldType = "My type";
+            const string updatedName = "My new updated name";
+            const string updatedType = "My new type";
+
             var newTile = new Tile
             {
                 Name = oldName,
                 Type = oldType
             };
 
-            var createdTileFromRepo = await unitUnderTest.Create(newTile);
+            await unitUnderTest.Create(newTile);
 
             var tileFromRepo = await unitUnderTest.GetById(newTile.Id);
             tileFromRepo.Name = updatedName;
             tileFromRepo.Type = updatedType;
 
-            var updatedTileFromRepo = await unitUnderTest.Update(tileFromRepo);
+            await unitUnderTest.Update(tileFromRepo);
 
             tileFromRepo = await unitUnderTest.GetById(newTile.Id);
             tileFromRepo.Name.Should().Be(updatedName);
             tileFromRepo.Type.Should().Be(updatedType);
-
-            createdTileFromRepo.Should().Be(tileFromRepo);
-            tileFromRepo.Should().Be(updatedTileFromRepo);
         }
 
         [Fact]
@@ -119,9 +117,9 @@ namespace Squip.Rest.Tests.Repositories
         {
             var unitUnderTest = new TileCosmosRepository(_configuration);
 
-            (await unitUnderTest.GetAll()).Count().Should().Be(0);
+            var tileId = Guid.NewGuid().ToString();
 
-            (await unitUnderTest.DoesExistById(string.Empty)).Should().Be(false);
+            (await unitUnderTest.DoesExistById(tileId)).Should().Be(false);
         }
 
         [Fact]
@@ -129,7 +127,9 @@ namespace Squip.Rest.Tests.Repositories
         {
             var unitUnderTest = new TileCosmosRepository(_configuration);
 
-            (await unitUnderTest.GetById(string.Empty)).Should().BeNull();
+            var tileId = Guid.NewGuid().ToString();
+
+            (await unitUnderTest.GetById(tileId)).Should().BeNull();
         }
     }
 }

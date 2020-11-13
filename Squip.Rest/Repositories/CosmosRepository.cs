@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Azure.Cosmos;
@@ -45,15 +46,43 @@ namespace Squip.Rest.Repositories
 
         public async Task<bool> DoesExistById(string id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                ItemResponse<T> response = await _container.ReadItemAsync<T>(id, new PartitionKey(id));
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    return true;
+                }
+            }
+            catch (CosmosException cosmosException)
+            {
+                // Log it.
+
+                if (cosmosException.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return false;
+                }
+            }
+
+            return false;
         }
 
         public async Task<T> GetById(string id)
         {
-            var response = await _container.ReadItemAsync<T>(id, new PartitionKey(id));
-            var entity = (T) response;
+            T item = default;
 
-            return entity;
+            try
+            {
+                var response = await _container.ReadItemAsync<T>(id, new PartitionKey(id));
+                item = response.Resource;
+            }
+            catch (CosmosException cosmosException)
+            {
+                // Log it.
+            }
+
+            return item;
         }
 
         public async Task<IEnumerable<T>> GetAll()
@@ -81,12 +110,29 @@ namespace Squip.Rest.Repositories
         public async Task<T> Update(T t)
         {
             t.PreUpdate();
-            throw new NotImplementedException();
+
+            var itemResponse = await _container.UpsertItemAsync(t);
+
+            return t;
         }
 
         public async Task<bool> Archive(string id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _container.DeleteItemAsync<T>(id, new PartitionKey(id));
+
+                return true;
+            }
+            catch (CosmosException cosmosException)
+            {
+                if (cosmosException.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return false;
+                }
+            }
+
+            return false;
         }
     }
 }
