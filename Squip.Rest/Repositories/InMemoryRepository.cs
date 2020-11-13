@@ -8,27 +8,27 @@ namespace Squip.Rest.Repositories
 {
     public class InMemoryRepository<T> : IRepository<T> where T : IDomainModel
     {
-        private static readonly IList<T> Entities = new List<T>();
+        private readonly IList<T> _entities = new List<T>();
 
         public Task<bool> DoesExistById(string id)
         {
-            return Task.FromResult(Entities.Any(idea => idea.Id == id));
+            return Task.FromResult(_entities.Any(idea => idea.Id == id));
         }
 
         public Task<T> GetById(string id)
         {
-            return Task.FromResult(Entities.SingleOrDefault(i => i.Id == id));
+            return Task.FromResult(_entities.SingleOrDefault(i => i.Id == id));
         }
 
         public Task<IEnumerable<T>> GetAll()
         {
-            return Task.FromResult(Entities.AsEnumerable());
+            return Task.FromResult(_entities.AsEnumerable());
         }
 
         public Task<T> Create(T t)
         {
             t.Id = Guid.NewGuid().ToString();
-            Entities.Add(t);
+            _entities.Add(t);
 
             return Task.FromResult(t);
         }
@@ -40,13 +40,13 @@ namespace Squip.Rest.Repositories
 
         public Task<bool> Archive(string id)
         {
-            var entity = Entities.SingleOrDefault(e => e.Id == id);
+            var entity = _entities.SingleOrDefault(e => e.Id == id);
             if (entity == null)
             {
                 return Task.FromResult(false);
             }
 
-            Entities.Remove(entity);
+            _entities.Remove(entity);
             return Task.FromResult(true);
         }
     }
