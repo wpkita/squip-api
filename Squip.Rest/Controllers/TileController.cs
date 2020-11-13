@@ -32,9 +32,9 @@ namespace Squip.Rest.Controllers
         }
 
         [HttpGet("{id}", Name = "GetTile")]
-        public async Task<IActionResult> GetTile([FromQuery] Guid id)
+        public async Task<IActionResult> GetTile(string id)
         {
-            var tileFromRepo = await _tileRepository.GetById(id.ToString());
+            var tileFromRepo = await _tileRepository.GetById(id);
 
             if (tileFromRepo == null)
             {
@@ -54,15 +54,24 @@ namespace Squip.Rest.Controllers
             return CreatedAtRoute("GetTile", new { id = tileToReturn.Id }, tileToReturn);
         }
 
-        [HttpDelete("{tileId}")]
-        public async Task<IActionResult> DeleteTile(Guid tileId)
+        [HttpPut]
+        public async Task<IActionResult> UpdateTile(TileDto tile)
         {
-            if (!await _tileRepository.DoesExistById(tileId.ToString()))
+            var tileEntity = _mapper.Map<Tile>(tile);
+            await _tileRepository.Update(tileEntity);
+
+            return Ok(_mapper.Map<TileDto>(tileEntity));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTile(string id)
+        {
+            if (!await _tileRepository.DoesExistById(id))
             {
                 return NotFound();
             }
 
-            await _tileRepository.Archive(tileId.ToString());
+            await _tileRepository.Archive(id);
 
             return NoContent();
         }

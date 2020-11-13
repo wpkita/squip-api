@@ -10,7 +10,7 @@ namespace Squip.EndToEndTests
         [Fact]
         public void CreateReadUpdateDelete()
         {
-            var client = new RestClient("https://localhost:44312/");
+            var client = new RestClient("https://localhost:32770/");
 
             const string name = "Tile NAME goes here.";
             const string type = "Tile TYPE goes here.";
@@ -23,23 +23,22 @@ namespace Squip.EndToEndTests
             {
                 name, type
             });
-            var responseContent = client.Post(request).Content;
-            var deserializedJson = JsonConvert.DeserializeObject<dynamic>(responseContent);
-            var id = deserializedJson.id.Value as string;
+            var response = client.Post(request);
+            var deserializedJson = JsonConvert.DeserializeObject<dynamic>(response.Content);
+            var id = (string)deserializedJson.id.Value;
 
-            (deserializedJson.name.Value as string).Should().Be(name);
-            (deserializedJson.type.Value as string).Should().Be(type);
+            ((string)deserializedJson.name.Value).Should().Be(name);
+            ((string)deserializedJson.type.Value).Should().Be(type);
             id.Should().NotBeNullOrWhiteSpace();
 
             // Read
-            request = new RestRequest("tiles");
-            request.AddQueryParameter("id", id);
-            responseContent = client.Get(request).Content;
-            deserializedJson = JsonConvert.DeserializeObject<dynamic>(responseContent);
-            id = deserializedJson.id.Value as string;
+            request = new RestRequest($"tiles/{id}");
+            response = client.Get(request);
+            deserializedJson = JsonConvert.DeserializeObject<dynamic>(response.Content);
+            id = deserializedJson.id.Value;
 
-            (deserializedJson.name.Value as string).Should().Be(name);
-            (deserializedJson.type.Value as string).Should().Be(type);
+            ((string)deserializedJson.name.Value).Should().Be(name);
+            ((string)deserializedJson.type.Value).Should().Be(type);
             id.Should().Be(id);
 
             // Update
@@ -50,20 +49,19 @@ namespace Squip.EndToEndTests
                 name = updatedName,
                 type = updatedType
             });
-            responseContent = client.Put(request).Content;
-            deserializedJson = JsonConvert.DeserializeObject<dynamic>(responseContent);
+            response = client.Put(request);
+            deserializedJson = JsonConvert.DeserializeObject<dynamic>(response.Content);
 
-            (deserializedJson.name.Value as string).Should().Be(updatedName);
-            (deserializedJson.type.Value as string).Should().Be(updatedType);
-            (deserializedJson.id.Value as string).Should().Be(id);
+            ((string)deserializedJson.name.Value).Should().Be(updatedName);
+            ((string)deserializedJson.type.Value).Should().Be(updatedType);
+            ((string)deserializedJson.id.Value).Should().Be(id);
 
             // Delete
-            request = new RestRequest("tiles");
-            request.AddQueryParameter("id", id);
-            var response = client.Delete(request);
+            request = new RestRequest($"tiles/{id}");
+            response = client.Delete(request);
             response.StatusCode.Should().Be(204);
 
-            request = new RestRequest("tiles");
+            request = new RestRequest($"tiles/{id}");
             response = client.Get(request);
             response.StatusCode.Should().Be(404);
         }

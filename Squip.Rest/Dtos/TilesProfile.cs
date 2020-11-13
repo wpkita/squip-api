@@ -7,6 +7,7 @@ namespace Squip.Rest.Dtos
     {
         public TilesProfile()
         {
+            CreateMap<TileDto, Tile>();
             CreateMap<Tile, TileDto>();
             CreateMap<TileForCreationDto, Tile>();
         }

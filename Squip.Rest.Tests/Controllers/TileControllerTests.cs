@@ -75,7 +75,7 @@ namespace Squip.Rest.Tests.Controllers
 
             var tileController = new TileController(mockRepo.Object, _mockMapper);
 
-            var result = await tileController.GetTile(new Guid(idFromRepo));
+            var result = await tileController.GetTile(idFromRepo);
             result.Should().BeOfType<OkObjectResult>();
         }
 
@@ -98,7 +98,7 @@ namespace Squip.Rest.Tests.Controllers
 
             var tileController = new TileController(mockRepo.Object, _mockMapper);
 
-            var result = await tileController.GetTile(new Guid(idInRequest));
+            var result = await tileController.GetTile(idInRequest);
             result.Should().BeOfType<NotFoundResult>();
         }
     }
