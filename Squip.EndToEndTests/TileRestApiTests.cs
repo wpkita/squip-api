@@ -10,7 +10,7 @@ namespace Squip.EndToEndTests
         [Fact]
         public void CreateReadUpdateDelete()
         {
-            var client = new RestClient("https://localhost:32770/");
+            var client = new RestClient("https://localhost:32776/");
 
             const string name = "Tile NAME goes here.";
             const string type = "Tile TYPE goes here.";
@@ -27,6 +27,7 @@ namespace Squip.EndToEndTests
             var deserializedJson = JsonConvert.DeserializeObject<dynamic>(response.Content);
             var id = (string)deserializedJson.id.Value;
 
+            response.StatusCode.Should().Be(201);
             ((string)deserializedJson.name.Value).Should().Be(name);
             ((string)deserializedJson.type.Value).Should().Be(type);
             id.Should().NotBeNullOrWhiteSpace();
@@ -37,9 +38,10 @@ namespace Squip.EndToEndTests
             deserializedJson = JsonConvert.DeserializeObject<dynamic>(response.Content);
             id = deserializedJson.id.Value;
 
+            response.StatusCode.Should().Be(200);
             ((string)deserializedJson.name.Value).Should().Be(name);
             ((string)deserializedJson.type.Value).Should().Be(type);
-            id.Should().Be(id);
+            ((string)deserializedJson.id.Value).Should().Be(id);
 
             // Update
             request = new RestRequest("tiles");
@@ -52,6 +54,7 @@ namespace Squip.EndToEndTests
             response = client.Put(request);
             deserializedJson = JsonConvert.DeserializeObject<dynamic>(response.Content);
 
+            response.StatusCode.Should().Be(200);
             ((string)deserializedJson.name.Value).Should().Be(updatedName);
             ((string)deserializedJson.type.Value).Should().Be(updatedType);
             ((string)deserializedJson.id.Value).Should().Be(id);
@@ -59,10 +62,12 @@ namespace Squip.EndToEndTests
             // Delete
             request = new RestRequest($"tiles/{id}");
             response = client.Delete(request);
+
             response.StatusCode.Should().Be(204);
 
             request = new RestRequest($"tiles/{id}");
             response = client.Get(request);
+
             response.StatusCode.Should().Be(404);
         }
     }
