@@ -32,7 +32,7 @@ namespace Squip.Rest.Controllers
         }
 
         [HttpGet("{id}", Name = "GetTile")]
-        public async Task<IActionResult> GetTile(Guid id)
+        public async Task<IActionResult> GetTile([FromQuery] Guid id)
         {
             var tileFromRepo = await _tileRepository.GetById(id.ToString());
 
