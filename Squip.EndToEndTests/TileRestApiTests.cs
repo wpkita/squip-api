@@ -5,6 +5,7 @@ using Xunit;
 
 namespace Squip.EndToEndTests
 {
+    [Trait("Category", "End-to-end")]
     public class TileRestApiTests
     {
         [Fact]
