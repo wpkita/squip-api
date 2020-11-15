@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -48,14 +47,14 @@ namespace Squip.Rest.Repositories
         {
             try
             {
-                ItemResponse<T> response = await _container.ReadItemAsync<T>(id, new PartitionKey(id));
+                var response = await _container.ReadItemAsync<T>(id, new PartitionKey(id));
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     return true;
                 }
             }
-            catch (CosmosException cosmosException)
+            catch (CosmosException cosmosException) when (cosmosException.StatusCode == HttpStatusCode.NotFound)
             {
                 // Log it.
 
