@@ -4,7 +4,7 @@ using Squip.Rest.Domain;
 
 namespace Squip.Rest.Repositories
 {
-    interface ITileRepository
+    internal interface ITileRepository
     {
         Task<Tile> GetById(string id);
         Task<IEnumerable<Tile>> GetAll();

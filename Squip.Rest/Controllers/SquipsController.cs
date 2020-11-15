@@ -10,8 +10,8 @@ namespace Squip.Rest.Controllers
     [ApiController]
     public class SquipsController : ControllerBase
     {
-        private readonly ISquipRepository _squipRepository;
         private readonly IMapper _mapper;
+        private readonly ISquipRepository _squipRepository;
 
         public SquipsController(ISquipRepository squipRepository, IMapper mapper)
         {
@@ -24,10 +24,7 @@ namespace Squip.Rest.Controllers
         {
             var squipFromRepo = await _squipRepository.GetRandomIdea();
 
-            if (squipFromRepo == null)
-            {
-                return NotFound();
-            }
+            if (squipFromRepo == null) return NotFound();
 
             return Ok(_mapper.Map<IdeaDto>(squipFromRepo));
         }

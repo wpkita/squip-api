@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-
 namespace Squip.Rest.Domain
 {
     public class Tile : DomainModelBase

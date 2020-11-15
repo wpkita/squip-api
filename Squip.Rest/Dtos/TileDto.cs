@@ -6,6 +6,7 @@ namespace Squip.Rest.Dtos
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+
         // ReSharper disable once UnusedMember.Global
         public string Type { get; set; }
     }

@@ -23,9 +23,9 @@ namespace Squip.Rest.Repositories
 
     public abstract class CosmosRepository<T> : IRepository<T> where T : IDomainModel
     {
-        private readonly IMapper _mapper;
         private readonly CosmosClient _client;
         private readonly Container _container;
+        private readonly IMapper _mapper;
 
         protected CosmosRepository(IConfiguration configuration)
         {
@@ -49,19 +49,13 @@ namespace Squip.Rest.Repositories
             {
                 var response = await _container.ReadItemAsync<T>(id, new PartitionKey(id));
 
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    return true;
-                }
+                if (response.StatusCode == HttpStatusCode.OK) return true;
             }
             catch (CosmosException cosmosException) when (cosmosException.StatusCode == HttpStatusCode.NotFound)
             {
                 // Log it.
 
-                if (cosmosException.StatusCode == HttpStatusCode.NotFound)
-                {
-                    return false;
-                }
+                if (cosmosException.StatusCode == HttpStatusCode.NotFound) return false;
             }
 
             return false;
@@ -89,10 +83,7 @@ namespace Squip.Rest.Repositories
             var query = _container.GetItemQueryIterator<T>();
 
             var results = new List<T>();
-            while (query.HasMoreResults)
-            {
-                results.AddRange(await query.ReadNextAsync());
-            }
+            while (query.HasMoreResults) results.AddRange(await query.ReadNextAsync());
 
             return results;
         }
@@ -125,10 +116,7 @@ namespace Squip.Rest.Repositories
             }
             catch (CosmosException cosmosException)
             {
-                if (cosmosException.StatusCode == HttpStatusCode.NotFound)
-                {
-                    return false;
-                }
+                if (cosmosException.StatusCode == HttpStatusCode.NotFound) return false;
             }
 
             return false;

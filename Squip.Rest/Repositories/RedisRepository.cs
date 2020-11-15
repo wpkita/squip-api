@@ -5,16 +5,16 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NodaTime;
+using NodaTime.Serialization.JsonNet;
 using Squip.Rest.Domain;
 using StackExchange.Redis;
-using NodaTime.Serialization.JsonNet;
 
 namespace Squip.Rest.Repositories
 {
     public abstract class RedisRepository<T> : IRepository<T> where T : IDomainModel
     {
-        protected readonly IDatabase RedisDb;
         private readonly JsonSerializerSettings _jsonSerializerSettings;
+        protected readonly IDatabase RedisDb;
 
         protected RedisRepository(IConfiguration config)
         {
@@ -32,11 +32,6 @@ namespace Squip.Rest.Repositories
         private string ArchivedEntityIdsSetName => $"{EntityName}IdsArchived";
 
         protected string ActiveEntityIdsSetName => $"{EntityName}Ids";
-
-        private string EntityRedisKey(string id)
-        {
-            return $"{EntityName}:{id}";
-        }
 
         public async Task<bool> DoesExistById(string id)
         {
@@ -105,6 +100,11 @@ namespace Squip.Rest.Repositories
             var didSucceed = await RedisDb.SetMoveAsync(ActiveEntityIdsSetName, ArchivedEntityIdsSetName, id);
 
             return didSucceed;
+        }
+
+        private string EntityRedisKey(string id)
+        {
+            return $"{EntityName}:{id}";
         }
     }
 }

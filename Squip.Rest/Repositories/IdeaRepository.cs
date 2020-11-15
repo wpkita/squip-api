@@ -6,7 +6,10 @@ namespace Squip.Rest.Repositories
 {
     public class IdeaRepository : RedisRepository<Idea>, ISquipRepository
     {
-        public IdeaRepository(IConfiguration config) : base(config) { }
+        public IdeaRepository(IConfiguration config) : base(config)
+        {
+        }
+
         protected override string EntityName => "idea";
 
         public async Task<Idea> GetRandomIdea()

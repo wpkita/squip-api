@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Squip.Rest.Domain;
@@ -11,6 +10,7 @@ namespace Squip.Rest.Tests.Repositories
     public class CosmosRepositoryTests
     {
         private readonly IConfiguration _configuration;
+
         public CosmosRepositoryTests()
         {
             _configuration = new ConfigurationBuilder().AddEnvironmentVariables().Build();

@@ -13,7 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squip.EndToEndTests", "Squi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{65A4741B-4606-4E3F-902E-B4026A6D3764}"
 	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
 		README.md = README.md
 	EndProjectSection
 EndProject

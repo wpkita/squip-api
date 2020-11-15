@@ -26,11 +26,11 @@ namespace Squip.EndToEndTests
             });
             var response = client.Post(request);
             var deserializedJson = JsonConvert.DeserializeObject<dynamic>(response.Content);
-            var id = (string)deserializedJson.id.Value;
+            var id = (string) deserializedJson.id.Value;
 
             response.StatusCode.Should().Be(201);
-            ((string)deserializedJson.name.Value).Should().Be(name);
-            ((string)deserializedJson.type.Value).Should().Be(type);
+            ((string) deserializedJson.name.Value).Should().Be(name);
+            ((string) deserializedJson.type.Value).Should().Be(type);
             id.Should().NotBeNullOrWhiteSpace();
 
             // Read
@@ -40,9 +40,9 @@ namespace Squip.EndToEndTests
             id = deserializedJson.id.Value;
 
             response.StatusCode.Should().Be(200);
-            ((string)deserializedJson.name.Value).Should().Be(name);
-            ((string)deserializedJson.type.Value).Should().Be(type);
-            ((string)deserializedJson.id.Value).Should().Be(id);
+            ((string) deserializedJson.name.Value).Should().Be(name);
+            ((string) deserializedJson.type.Value).Should().Be(type);
+            ((string) deserializedJson.id.Value).Should().Be(id);
 
             // Update
             request = new RestRequest("tiles");
@@ -56,9 +56,9 @@ namespace Squip.EndToEndTests
             deserializedJson = JsonConvert.DeserializeObject<dynamic>(response.Content);
 
             response.StatusCode.Should().Be(200);
-            ((string)deserializedJson.name.Value).Should().Be(updatedName);
-            ((string)deserializedJson.type.Value).Should().Be(updatedType);
-            ((string)deserializedJson.id.Value).Should().Be(id);
+            ((string) deserializedJson.name.Value).Should().Be(updatedName);
+            ((string) deserializedJson.type.Value).Should().Be(updatedType);
+            ((string) deserializedJson.id.Value).Should().Be(id);
 
             // Delete
             request = new RestRequest($"tiles/{id}");
