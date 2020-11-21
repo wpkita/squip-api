@@ -12,8 +12,11 @@ namespace Squip.Rest
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IWebHostEnvironment _env;
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
+            _env = env;
             Configuration = configuration;
         }
 
@@ -23,9 +26,16 @@ namespace Squip.Rest
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddSingleton<IRepository<Tile>, InMemoryRepository<Tile>>();
+            if (_env.IsDevelopment())
+            {
+                services.AddSingleton<IRepository<Tile>, InMemoryRepository<Tile>>();
+            }
+            else
+            {
+                services.AddScoped<IRepository<Tile>, TileCosmosRepository>();
+                services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
