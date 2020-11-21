@@ -12,8 +12,8 @@ namespace Squip.Rest.Controllers
     [Route("tiles")]
     public class TileController : ControllerBase
     {
-        private readonly IRepository<Tile> _tileRepository;
         private readonly IMapper _mapper;
+        private readonly IRepository<Tile> _tileRepository;
 
         public TileController(IRepository<Tile> tileRepository, IMapper mapper)
         {
@@ -35,10 +35,7 @@ namespace Squip.Rest.Controllers
         {
             var tileFromRepo = await _tileRepository.GetById(id);
 
-            if (tileFromRepo == null)
-            {
-                return NotFound();
-            }
+            if (tileFromRepo == null) return NotFound();
 
             return Ok(_mapper.Map<TileDto>(tileFromRepo));
         }
@@ -55,7 +52,7 @@ namespace Squip.Rest.Controllers
             }
 
             var tileToReturn = _mapper.Map<TileDto>(tileEntity);
-            return CreatedAtRoute("GetTile", new { id = tileToReturn.Id }, tileToReturn);
+            return CreatedAtRoute("GetTile", new {id = tileToReturn.Id}, tileToReturn);
         }
 
         [HttpPut]
@@ -85,10 +82,7 @@ namespace Squip.Rest.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTile(string id)
         {
-            if (!await _tileRepository.DoesExistById(id))
-            {
-                return NotFound();
-            }
+            if (!await _tileRepository.DoesExistById(id)) return NotFound();
 
             var didSucceed = await _tileRepository.Archive(id);
 

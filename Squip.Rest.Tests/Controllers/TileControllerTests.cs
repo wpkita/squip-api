@@ -1,16 +1,14 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Squip.Rest.Controllers;
 using Squip.Rest.Domain;
 using Squip.Rest.Dtos;
 using Squip.Rest.Repositories;
 using Xunit;
-using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Squip.Rest.Tests.Controllers
 {
@@ -22,10 +20,7 @@ namespace Squip.Rest.Tests.Controllers
         {
             if (_mockMapper != null) return;
 
-            var mappingConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new TilesProfile());
-            });
+            var mappingConfig = new MapperConfiguration(mc => { mc.AddProfile(new TilesProfile()); });
 
             _mockMapper = mappingConfig.CreateMapper();
         }
@@ -45,11 +40,14 @@ namespace Squip.Rest.Tests.Controllers
         public async void GetTiles_OneTileAdded_GetsOneTile()
         {
             var mockRepo = new Mock<IRepository<Tile>>();
-            mockRepo.Setup(m => m.GetAll()).Returns(Task.FromResult(new[] { new Tile
+            mockRepo.Setup(m => m.GetAll()).Returns(Task.FromResult(new[]
             {
-                Name = "Name",
-                Type = "Type"
-            } }.AsEnumerable()));
+                new Tile
+                {
+                    Name = "Name",
+                    Type = "Type"
+                }
+            }.AsEnumerable()));
 
             var tileController = new TileController(mockRepo.Object, _mockMapper);
 

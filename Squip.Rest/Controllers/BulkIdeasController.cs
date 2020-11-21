@@ -13,8 +13,8 @@ namespace Squip.Rest.Controllers
     [ApiController]
     public class BulkIdeasController : ControllerBase
     {
-        private readonly IRepository<Idea> _squipRepository;
         private readonly IMapper _mapper;
+        private readonly IRepository<Idea> _squipRepository;
 
         public BulkIdeasController(IRepository<Idea> squipRepository, IMapper mapper)
         {
@@ -28,7 +28,7 @@ namespace Squip.Rest.Controllers
             var ideasToReturn = new Collection<IdeaDto>();
             foreach (var ideaForCreationDto in ideasToImport)
             {
-                var ideaEntity =_mapper.Map<Idea>(ideaForCreationDto);
+                var ideaEntity = _mapper.Map<Idea>(ideaForCreationDto);
 
                 await _squipRepository.Create(ideaEntity);
 
