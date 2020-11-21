@@ -1,7 +1,8 @@
 using System;
-using System.Linq;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Squip.Rest.Domain;
 using Squip.Rest.Repositories;
 using Xunit;
@@ -11,15 +12,18 @@ namespace Squip.Rest.Tests.Repositories
     public class CosmosRepositoryTests
     {
         private readonly IConfiguration _configuration;
+        private readonly ILogger _logger;
+
         public CosmosRepositoryTests()
         {
             _configuration = new ConfigurationBuilder().AddEnvironmentVariables().Build();
+            _logger = new NullLogger<TileCosmosRepository>();
         }
 
         [Fact]
         public async void Create_NotAddedThenAdd_CanGetById()
         {
-            var unitUnderTest = new TileCosmosRepository(_configuration);
+            var unitUnderTest = new TileCosmosRepository(_configuration, _logger);
 
             var newTile = new Tile
             {
@@ -39,7 +43,7 @@ namespace Squip.Rest.Tests.Repositories
         [Fact]
         public async void Archive_NotAddedThenAdd_CanArchiveAndReturnsTrue()
         {
-            var unitUnderTest = new TileCosmosRepository(_configuration);
+            var unitUnderTest = new TileCosmosRepository(_configuration, _logger);
 
 
             var newTile = new Tile
@@ -57,7 +61,7 @@ namespace Squip.Rest.Tests.Repositories
         [Fact]
         public async void Archive_NotAdded_CannotArchiveAndReturnsFalse()
         {
-            var unitUnderTest = new TileCosmosRepository(_configuration);
+            var unitUnderTest = new TileCosmosRepository(_configuration, _logger);
 
             var tileId = Guid.NewGuid().ToString();
 
@@ -68,7 +72,7 @@ namespace Squip.Rest.Tests.Repositories
         [Fact]
         public async void Update_NotAddedThenAddThenChangeProperty_PropertiesHaveChanged()
         {
-            var unitUnderTest = new TileCosmosRepository(_configuration);
+            var unitUnderTest = new TileCosmosRepository(_configuration, _logger);
 
             const string oldName = "My test tile";
             const string oldType = "My type";
@@ -97,7 +101,7 @@ namespace Squip.Rest.Tests.Repositories
         [Fact]
         public async void DoesExistById_NotAddedThenAdd_ReturnsTrue()
         {
-            var unitUnderTest = new TileCosmosRepository(_configuration);
+            var unitUnderTest = new TileCosmosRepository(_configuration, _logger);
 
             var newTile = new Tile
             {
@@ -115,7 +119,7 @@ namespace Squip.Rest.Tests.Repositories
         [Fact]
         public async void DoesExistById_NotAdded_ReturnsFalse()
         {
-            var unitUnderTest = new TileCosmosRepository(_configuration);
+            var unitUnderTest = new TileCosmosRepository(_configuration, _logger);
 
             var tileId = Guid.NewGuid().ToString();
 
@@ -125,7 +129,7 @@ namespace Squip.Rest.Tests.Repositories
         [Fact]
         public async void GetById_DoesNotExist_ReturnsNull()
         {
-            var unitUnderTest = new TileCosmosRepository(_configuration);
+            var unitUnderTest = new TileCosmosRepository(_configuration, _logger);
 
             var tileId = Guid.NewGuid().ToString();
 

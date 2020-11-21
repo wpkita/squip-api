@@ -78,20 +78,20 @@ namespace Squip.Rest.Tests.Repositories
                 Type = oldType
             };
 
-            var createdTileFromRepo = await unitUnderTest.Create(newTile);
+            var didSucceed = await unitUnderTest.Create(newTile);
+            didSucceed.Should().BeTrue();
 
             var tileFromRepo = await unitUnderTest.GetById(newTile.Id);
+            tileFromRepo.Should().NotBeNull();
             tileFromRepo.Name = updatedName;
             tileFromRepo.Type = updatedType;
 
-            var updatedTileFromRepo = await unitUnderTest.Update(tileFromRepo);
+            didSucceed = await unitUnderTest.Update(tileFromRepo);
+            didSucceed.Should().BeTrue();
 
             tileFromRepo = await unitUnderTest.GetById(newTile.Id);
             tileFromRepo.Name.Should().Be(updatedName);
             tileFromRepo.Type.Should().Be(updatedType);
-
-            createdTileFromRepo.Should().Be(tileFromRepo);
-            tileFromRepo.Should().Be(updatedTileFromRepo);
         }
 
         [Fact]

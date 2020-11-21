@@ -25,17 +25,17 @@ namespace Squip.Rest.Repositories
             return Task.FromResult(_entities.AsEnumerable());
         }
 
-        public Task<T> Create(T t)
+        public Task<bool> Create(T t)
         {
             t.Id = Guid.NewGuid().ToString();
             _entities.Add(t);
 
-            return Task.FromResult(t);
+            return Task.FromResult(true);
         }
 
-        public Task<T> Update(T t)
+        public Task<bool> Update(T t)
         {
-            return Task.FromResult(t);
+            return Task.FromResult(true);
         }
 
         public Task<bool> Archive(string id)

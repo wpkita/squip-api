@@ -9,8 +9,8 @@ namespace Squip.Rest.Repositories
         Task<bool> DoesExistById(string id);
         Task<T> GetById(string id);
         Task<IEnumerable<T>> GetAll();
-        Task<T> Create(T t);
-        Task<T> Update(T t);
+        Task<bool> Create(T t);
+        Task<bool> Update(T t);
         Task<bool> Archive(string id);
     }
 }

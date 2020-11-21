@@ -77,7 +77,7 @@ namespace Squip.Rest.Repositories
             return entities;
         }
 
-        public async Task<T> Create(T entity)
+        public async Task<bool> Create(T entity)
         {
             entity.PreCreate();
             var entityJson = JsonConvert.SerializeObject(entity, _jsonSerializerSettings);
@@ -87,17 +87,17 @@ namespace Squip.Rest.Repositories
             // Cache Id for random selection later
             await RedisDb.SetAddAsync(ActiveEntityIdsSetName, entity.Id);
 
-            return entity;
+            return true;
         }
 
-        public async Task<T> Update(T entity)
+        public async Task<bool> Update(T entity)
         {
             entity.PreUpdate();
             var entityJson = JsonConvert.SerializeObject(entity, _jsonSerializerSettings);
 
             await RedisDb.StringSetAsync(EntityRedisKey(entity.Id), entityJson);
 
-            return entity;
+            return true;
         }
 
         public async Task<bool> Archive(string id)
