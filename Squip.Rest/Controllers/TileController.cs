@@ -46,10 +46,7 @@ namespace Squip.Rest.Controllers
             var tileEntity = _mapper.Map<Tile>(tile);
             var didSucceed = await _tileRepository.Create(tileEntity);
 
-            if (!didSucceed)
-            {
-                return Problem();
-            }
+            if (!didSucceed) return Problem();
 
             var tileToReturn = _mapper.Map<TileDto>(tileEntity);
             return CreatedAtRoute("GetTile", new {id = tileToReturn.Id}, tileToReturn);
@@ -58,23 +55,14 @@ namespace Squip.Rest.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateTile(string id, TileDto tile)
         {
-            if (id != tile.Id)
-            {
-                return BadRequest("Ids in query must match body.");
-            }
+            if (id != tile.Id) return BadRequest("Ids in query must match body.");
 
-            if (!await _tileRepository.DoesExistById(id))
-            {
-                return NotFound();
-            }
+            if (!await _tileRepository.DoesExistById(id)) return NotFound();
 
             var tileEntity = _mapper.Map<Tile>(tile);
             var didSucceed = await _tileRepository.Update(tileEntity);
 
-            if (!didSucceed)
-            {
-                return Problem();
-            }
+            if (!didSucceed) return Problem();
 
             return Ok(_mapper.Map<TileDto>(tileEntity));
         }
@@ -86,10 +74,7 @@ namespace Squip.Rest.Controllers
 
             var didSucceed = await _tileRepository.Archive(id);
 
-            if (!didSucceed)
-            {
-                return Problem();
-            }
+            if (!didSucceed) return Problem();
 
             return NoContent();
         }

@@ -23,8 +23,8 @@ namespace Squip.Rest.Repositories
 
     public abstract class CosmosRepository<T> : IRepository<T> where T : IDomainModel
     {
-        private readonly ILogger _logger;
         private readonly Container _container;
+        private readonly ILogger _logger;
 
         protected CosmosRepository(IConfiguration configuration, ILogger logger)
         {
@@ -49,10 +49,7 @@ namespace Squip.Rest.Repositories
             {
                 var response = await _container.ReadItemAsync<T>(id, new PartitionKey(id));
 
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    return true;
-                }
+                if (response.StatusCode == HttpStatusCode.OK) return true;
             }
             catch (CosmosException cosmosException) when (cosmosException.StatusCode == HttpStatusCode.NotFound)
             {
@@ -97,10 +94,7 @@ namespace Squip.Rest.Repositories
             {
                 var query = _container.GetItemQueryIterator<T>();
 
-                while (query.HasMoreResults)
-                {
-                    results.AddRange(await query.ReadNextAsync());
-                }
+                while (query.HasMoreResults) results.AddRange(await query.ReadNextAsync());
             }
             catch (CosmosException cosmosException)
             {
