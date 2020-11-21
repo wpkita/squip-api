@@ -17,3 +17,9 @@ steps:
   env:
     COSMOS_DB_CONN_STRING: $(COSMOS_DB_CONN_STRING)
     COSMOS_DB_NAME: $(COSMOS_DB_NAME)
+- task: Docker@2
+  displayName: Build an image
+  inputs:
+    repository: squiprest
+    command: build
+    Dockerfile: Squip.Rest/Dockerfile
