@@ -36,19 +36,4 @@ namespace Squip.TestPlayground
             dailyToggle.IsOn.Should().Be(false);
         }
     }
-
-    public class DailyToggle
-    {
-        public DailyToggle(bool isOn)
-        {
-            IsOn = isOn;
-        }
-
-        public bool IsOn { get; private set; }
-
-        public void Toggle()
-        {
-            IsOn = !IsOn;
-        }
-    }
 }
