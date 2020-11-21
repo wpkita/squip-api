@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>e8891500-09d0-421b-8958-c5606fb14102</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <ApplicationInsightsResourceId>/subscriptions/61136434-4289-4d5c-975b-2723fd9b01c6/resourceGroups/rg-south-central-squip-dev/providers/microsoft.insights/components/ai-squip-dev</ApplicationInsightsResourceId>
