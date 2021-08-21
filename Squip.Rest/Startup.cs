@@ -1,5 +1,4 @@
 using System;
-using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -30,6 +29,7 @@ namespace Squip.Rest
             if (_env.IsDevelopment())
             {
                 services.AddSingleton<IRepository<Tile>, InMemoryRepository<Tile>>();
+                services.AddSingleton<IRepository<Habit>, InMemoryRepository<Habit>>();
             }
             else
             {

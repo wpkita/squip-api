@@ -8,6 +8,8 @@ namespace Squip.Rest.Domain
             Score = score;
         }
 
+        public Habit Habit { get; set; }
+        
         public decimal Score { get; set; }
     }
 }
