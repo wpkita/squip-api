@@ -4,7 +4,7 @@ using System.Linq;
 using FluentAssertions;
 using Xunit;
 
-namespace Squip.Habits
+namespace Squip.Rest.Tests
 {
     public class Tests
     {
@@ -45,13 +45,16 @@ namespace Squip.Habits
                 Score = 1
             };
 
-            goalWeek.Hibits.Add(hibitMonday);
-            goalWeek.Hibits.Add(hibitTuesday);
-            goalWeek.Hibits.Add(hibitWednesday);
-            goalWeek.Hibits.Add(hibitThursday);
-            goalWeek.Hibits.Add(hibitFriday);
-            goalWeek.Hibits.Add(hibitSaturday);
-            goalWeek.Hibits.Add(hibitSunday);
+            goalWeek.Hibits = new List<Hibit>
+            {
+                hibitMonday,
+                hibitTuesday,
+                hibitWednesday,
+                hibitThursday,
+                hibitFriday,
+                hibitSaturday,
+                hibitSunday
+            };
 
             goalWeek.Score.Should().Be(5);
         }
@@ -71,7 +74,7 @@ namespace Squip.Habits
         {
             get
             {
-                return Math.Max(MaxScore, Hibits.Sum(h => h.Score));
+                return Math.Min(MaxScore, Hibits.Sum(h => h.Score));
             }
         }
     }

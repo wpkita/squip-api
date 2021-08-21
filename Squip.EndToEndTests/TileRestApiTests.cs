@@ -1,3 +1,4 @@
+using System.Net;
 using FluentAssertions;
 using Newtonsoft.Json;
 using RestSharp;
@@ -28,7 +29,7 @@ namespace Squip.EndToEndTests
             var deserializedJson = JsonConvert.DeserializeObject<dynamic>(response.Content);
             var id = (string) deserializedJson.id.Value;
 
-            response.StatusCode.Should().Be(201);
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
             ((string) deserializedJson.name.Value).Should().Be(name);
             ((string) deserializedJson.type.Value).Should().Be(type);
             id.Should().NotBeNullOrWhiteSpace();
@@ -39,7 +40,7 @@ namespace Squip.EndToEndTests
             deserializedJson = JsonConvert.DeserializeObject<dynamic>(response.Content);
             id = deserializedJson.id.Value;
 
-            response.StatusCode.Should().Be(200);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             ((string) deserializedJson.name.Value).Should().Be(name);
             ((string) deserializedJson.type.Value).Should().Be(type);
             ((string) deserializedJson.id.Value).Should().Be(id);
@@ -55,7 +56,7 @@ namespace Squip.EndToEndTests
             response = client.Put(request);
             deserializedJson = JsonConvert.DeserializeObject<dynamic>(response.Content);
 
-            response.StatusCode.Should().Be(200);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             ((string) deserializedJson.name.Value).Should().Be(updatedName);
             ((string) deserializedJson.type.Value).Should().Be(updatedType);
             ((string) deserializedJson.id.Value).Should().Be(id);
@@ -64,12 +65,12 @@ namespace Squip.EndToEndTests
             request = new RestRequest($"tiles/{id}");
             response = client.Delete(request);
 
-            response.StatusCode.Should().Be(204);
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
             request = new RestRequest($"tiles/{id}");
             response = client.Get(request);
 
-            response.StatusCode.Should().Be(404);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
     }
 }
