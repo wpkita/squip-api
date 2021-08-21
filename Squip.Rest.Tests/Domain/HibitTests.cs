@@ -1,10 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using FluentAssertions;
+using Squip.Rest.Domain;
 using Xunit;
 
-namespace Squip.Rest.Tests
+namespace Squip.Rest.Tests.Domain
 {
     public class HibitTests
     {
@@ -154,37 +153,5 @@ namespace Squip.Rest.Tests
 
             week.Score.Should().Be(1.93235m / 3);
         }
-    }
-
-    public class Week
-    {
-        public List<HibitWeek> HibitWeeks { get; set; }
-
-        public decimal Score => HibitWeeks.Sum(hw => hw.NormalizedScore * hw.ScoreWeight);
-    }
-
-    public class Hibit
-    {
-        public Hibit() { }
-        public Hibit(decimal score)
-        {
-            Score = score;
-        }
-
-        public decimal Score { get; set; }
-    }
-
-    public class HibitWeek
-    {
-        public IList<Hibit> Hibits { get; set; }
-        public decimal ScoreGoal { get; set; }
-
-        public decimal RawScore
-        {
-            get { return Math.Min(ScoreGoal, Hibits.Sum(h => h.Score)); }
-        }
-
-        public decimal NormalizedScore => RawScore / ScoreGoal;
-        public decimal ScoreWeight { get; set; }
     }
 }
