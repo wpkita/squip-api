@@ -11,7 +11,7 @@ namespace Squip.Rest.Tests
         [Fact]
         public void DiscreteFrameHasMaxScoreOf3_HighPerformanceDays_MaxesAt3()
         {
-            var week = new Week
+            var hibitWeek = new HibitWeek
             {
                 ScoreGoal = 3
             };
@@ -45,7 +45,7 @@ namespace Squip.Rest.Tests
                 Score = 1
             };
 
-            week.Hibits = new List<Hibit>
+            hibitWeek.Hibits = new List<Hibit>
             {
                 hibitMonday,
                 hibitTuesday,
@@ -56,14 +56,14 @@ namespace Squip.Rest.Tests
                 hibitSunday
             };
 
-            week.RawScore.Should().Be(3);
-            week.NormalizedScore.Should().Be(1);
+            hibitWeek.RawScore.Should().Be(3);
+            hibitWeek.NormalizedScore.Should().Be(1);
         }
 
         [Fact]
         public void DiscreteFrameHasMaxScoreOf3_LowPerformanceDays_IsLowScore()
         {
-            var week = new Week
+            var hibitWeek = new HibitWeek
             {
                 ScoreGoal = 3
             };
@@ -97,7 +97,7 @@ namespace Squip.Rest.Tests
                 Score = 0
             };
 
-            week.Hibits = new List<Hibit>
+            hibitWeek.Hibits = new List<Hibit>
             {
                 hibitMonday,
                 hibitTuesday,
@@ -108,22 +108,73 @@ namespace Squip.Rest.Tests
                 hibitSunday
             };
 
-            week.RawScore.Should().Be(1);
-            week.NormalizedScore.Should().Be(1 / 3m);
+            hibitWeek.RawScore.Should().Be(1);
+            hibitWeek.NormalizedScore.Should().Be(1 / 3m);
         }
 
         [Fact]
-        public void TestScalingFactor()
+        public void WeeklyScore_HasTwoHibitWeeksScaled_CalculatesWithScalingFactor()
         {
+            var hibitWeek1 = new HibitWeek
+            {
+                ScoreGoal = 3,
+                ScoreWeight = 0.25m,
+                Hibits = new List<Hibit>
+                {
+                    new(1),
+                    new(0),
+                    new(1)
+                }
+            };
+
+            var hibitWeek2 = new HibitWeek
+            {
+                ScoreGoal = 50000,
+                ScoreWeight = 0.75m,
+                Hibits = new List<Hibit>
+                {
+                    new(6656),
+                    new(4320),
+                    new(5259),
+                    new(7884),
+                    new(2415),
+                    new(2522),
+                    new(2774)
+                }
+            };
+
+            var week = new Week
+            {
+                HibitWeeks = new List<HibitWeek>
+                {
+                    hibitWeek1,
+                    hibitWeek2
+                }
+            };
+
+            week.Score.Should().Be(1.93235m / 3);
         }
+    }
+
+    public class Week
+    {
+        public List<HibitWeek> HibitWeeks { get; set; }
+
+        public decimal Score => HibitWeeks.Sum(hw => hw.NormalizedScore * hw.ScoreWeight);
     }
 
     public class Hibit
     {
+        public Hibit() { }
+        public Hibit(decimal score)
+        {
+            Score = score;
+        }
+
         public decimal Score { get; set; }
     }
 
-    public class Week
+    public class HibitWeek
     {
         public IList<Hibit> Hibits { get; set; }
         public decimal ScoreGoal { get; set; }
@@ -134,5 +185,6 @@ namespace Squip.Rest.Tests
         }
 
         public decimal NormalizedScore => RawScore / ScoreGoal;
+        public decimal ScoreWeight { get; set; }
     }
 }
