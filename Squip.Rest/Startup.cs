@@ -28,8 +28,11 @@ namespace Squip.Rest
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             if (_env.IsDevelopment())
             {
+                services.AddCors(options => options.AddDefaultPolicy(policy => policy.AllowAnyOrigin()));
                 services.AddSingleton<IRepository<Tile>, InMemoryRepository<Tile>>();
                 services.AddSingleton<IRepository<Habit>, InMemoryRepository<Habit>>();
+                services.AddSingleton<IRepository<Idea>, InMemoryRepository<Idea>>();
+                services.AddSingleton<ISquipRepository, InMemorySquipRepository>();
             }
             else
             {
@@ -44,6 +47,7 @@ namespace Squip.Rest
         {
             if (env.IsDevelopment())
             {
+                app.UseCors();
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI();
