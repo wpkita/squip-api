@@ -10,39 +10,15 @@ namespace Squip.Rest.Tests.Domain
         [Fact]
         public void DiscreteFrameHasMaxScoreOf3_HighPerformanceDays_MaxesAt3()
         {
-            var hibitWeek = new HibitWeek
-            {
-                ScoreGoal = 3
-            };
+            var hibitWeek = new HibitWeek { ScoreGoal = 3 };
 
-            var hibitMonday = new Hibit
-            {
-                Score = 1
-            };
-            var hibitTuesday = new Hibit
-            {
-                Score = 1
-            };
-            var hibitWednesday = new Hibit
-            {
-                Score = 1
-            };
-            var hibitThursday = new Hibit
-            {
-                Score = 1
-            };
-            var hibitFriday = new Hibit
-            {
-                Score = 1
-            };
-            var hibitSaturday = new Hibit
-            {
-                Score = 1
-            };
-            var hibitSunday = new Hibit
-            {
-                Score = 1
-            };
+            var hibitMonday = new Hibit { Score = 1 };
+            var hibitTuesday = new Hibit { Score = 1 };
+            var hibitWednesday = new Hibit { Score = 1 };
+            var hibitThursday = new Hibit { Score = 1 };
+            var hibitFriday = new Hibit { Score = 1 };
+            var hibitSaturday = new Hibit { Score = 1 };
+            var hibitSunday = new Hibit { Score = 1 };
 
             hibitWeek.Hibits = new List<Hibit>
             {
@@ -62,39 +38,15 @@ namespace Squip.Rest.Tests.Domain
         [Fact]
         public void DiscreteFrameHasMaxScoreOf3_LowPerformanceDays_IsLowScore()
         {
-            var hibitWeek = new HibitWeek
-            {
-                ScoreGoal = 3
-            };
+            var hibitWeek = new HibitWeek { ScoreGoal = 3 };
 
-            var hibitMonday = new Hibit
-            {
-                Score = 1
-            };
-            var hibitTuesday = new Hibit
-            {
-                Score = 0
-            };
-            var hibitWednesday = new Hibit
-            {
-                Score = 0
-            };
-            var hibitThursday = new Hibit
-            {
-                Score = 0
-            };
-            var hibitFriday = new Hibit
-            {
-                Score = 0
-            };
-            var hibitSaturday = new Hibit
-            {
-                Score = 0
-            };
-            var hibitSunday = new Hibit
-            {
-                Score = 0
-            };
+            var hibitMonday = new Hibit { Score = 1 };
+            var hibitTuesday = new Hibit { Score = 0 };
+            var hibitWednesday = new Hibit { Score = 0 };
+            var hibitThursday = new Hibit { Score = 0 };
+            var hibitFriday = new Hibit { Score = 0 };
+            var hibitSaturday = new Hibit { Score = 0 };
+            var hibitSunday = new Hibit { Score = 0 };
 
             hibitWeek.Hibits = new List<Hibit>
             {
@@ -118,12 +70,7 @@ namespace Squip.Rest.Tests.Domain
             {
                 ScoreGoal = 3,
                 ScoreWeight = 0.25m,
-                Hibits = new List<Hibit>
-                {
-                    new(1),
-                    new(0),
-                    new(1)
-                }
+                Hibits = new List<Hibit> { new(1), new(0), new(1) }
             };
 
             var hibitWeek2 = new HibitWeek
@@ -144,11 +91,7 @@ namespace Squip.Rest.Tests.Domain
 
             var week = new Week
             {
-                HibitWeeks = new List<HibitWeek>
-                {
-                    hibitWeek1,
-                    hibitWeek2
-                }
+                HibitWeeks = new List<HibitWeek> { hibitWeek1, hibitWeek2 }
             };
 
             week.Score.Should().Be(1.93235m / 3);

@@ -97,7 +97,11 @@ namespace Squip.Rest.Repositories
 
         public async Task<bool> Archive(string id)
         {
-            var didSucceed = await RedisDb.SetMoveAsync(ActiveEntityIdsSetName, ArchivedEntityIdsSetName, id);
+            var didSucceed = await RedisDb.SetMoveAsync(
+                ActiveEntityIdsSetName,
+                ArchivedEntityIdsSetName,
+                id
+            );
 
             return didSucceed;
         }

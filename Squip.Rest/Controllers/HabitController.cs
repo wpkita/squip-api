@@ -36,7 +36,8 @@ namespace Squip.Rest.Controllers
         {
             var habitFromRepo = await _habitRepository.GetById(habitId.ToString());
 
-            if (habitFromRepo == null) return NotFound();
+            if (habitFromRepo == null)
+                return NotFound();
 
             return Ok(_mapper.Map<HabitDto>(habitFromRepo));
         }
@@ -48,13 +49,14 @@ namespace Squip.Rest.Controllers
             await _habitRepository.Create(habitEntity);
 
             var habitToReturn = _mapper.Map<HabitDto>(habitEntity);
-            return CreatedAtRoute("GetHabit", new {habitId = habitToReturn.Id}, habitToReturn);
+            return CreatedAtRoute("GetHabit", new { habitId = habitToReturn.Id }, habitToReturn);
         }
 
         [HttpDelete("{habitId}")]
         public async Task<IActionResult> DeleteHabit(Guid habitId)
         {
-            if (!await _habitRepository.DoesExistById(habitId.ToString())) return NotFound();
+            if (!await _habitRepository.DoesExistById(habitId.ToString()))
+                return NotFound();
 
             await _habitRepository.Archive(habitId.ToString());
 

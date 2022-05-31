@@ -24,7 +24,8 @@ namespace Squip.Rest.Controllers
         {
             var squipFromRepo = await _squipRepository.GetRandomIdea();
 
-            if (squipFromRepo == null) return NotFound();
+            if (squipFromRepo == null)
+                return NotFound();
 
             return Ok(_mapper.Map<IdeaDto>(squipFromRepo));
         }

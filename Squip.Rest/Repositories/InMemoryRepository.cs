@@ -41,7 +41,8 @@ namespace Squip.Rest.Repositories
         public Task<bool> Archive(string id)
         {
             var entity = _entities.SingleOrDefault(e => e.Id == id);
-            if (entity == null) return Task.FromResult(false);
+            if (entity == null)
+                return Task.FromResult(false);
 
             _entities.Remove(entity);
             return Task.FromResult(true);

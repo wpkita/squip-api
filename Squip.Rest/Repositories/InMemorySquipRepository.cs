@@ -8,7 +8,9 @@ namespace Squip.Rest.Repositories
     {
         public Task<Idea> GetRandomIdea()
         {
-            return Task.FromResult(new Idea { Id = Guid.NewGuid().ToString(), Content = "Hello world!" });
+            return Task.FromResult(
+                new Idea { Id = Guid.NewGuid().ToString(), Content = "Hello world!" }
+            );
         }
     }
 }

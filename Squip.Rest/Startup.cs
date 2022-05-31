@@ -28,7 +28,9 @@ namespace Squip.Rest
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             if (_env.IsDevelopment())
             {
-                services.AddCors(options => options.AddDefaultPolicy(policy => policy.AllowAnyOrigin()));
+                services.AddCors(
+                    options => options.AddDefaultPolicy(policy => policy.AllowAnyOrigin())
+                );
                 services.AddSingleton<IRepository<Tile>, InMemoryRepository<Tile>>();
                 services.AddSingleton<IRepository<Habit>, InMemoryRepository<Habit>>();
                 services.AddSingleton<IRepository<Idea>, InMemoryRepository<Idea>>();
@@ -37,7 +39,9 @@ namespace Squip.Rest
             else
             {
                 services.AddScoped<IRepository<Tile>, TileCosmosRepository>();
-                services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
+                services.AddApplicationInsightsTelemetry(
+                    Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]
+                );
             }
             services.AddSwaggerGen();
         }
@@ -64,7 +68,10 @@ namespace Squip.Rest
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }

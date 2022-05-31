@@ -15,15 +15,14 @@ namespace Squip.Api.Services
         {
             _httpContextAccessor = httpContextAccessor;
         }
+
         public IUser GetCurrentUser()
         {
-            if (!(_httpContextAccessor.HttpContext.User.Identity is ClaimsIdentity claimsIdentity)) return null;
+            if (!(_httpContextAccessor.HttpContext.User.Identity is ClaimsIdentity claimsIdentity))
+                return null;
 
             var userId = GetUserIdFromClaimsIdentity(claimsIdentity);
-            var user = new User
-            {
-                Id = userId
-            };
+            var user = new User { Id = userId };
 
             return user;
         }

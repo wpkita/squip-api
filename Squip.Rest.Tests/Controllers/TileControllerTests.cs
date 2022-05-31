@@ -18,9 +18,13 @@ namespace Squip.Rest.Tests.Controllers
 
         public TileControllerTests()
         {
-            if (_mockMapper != null) return;
+            if (_mockMapper != null)
+                return;
 
-            var mappingConfig = new MapperConfiguration(mc => { mc.AddProfile(new TilesProfile()); });
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new TilesProfile());
+            });
 
             _mockMapper = mappingConfig.CreateMapper();
         }
@@ -40,14 +44,16 @@ namespace Squip.Rest.Tests.Controllers
         public async void GetTiles_OneTileAdded_GetsOneTile()
         {
             var mockRepo = new Mock<IRepository<Tile>>();
-            mockRepo.Setup(m => m.GetAll()).Returns(Task.FromResult(new[]
-            {
-                new Tile
-                {
-                    Name = "Name",
-                    Type = "Type"
-                }
-            }.AsEnumerable()));
+            mockRepo
+                .Setup(m => m.GetAll())
+                .Returns(
+                    Task.FromResult(
+                        new[]
+                        {
+                            new Tile { Name = "Name", Type = "Type" }
+                        }.AsEnumerable()
+                    )
+                );
 
             var tileController = new TileController(mockRepo.Object, _mockMapper);
 
@@ -68,8 +74,7 @@ namespace Squip.Rest.Tests.Controllers
             };
 
             var mockRepo = new Mock<IRepository<Tile>>();
-            mockRepo.Setup(m => m.GetById(idFromRepo))
-                .Returns(Task.FromResult(fakeTile));
+            mockRepo.Setup(m => m.GetById(idFromRepo)).Returns(Task.FromResult(fakeTile));
 
             var tileController = new TileController(mockRepo.Object, _mockMapper);
 
@@ -91,8 +96,7 @@ namespace Squip.Rest.Tests.Controllers
             };
 
             var mockRepo = new Mock<IRepository<Tile>>();
-            mockRepo.Setup(m => m.GetById(idFromRepo))
-                .Returns(Task.FromResult(fakeTile));
+            mockRepo.Setup(m => m.GetById(idFromRepo)).Returns(Task.FromResult(fakeTile));
 
             var tileController = new TileController(mockRepo.Object, _mockMapper);
 

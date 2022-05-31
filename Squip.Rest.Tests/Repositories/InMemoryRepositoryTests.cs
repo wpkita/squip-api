@@ -15,11 +15,7 @@ namespace Squip.Rest.Tests.Repositories
 
             (await unitUnderTest.GetAll()).Count().Should().Be(0);
 
-            var newTile = new Tile
-            {
-                Name = "My test tile",
-                Type = "My type"
-            };
+            var newTile = new Tile { Name = "My test tile", Type = "My type" };
 
             await unitUnderTest.Create(newTile);
 
@@ -40,11 +36,7 @@ namespace Squip.Rest.Tests.Repositories
 
             (await unitUnderTest.GetAll()).Count().Should().Be(0);
 
-            var newTile = new Tile
-            {
-                Name = "My test tile",
-                Type = "My type"
-            };
+            var newTile = new Tile { Name = "My test tile", Type = "My type" };
 
             await unitUnderTest.Create(newTile);
 
@@ -72,11 +64,7 @@ namespace Squip.Rest.Tests.Repositories
             var oldType = "My type";
             var updatedName = "My new updated name";
             var updatedType = "My new type";
-            var newTile = new Tile
-            {
-                Name = oldName,
-                Type = oldType
-            };
+            var newTile = new Tile { Name = oldName, Type = oldType };
 
             var didSucceed = await unitUnderTest.Create(newTile);
             didSucceed.Should().BeTrue();
@@ -101,11 +89,7 @@ namespace Squip.Rest.Tests.Repositories
 
             (await unitUnderTest.GetAll()).Count().Should().Be(0);
 
-            var newTile = new Tile
-            {
-                Name = "My test tile",
-                Type = "My type"
-            };
+            var newTile = new Tile { Name = "My test tile", Type = "My type" };
 
             await unitUnderTest.Create(newTile);
 

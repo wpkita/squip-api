@@ -25,11 +25,7 @@ namespace Squip.Rest.Tests.Repositories
         {
             var unitUnderTest = new TileCosmosRepository(_configuration, _logger);
 
-            var newTile = new Tile
-            {
-                Name = "My test tile",
-                Type = "My type"
-            };
+            var newTile = new Tile { Name = "My test tile", Type = "My type" };
 
             await unitUnderTest.Create(newTile);
 
@@ -45,12 +41,7 @@ namespace Squip.Rest.Tests.Repositories
         {
             var unitUnderTest = new TileCosmosRepository(_configuration, _logger);
 
-
-            var newTile = new Tile
-            {
-                Name = "My test tile",
-                Type = "My type"
-            };
+            var newTile = new Tile { Name = "My test tile", Type = "My type" };
 
             await unitUnderTest.Create(newTile);
 
@@ -79,11 +70,7 @@ namespace Squip.Rest.Tests.Repositories
             const string updatedName = "My new updated name";
             const string updatedType = "My new type";
 
-            var newTile = new Tile
-            {
-                Name = oldName,
-                Type = oldType
-            };
+            var newTile = new Tile { Name = oldName, Type = oldType };
 
             await unitUnderTest.Create(newTile);
 
@@ -103,11 +90,7 @@ namespace Squip.Rest.Tests.Repositories
         {
             var unitUnderTest = new TileCosmosRepository(_configuration, _logger);
 
-            var newTile = new Tile
-            {
-                Name = "My test tile",
-                Type = "My type"
-            };
+            var newTile = new Tile { Name = "My test tile", Type = "My type" };
 
             await unitUnderTest.Create(newTile);
 

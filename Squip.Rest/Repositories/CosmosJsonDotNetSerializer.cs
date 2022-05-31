@@ -44,10 +44,14 @@ namespace Squip.Rest.Repositories
                 NullValueHandling = cosmosSerializerOptions.IgnoreNullValues
                     ? NullValueHandling.Ignore
                     : NullValueHandling.Include,
-                Formatting = cosmosSerializerOptions.Indented ? Formatting.Indented : Formatting.None,
-                ContractResolver = cosmosSerializerOptions.PropertyNamingPolicy == CosmosPropertyNamingPolicy.CamelCase
-                    ? new CamelCasePropertyNamesContractResolver()
-                    : null
+                Formatting = cosmosSerializerOptions.Indented
+                    ? Formatting.Indented
+                    : Formatting.None,
+                ContractResolver =
+                    cosmosSerializerOptions.PropertyNamingPolicy
+                    == CosmosPropertyNamingPolicy.CamelCase
+                        ? new CamelCasePropertyNamesContractResolver()
+                        : null
             };
 
             SerializerSettings = jsonSerializerSettings;
@@ -62,8 +66,9 @@ namespace Squip.Rest.Repositories
         /// </remarks>
         internal CosmosJsonDotNetSerializer(JsonSerializerSettings jsonSerializerSettings)
         {
-            SerializerSettings = jsonSerializerSettings ??
-                                 throw new ArgumentNullException(nameof(jsonSerializerSettings));
+            SerializerSettings =
+                jsonSerializerSettings
+                ?? throw new ArgumentNullException(nameof(jsonSerializerSettings));
         }
 
         /// <summary>
@@ -76,7 +81,8 @@ namespace Squip.Rest.Repositories
         {
             using (stream)
             {
-                if (typeof(Stream).IsAssignableFrom(typeof(T))) return (T) (object) stream;
+                if (typeof(Stream).IsAssignableFrom(typeof(T)))
+                    return (T)(object)stream;
 
                 using (var sr = new StreamReader(stream))
                 {

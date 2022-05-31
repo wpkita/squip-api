@@ -36,7 +36,8 @@ namespace Squip.Rest.Controllers
         {
             var ideaFromRepo = await _ideaRepository.GetById(ideaId.ToString());
 
-            if (ideaFromRepo == null) return NotFound();
+            if (ideaFromRepo == null)
+                return NotFound();
 
             return Ok(_mapper.Map<IdeaDto>(ideaFromRepo));
         }
@@ -48,13 +49,14 @@ namespace Squip.Rest.Controllers
             await _ideaRepository.Create(ideaEntity);
 
             var ideaToReturn = _mapper.Map<IdeaDto>(ideaEntity);
-            return CreatedAtRoute("GetIdea", new {ideaId = ideaToReturn.Id}, ideaToReturn);
+            return CreatedAtRoute("GetIdea", new { ideaId = ideaToReturn.Id }, ideaToReturn);
         }
 
         [HttpDelete("{ideaId}")]
         public async Task<IActionResult> DeleteIdea(Guid ideaId)
         {
-            if (!await _ideaRepository.DoesExistById(ideaId.ToString())) return NotFound();
+            if (!await _ideaRepository.DoesExistById(ideaId.ToString()))
+                return NotFound();
 
             await _ideaRepository.Archive(ideaId.ToString());
 

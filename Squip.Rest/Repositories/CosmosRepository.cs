@@ -22,10 +22,12 @@ namespace Squip.Rest.Repositories
             _logger = logger;
             var cosmosOptions = new CosmosClientOptions
             {
-                Serializer = new CosmosJsonDotNetSerializer(new JsonSerializerSettings
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                }.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb))
+                Serializer = new CosmosJsonDotNetSerializer(
+                    new JsonSerializerSettings
+                    {
+                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    }.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb)
+                )
             };
 
             var client = new CosmosClient(configuration["COSMOS_DB_CONN_STRING"], cosmosOptions);
@@ -40,9 +42,11 @@ namespace Squip.Rest.Repositories
             {
                 var response = await _container.ReadItemAsync<T>(id, new PartitionKey(id));
 
-                if (response.StatusCode == HttpStatusCode.OK) return true;
+                if (response.StatusCode == HttpStatusCode.OK)
+                    return true;
             }
-            catch (CosmosException cosmosException) when (cosmosException.StatusCode == HttpStatusCode.NotFound)
+            catch (CosmosException cosmosException)
+                when (cosmosException.StatusCode == HttpStatusCode.NotFound)
             {
                 _logger.LogWarning(cosmosException, "DoesExistById did not find {id}", id);
 
@@ -65,7 +69,8 @@ namespace Squip.Rest.Repositories
                 var response = await _container.ReadItemAsync<T>(id, new PartitionKey(id));
                 item = response.Resource;
             }
-            catch (CosmosException cosmosException) when (cosmosException.StatusCode == HttpStatusCode.NotFound)
+            catch (CosmosException cosmosException)
+                when (cosmosException.StatusCode == HttpStatusCode.NotFound)
             {
                 _logger.LogWarning(cosmosException, "GetById did not find {id}", id);
             }
@@ -85,7 +90,8 @@ namespace Squip.Rest.Repositories
             {
                 var query = _container.GetItemQueryIterator<T>();
 
-                while (query.HasMoreResults) results.AddRange(await query.ReadNextAsync());
+                while (query.HasMoreResults)
+                    results.AddRange(await query.ReadNextAsync());
             }
             catch (CosmosException cosmosException)
             {
@@ -139,8 +145,8 @@ namespace Squip.Rest.Repositories
 
                 return true;
             }
-
-            catch (CosmosException cosmosException) when (cosmosException.StatusCode == HttpStatusCode.NotFound)
+            catch (CosmosException cosmosException)
+                when (cosmosException.StatusCode == HttpStatusCode.NotFound)
             {
                 _logger.LogWarning(cosmosException, "Archive did not find {id}", id);
             }
