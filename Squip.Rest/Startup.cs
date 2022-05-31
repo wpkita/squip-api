@@ -47,7 +47,6 @@ namespace Squip.Rest
         {
             if (env.IsDevelopment())
             {
-                app.UseCors();
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI();
@@ -56,6 +55,12 @@ namespace Squip.Rest
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            // "The call to UseCors must be placed after UseRouting, but before UseAuthorization."
+            if (env.IsDevelopment())
+            {
+                app.UseCors();
+            }
 
             app.UseAuthorization();
 
