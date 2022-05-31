@@ -29,7 +29,10 @@ namespace Squip.Rest
             if (_env.IsDevelopment())
             {
                 services.AddCors(
-                    options => options.AddDefaultPolicy(policy => policy.AllowAnyOrigin())
+                    options =>
+                        options.AddDefaultPolicy(
+                            policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+                        )
                 );
                 services.AddSingleton<IRepository<Tile>, InMemoryRepository<Tile>>();
                 services.AddSingleton<IRepository<Habit>, InMemoryRepository<Habit>>();
