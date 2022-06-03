@@ -1,6 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,6 +27,13 @@ namespace Squip.Rest
         {
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddDbContext<SquipContext>(
+                options =>
+                    options.UseSqlServer(
+                        "Server=.\\SQLEXPRESS;Database=Squip;Integrated Security=True;",
+                        x => x.UseNodaTime()
+                    )
+            );
             if (_env.IsDevelopment())
             {
                 services.AddCors(
@@ -36,7 +44,7 @@ namespace Squip.Rest
                 );
                 services.AddSingleton<IRepository<Tile>, InMemoryRepository<Tile>>();
                 services.AddSingleton<IRepository<Habit>, InMemoryRepository<Habit>>();
-                services.AddSingleton<IRepository<Idea>, InMemoryRepository<Idea>>();
+                services.AddScoped<IRepository<Idea>, EfIdeaRepository>();
                 services.AddSingleton<ISquipRepository, InMemorySquipRepository>();
             }
             else
