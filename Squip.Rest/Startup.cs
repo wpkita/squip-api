@@ -30,7 +30,7 @@ namespace Squip.Rest
             services.AddDbContext<SquipContext>(
                 options =>
                     options.UseSqlServer(
-                        "Server=.\\SQLEXPRESS;Database=Squip;Integrated Security=True;",
+                        Configuration.GetConnectionString("SquipDatabase"),
                         x => x.UseNodaTime()
                     )
             );
