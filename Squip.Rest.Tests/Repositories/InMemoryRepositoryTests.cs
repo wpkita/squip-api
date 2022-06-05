@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using FluentAssertions;
 using Squip.Rest.Domain;
@@ -51,7 +52,7 @@ namespace Squip.Rest.Tests.Repositories
             var unitUnderTest = new InMemoryRepository<Tile>();
 
             (await unitUnderTest.GetAll()).Count().Should().Be(0);
-            (await unitUnderTest.Archive(string.Empty)).Should().Be(false);
+            (await unitUnderTest.Archive(Guid.Empty)).Should().Be(false);
             (await unitUnderTest.GetAll()).Count().Should().Be(0);
         }
 
@@ -105,7 +106,7 @@ namespace Squip.Rest.Tests.Repositories
 
             (await unitUnderTest.GetAll()).Count().Should().Be(0);
 
-            (await unitUnderTest.DoesExistById(string.Empty)).Should().Be(false);
+            (await unitUnderTest.DoesExistById(Guid.Empty)).Should().Be(false);
         }
 
         [Fact]
@@ -113,7 +114,7 @@ namespace Squip.Rest.Tests.Repositories
         {
             var unitUnderTest = new InMemoryRepository<Tile>();
 
-            (await unitUnderTest.GetById(string.Empty)).Should().BeNull();
+            (await unitUnderTest.GetById(Guid.Empty)).Should().BeNull();
         }
     }
 }

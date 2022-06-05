@@ -5,13 +5,13 @@ namespace Squip.Rest.Domain
 {
     public abstract class DomainModelBase : IDomainModel
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public Instant InstantCreatedAt { get; set; }
         public Instant InstantUpdatedAt { get; set; }
 
         public void PreCreate()
         {
-            Id ??= Guid.NewGuid().ToString();
+            Id = Guid.NewGuid();
 
             InstantCreatedAt = SystemClock.Instance.GetCurrentInstant();
         }

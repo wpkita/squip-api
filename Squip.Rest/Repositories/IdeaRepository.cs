@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Squip.Rest.Domain;
@@ -14,7 +15,7 @@ namespace Squip.Rest.Repositories
         {
             var randomIdeaId = await RedisDb.SetRandomMemberAsync(ActiveEntityIdsSetName);
 
-            var randomIdea = await GetById(randomIdeaId);
+            var randomIdea = await GetById(Guid.Parse(randomIdeaId));
 
             return randomIdea;
         }

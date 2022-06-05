@@ -10,12 +10,12 @@ namespace Squip.Rest.Repositories
     {
         private readonly IList<T> _entities = new List<T>();
 
-        public Task<bool> DoesExistById(string id)
+        public Task<bool> DoesExistById(Guid id)
         {
             return Task.FromResult(_entities.Any(idea => idea.Id == id));
         }
 
-        public Task<T> GetById(string id)
+        public Task<T> GetById(Guid id)
         {
             return Task.FromResult(_entities.SingleOrDefault(i => i.Id == id));
         }
@@ -27,7 +27,7 @@ namespace Squip.Rest.Repositories
 
         public Task<bool> Create(T t)
         {
-            t.Id = Guid.NewGuid().ToString();
+            t.Id = Guid.NewGuid();
             _entities.Add(t);
 
             return Task.FromResult(true);
@@ -38,7 +38,7 @@ namespace Squip.Rest.Repositories
             return Task.FromResult(true);
         }
 
-        public Task<bool> Archive(string id)
+        public Task<bool> Archive(Guid id)
         {
             var entity = _entities.SingleOrDefault(e => e.Id == id);
             if (entity == null)

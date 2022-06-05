@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -64,7 +65,7 @@ namespace Squip.Rest.Tests.Controllers
         [Fact]
         public async void GetTile_OneTileAddedWithMatchingId_GetsThatTile()
         {
-            var idFromRepo = "a022bd9e-864a-430c-aa5a-62f40ab8dd4e";
+            var idFromRepo = Guid.Parse("a022bd9e-864a-430c-aa5a-62f40ab8dd4e");
 
             var fakeTile = new Tile
             {
@@ -85,8 +86,8 @@ namespace Squip.Rest.Tests.Controllers
         [Fact]
         public async void GetTile_OneTileAddedButNoMatchingId_GetsNoTiles()
         {
-            var idFromRepo = "a022bd9e-864a-430c-aa5a-62f40ab8dd4e";
-            var idInRequest = "65cf0356-fa87-46ea-9af6-8ae8bae81379";
+            var idFromRepo = Guid.Parse("a022bd9e-864a-430c-aa5a-62f40ab8dd4e");
+            var idInRequest = Guid.Parse("65cf0356-fa87-46ea-9af6-8ae8bae81379");
 
             var fakeTile = new Tile
             {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -36,11 +37,14 @@ namespace Squip.Rest.Repositories
 
         protected abstract string ContainerName { get; }
 
-        public async Task<bool> DoesExistById(string id)
+        public async Task<bool> DoesExistById(Guid id)
         {
             try
             {
-                var response = await _container.ReadItemAsync<T>(id, new PartitionKey(id));
+                var response = await _container.ReadItemAsync<T>(
+                    id.ToString(),
+                    new PartitionKey(id.ToString())
+                );
 
                 if (response.StatusCode == HttpStatusCode.OK)
                     return true;
@@ -60,13 +64,16 @@ namespace Squip.Rest.Repositories
             return false;
         }
 
-        public async Task<T> GetById(string id)
+        public async Task<T> GetById(Guid id)
         {
             T item = default;
 
             try
             {
-                var response = await _container.ReadItemAsync<T>(id, new PartitionKey(id));
+                var response = await _container.ReadItemAsync<T>(
+                    id.ToString(),
+                    new PartitionKey(id.ToString())
+                );
                 item = response.Resource;
             }
             catch (CosmosException cosmosException)
@@ -137,11 +144,11 @@ namespace Squip.Rest.Repositories
             return false;
         }
 
-        public async Task<bool> Archive(string id)
+        public async Task<bool> Archive(Guid id)
         {
             try
             {
-                await _container.DeleteItemAsync<T>(id, new PartitionKey(id));
+                await _container.DeleteItemAsync<T>(id.ToString(), new PartitionKey(id.ToString()));
 
                 return true;
             }

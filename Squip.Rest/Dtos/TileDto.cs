@@ -1,4 +1,6 @@
+using System;
+
 namespace Squip.Rest.Dtos
 {
-    public record TileDto(string Id, string Name, string Type);
+    public record TileDto(Guid Id, string Name, string Type);
 }

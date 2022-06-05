@@ -34,7 +34,7 @@ namespace Squip.Rest.Controllers
         [HttpGet("{habitId}", Name = "GetHabit")]
         public async Task<IActionResult> GetHabit(Guid habitId)
         {
-            var habitFromRepo = await _habitRepository.GetById(habitId.ToString());
+            var habitFromRepo = await _habitRepository.GetById(habitId);
 
             if (habitFromRepo == null)
                 return NotFound();
@@ -55,10 +55,10 @@ namespace Squip.Rest.Controllers
         [HttpDelete("{habitId}")]
         public async Task<IActionResult> DeleteHabit(Guid habitId)
         {
-            if (!await _habitRepository.DoesExistById(habitId.ToString()))
+            if (!await _habitRepository.DoesExistById(habitId))
                 return NotFound();
 
-            await _habitRepository.Archive(habitId.ToString());
+            await _habitRepository.Archive(habitId);
 
             return NoContent();
         }

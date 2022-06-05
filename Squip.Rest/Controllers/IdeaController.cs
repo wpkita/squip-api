@@ -34,7 +34,7 @@ namespace Squip.Rest.Controllers
         [HttpGet("{ideaId}", Name = "GetIdea")]
         public async Task<IActionResult> GetIdea(Guid ideaId)
         {
-            var ideaFromRepo = await _ideaRepository.GetById(ideaId.ToString());
+            var ideaFromRepo = await _ideaRepository.GetById(ideaId);
 
             if (ideaFromRepo == null)
                 return NotFound();
@@ -55,10 +55,10 @@ namespace Squip.Rest.Controllers
         [HttpDelete("{ideaId}")]
         public async Task<IActionResult> DeleteIdea(Guid ideaId)
         {
-            if (!await _ideaRepository.DoesExistById(ideaId.ToString()))
+            if (!await _ideaRepository.DoesExistById(ideaId))
                 return NotFound();
 
-            await _ideaRepository.Archive(ideaId.ToString());
+            await _ideaRepository.Archive(ideaId);
 
             return NoContent();
         }

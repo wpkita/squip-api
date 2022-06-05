@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -14,14 +15,14 @@ namespace Squip.Rest.Repositories
             _context = context;
         }
 
-        public async Task<bool> DoesExistById(string id)
+        public async Task<bool> DoesExistById(Guid id)
         {
             var idea = await _context.FindAsync<Idea>(id);
 
             return idea != null;
         }
 
-        public async Task<Idea> GetById(string id)
+        public async Task<Idea> GetById(Guid id)
         {
             var idea = await _context.FindAsync<Idea>(id);
 
@@ -37,6 +38,7 @@ namespace Squip.Rest.Repositories
 
         public async Task<bool> Create(Idea idea)
         {
+            idea.PreCreate();
             _context.Add(idea);
             await _context.SaveChangesAsync();
 
@@ -45,10 +47,11 @@ namespace Squip.Rest.Repositories
 
         public Task<bool> Update(Idea t)
         {
+            t.PreUpdate();
             throw new System.NotImplementedException();
         }
 
-        public Task<bool> Archive(string id)
+        public Task<bool> Archive(Guid id)
         {
             throw new System.NotImplementedException();
         }

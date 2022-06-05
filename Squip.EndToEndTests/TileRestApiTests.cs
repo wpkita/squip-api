@@ -10,7 +10,7 @@ namespace Squip.EndToEndTests
     public class TileRestApiTests
     {
         [Fact]
-        public void CreateReadUpdateDelete()
+        public async void CreateReadUpdateDelete()
         {
             var client = new RestClient("https://localhost:32776/");
 
@@ -22,7 +22,7 @@ namespace Squip.EndToEndTests
             // Create
             var request = new RestRequest("tiles");
             request.AddJsonBody(new { name, type });
-            var response = client.Post(request);
+            var response = await client.PostAsync(request);
             var deserializedJson = JsonConvert.DeserializeObject<dynamic>(response.Content);
             var id = (string)deserializedJson.id.Value;
 
@@ -33,7 +33,7 @@ namespace Squip.EndToEndTests
 
             // Read
             request = new RestRequest($"tiles/{id}");
-            response = client.Get(request);
+            response = await client.GetAsync(request);
             deserializedJson = JsonConvert.DeserializeObject<dynamic>(response.Content);
             id = deserializedJson.id.Value;
 
@@ -45,7 +45,7 @@ namespace Squip.EndToEndTests
             // Update
             request = new RestRequest("tiles");
             request.AddJsonBody(new { id, name = updatedName, type = updatedType });
-            response = client.Put(request);
+            response = await client.PutAsync(request);
             deserializedJson = JsonConvert.DeserializeObject<dynamic>(response.Content);
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -55,12 +55,12 @@ namespace Squip.EndToEndTests
 
             // Delete
             request = new RestRequest($"tiles/{id}");
-            response = client.Delete(request);
+            response = await client.DeleteAsync(request);
 
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
             request = new RestRequest($"tiles/{id}");
-            response = client.Get(request);
+            response = await client.GetAsync(request);
 
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }

@@ -54,7 +54,7 @@ namespace Squip.Rest.Tests.Repositories
         {
             var unitUnderTest = new TileCosmosRepository(_configuration, _logger);
 
-            var tileId = Guid.NewGuid().ToString();
+            var tileId = Guid.NewGuid();
 
             (await unitUnderTest.Archive(tileId)).Should().Be(false);
             (await unitUnderTest.GetById(tileId)).Should().BeNull();
@@ -104,7 +104,7 @@ namespace Squip.Rest.Tests.Repositories
         {
             var unitUnderTest = new TileCosmosRepository(_configuration, _logger);
 
-            var tileId = Guid.NewGuid().ToString();
+            var tileId = Guid.NewGuid();
 
             (await unitUnderTest.DoesExistById(tileId)).Should().Be(false);
         }
@@ -114,7 +114,7 @@ namespace Squip.Rest.Tests.Repositories
         {
             var unitUnderTest = new TileCosmosRepository(_configuration, _logger);
 
-            var tileId = Guid.NewGuid().ToString();
+            var tileId = Guid.NewGuid();
 
             (await unitUnderTest.GetById(tileId)).Should().BeNull();
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -33,14 +34,14 @@ namespace Squip.Rest.Repositories
 
         protected string ActiveEntityIdsSetName => $"{EntityName}Ids";
 
-        public async Task<bool> DoesExistById(string id)
+        public async Task<bool> DoesExistById(Guid id)
         {
             var doesExist = await RedisDb.KeyExistsAsync(EntityRedisKey(id));
 
             return doesExist;
         }
 
-        public async Task<T> GetById(string id)
+        public async Task<T> GetById(Guid id)
         {
             var entity = default(T);
 
@@ -65,7 +66,7 @@ namespace Squip.Rest.Repositories
             var entityIds = await RedisDb.SetMembersAsync(ActiveEntityIdsSetName);
             foreach (var entityId in entityIds)
             {
-                var entity = await GetById(entityId);
+                var entity = await GetById(Guid.Parse(entityId));
                 entities.Add(entity);
             }
 
@@ -80,7 +81,7 @@ namespace Squip.Rest.Repositories
             await RedisDb.StringSetAsync(EntityRedisKey(entity.Id), entityJson);
 
             // Cache Id for random selection later
-            await RedisDb.SetAddAsync(ActiveEntityIdsSetName, entity.Id);
+            await RedisDb.SetAddAsync(ActiveEntityIdsSetName, entity.Id.ToString());
 
             return true;
         }
@@ -95,18 +96,18 @@ namespace Squip.Rest.Repositories
             return true;
         }
 
-        public async Task<bool> Archive(string id)
+        public async Task<bool> Archive(Guid id)
         {
             var didSucceed = await RedisDb.SetMoveAsync(
                 ActiveEntityIdsSetName,
                 ArchivedEntityIdsSetName,
-                id
+                id.ToString()
             );
 
             return didSucceed;
         }
 
-        private string EntityRedisKey(string id)
+        private string EntityRedisKey(Guid id)
         {
             return $"{EntityName}:{id}";
         }

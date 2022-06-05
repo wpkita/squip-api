@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -31,7 +32,7 @@ namespace Squip.Rest.Controllers
         }
 
         [HttpGet("{id}", Name = "GetTile")]
-        public async Task<IActionResult> GetTile(string id)
+        public async Task<IActionResult> GetTile(Guid id)
         {
             var tileFromRepo = await _tileRepository.GetById(id);
 
@@ -55,7 +56,7 @@ namespace Squip.Rest.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateTile(string id, TileDto tile)
+        public async Task<IActionResult> UpdateTile(Guid id, TileDto tile)
         {
             if (id != tile.Id)
                 return BadRequest("Ids in query must match body.");
@@ -73,7 +74,7 @@ namespace Squip.Rest.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTile(string id)
+        public async Task<IActionResult> DeleteTile(Guid id)
         {
             if (!await _tileRepository.DoesExistById(id))
                 return NotFound();
