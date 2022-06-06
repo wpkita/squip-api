@@ -8,5 +8,6 @@ namespace Squip.Rest.Repositories
         public SquipContext(DbContextOptions options) : base(options) { }
 
         public DbSet<Idea> Ideas { get; set; }
+        public DbSet<Game> Games { get; set; }
     }
 }

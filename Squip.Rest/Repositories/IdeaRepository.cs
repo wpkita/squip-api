@@ -19,5 +19,10 @@ namespace Squip.Rest.Repositories
 
             return randomIdea;
         }
+
+        public Task<Tuple<Idea, Idea>> GetRandomIdeaPair()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

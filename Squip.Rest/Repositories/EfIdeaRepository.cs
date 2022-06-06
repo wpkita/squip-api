@@ -6,7 +6,7 @@ using Squip.Rest.Domain;
 
 namespace Squip.Rest.Repositories
 {
-    public class EfIdeaRepository : IRepository<Idea>
+    public class EfIdeaRepository : IRepository<Idea>, ISquipRepository
     {
         private readonly SquipContext _context;
 
@@ -54,6 +54,29 @@ namespace Squip.Rest.Repositories
         public Task<bool> Archive(Guid id)
         {
             throw new System.NotImplementedException();
+        }
+
+        public async Task<Idea> GetRandomIdea()
+        {
+            var ideasArray = await _context.Ideas.ToArrayAsync();
+            var random = new Random();
+            var randomIndex = random.Next(0, ideasArray.Length);
+            return ideasArray[randomIndex];
+        }
+
+        public async Task<Tuple<Idea, Idea>> GetRandomIdeaPair()
+        {
+            var ideas = await _context.Ideas.ToListAsync();
+            var random = new Random();
+
+            var randomIndex = random.Next(0, ideas.Count);
+            var firstIdea = ideas[randomIndex];
+            ideas.Remove(firstIdea);
+
+            randomIndex = random.Next(0, ideas.Count);
+            var secondIdea = ideas[randomIndex];
+
+            return new Tuple<Idea, Idea>(firstIdea, secondIdea);
         }
     }
 }

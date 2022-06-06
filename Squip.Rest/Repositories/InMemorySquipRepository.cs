@@ -10,5 +10,12 @@ namespace Squip.Rest.Repositories
         {
             return Task.FromResult(new Idea { Id = Guid.NewGuid(), Content = "Hello world!" });
         }
+
+        public Task<Tuple<Idea, Idea>> GetRandomIdeaPair()
+        {
+            return Task.FromResult(
+                new Tuple<Idea, Idea>(GetRandomIdea().Result, GetRandomIdea().Result)
+            );
+        }
     }
 }

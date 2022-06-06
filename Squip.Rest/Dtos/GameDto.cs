@@ -1,4 +1,6 @@
+using System;
+
 namespace Squip.Rest.Dtos
 {
-    public record GameDto(IdeaDto Left, IdeaDto Right);
+    public record GameDto(Guid Id, IdeaDto Left, IdeaDto Right);
 }

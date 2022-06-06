@@ -42,10 +42,10 @@ namespace Squip.Rest
                             policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
                         )
                 );
-                services.AddSingleton<IRepository<Tile>, InMemoryRepository<Tile>>();
-                services.AddSingleton<IRepository<Habit>, InMemoryRepository<Habit>>();
+                services.AddScoped<IRepository<Tile>, InMemoryRepository<Tile>>();
+                services.AddScoped<IRepository<Habit>, InMemoryRepository<Habit>>();
                 services.AddScoped<IRepository<Idea>, EfIdeaRepository>();
-                services.AddSingleton<ISquipRepository, InMemorySquipRepository>();
+                services.AddScoped<ISquipRepository, EfIdeaRepository>();
             }
             else
             {

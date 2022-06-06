@@ -9,6 +9,7 @@ namespace Squip.Rest
         public SquipMappingProfile()
         {
             CreateMap<Idea, IdeaDto>();
+            CreateMap<Game, GameDto>();
         }
     }
 }
