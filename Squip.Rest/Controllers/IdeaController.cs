@@ -52,6 +52,19 @@ namespace Squip.Rest.Controllers
             return CreatedAtRoute("GetIdea", new { ideaId = ideaToReturn.Id }, ideaToReturn);
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutIdea(Guid id, Idea idea)
+        {
+            if (id != idea.Id)
+            {
+                return BadRequest();
+            }
+
+            await _ideaRepository.Update(idea);
+
+            return NoContent();
+        }
+
         [HttpDelete("{ideaId}")]
         public async Task<IActionResult> DeleteIdea(Guid ideaId)
         {

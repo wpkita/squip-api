@@ -45,10 +45,14 @@ namespace Squip.Rest.Repositories
             return true;
         }
 
-        public Task<bool> Update(Idea t)
+        public async Task<bool> Update(Idea t)
         {
             t.PreUpdate();
-            throw new System.NotImplementedException();
+            _context.Entry(t).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
         public Task<bool> Archive(Guid id)
