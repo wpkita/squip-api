@@ -52,7 +52,7 @@ namespace Squip.Rest.Controllers
             if (winner == null)
                 return BadRequest();
 
-            game.Winner = winner;
+            game.SetWinner(winner);
             game.PreUpdate();
             await _context.SaveChangesAsync();
 
