@@ -11,8 +11,6 @@ namespace Squip.Rest.Domain
 
         public void PreCreate()
         {
-            Id = Guid.NewGuid();
-
             InstantCreatedAt = SystemClock.Instance.GetCurrentInstant();
         }
 

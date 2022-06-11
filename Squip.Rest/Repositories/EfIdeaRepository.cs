@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Squip.Rest.Domain;
+using System.Linq;
 
 namespace Squip.Rest.Repositories
 {
@@ -45,11 +46,22 @@ namespace Squip.Rest.Repositories
             return true;
         }
 
-        public async Task<bool> Update(Idea t)
+        public async Task<bool> Update(Idea idea)
         {
-            t.PreUpdate();
-            _context.Entry(t).State = EntityState.Modified;
+            var ideaFromDatabase = await _context.FindAsync<Idea>(idea.Id);
+            ideaFromDatabase.Content = idea.Content;
+            var tagsToRemove = ideaFromDatabase.Tags.Except(idea.Tags, new TagEqualityComparer());
+            var tagsToAdd = idea.Tags.Except(ideaFromDatabase.Tags, new TagEqualityComparer());
 
+            foreach (var tagToAdd in tagsToAdd)
+            {
+                tagToAdd.PreCreate();
+                ideaFromDatabase.Tags.Add(tagToAdd);
+            }
+
+            _context.RemoveRange(tagsToRemove);
+
+            idea.PreUpdate();
             await _context.SaveChangesAsync();
 
             return true;

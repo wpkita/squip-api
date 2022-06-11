@@ -39,7 +39,8 @@ namespace Squip.Rest.Controllers
             if (ideaFromRepo == null)
                 return NotFound();
 
-            return Ok(_mapper.Map<IdeaDto>(ideaFromRepo));
+            var ideaDto = IdeasProfile.MapIdeaToDto(ideaFromRepo);
+            return Ok(ideaDto);
         }
 
         [HttpPost]
@@ -53,14 +54,16 @@ namespace Squip.Rest.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutIdea(Guid id, Idea idea)
+        public async Task<IActionResult> PutIdea(Guid id, IdeaDto idea)
         {
             if (id != idea.Id)
             {
                 return BadRequest();
             }
 
-            await _ideaRepository.Update(idea);
+            var ideaEntity = _mapper.Map<Idea>(idea);
+
+            await _ideaRepository.Update(ideaEntity);
 
             return NoContent();
         }
