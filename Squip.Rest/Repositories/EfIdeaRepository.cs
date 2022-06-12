@@ -49,6 +49,9 @@ namespace Squip.Rest.Repositories
         public async Task<bool> Update(Idea idea)
         {
             var ideaFromDatabase = await _context.FindAsync<Idea>(idea.Id);
+            if (ideaFromDatabase == null)
+                return false;
+
             ideaFromDatabase.Content = idea.Content;
             var tagsToRemove = ideaFromDatabase.Tags.Except(idea.Tags, new TagEqualityComparer());
             var tagsToAdd = idea.Tags.Except(ideaFromDatabase.Tags, new TagEqualityComparer());
@@ -67,9 +70,16 @@ namespace Squip.Rest.Repositories
             return true;
         }
 
-        public Task<bool> Archive(Guid id)
+        public async Task<bool> Archive(Guid id)
         {
-            throw new System.NotImplementedException();
+            var idea = await _context.Ideas.FindAsync(id);
+            if (idea == null)
+                return false;
+
+            idea.IsArchived = true;
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<Idea> GetRandomIdea()

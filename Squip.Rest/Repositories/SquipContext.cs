@@ -16,6 +16,8 @@ namespace Squip.Rest.Repositories
             modelBuilder.Entity<Tag>().HasIndex(tag => tag.Name);
 
             modelBuilder.Entity<Idea>().Navigation(idea => idea.Tags).AutoInclude();
+
+            modelBuilder.Entity<Idea>().HasQueryFilter(idea => !idea.IsArchived);
         }
 
         public DbSet<Idea> Ideas { get; set; }
