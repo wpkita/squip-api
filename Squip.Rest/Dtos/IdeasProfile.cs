@@ -8,7 +8,12 @@ namespace Squip.Rest.Dtos
     {
         public static IdeaDto MapIdeaToDto(Idea idea)
         {
-            return new IdeaDto(idea.Id, idea.Content, idea.Tags.Select(tag => tag.Name).ToArray());
+            return new IdeaDto(
+                idea.Id,
+                idea.Title,
+                idea.Content,
+                idea.Tags.Select(tag => tag.Name).ToArray()
+            );
         }
 
         public IdeasProfile()

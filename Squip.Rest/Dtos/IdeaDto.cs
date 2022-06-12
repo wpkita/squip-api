@@ -3,5 +3,5 @@ using Squip.Rest.Domain;
 
 namespace Squip.Rest.Dtos
 {
-    public record IdeaDto(Guid Id, string Content, string[] Tags);
+    public record IdeaDto(Guid Id, string Title, string Content, string[] Tags);
 }
