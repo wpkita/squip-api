@@ -39,7 +39,6 @@ namespace Squip.Rest.Repositories
 
         public async Task<bool> Create(Idea idea)
         {
-            idea.PreCreate();
             _context.Add(idea);
             await _context.SaveChangesAsync();
 
@@ -58,13 +57,11 @@ namespace Squip.Rest.Repositories
 
             foreach (var tagToAdd in tagsToAdd)
             {
-                tagToAdd.PreCreate();
                 ideaFromDatabase.Tags.Add(tagToAdd);
             }
 
             _context.RemoveRange(tagsToRemove);
 
-            idea.PreUpdate();
             await _context.SaveChangesAsync();
 
             return true;

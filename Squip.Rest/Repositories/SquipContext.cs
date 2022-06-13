@@ -1,3 +1,6 @@
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Squip.Rest.Domain;
 
@@ -18,6 +21,29 @@ namespace Squip.Rest.Repositories
             modelBuilder.Entity<Idea>().Navigation(idea => idea.Tags).AutoInclude();
 
             modelBuilder.Entity<Idea>().HasQueryFilter(idea => !idea.IsArchived);
+        }
+
+        public override Task<int> SaveChangesAsync(
+            CancellationToken cancellationToken = new CancellationToken()
+        )
+        {
+            var modifiedEntries = ChangeTracker
+                .Entries()
+                .Where(entry => entry.State is EntityState.Added or EntityState.Modified);
+
+            foreach (var entry in modifiedEntries)
+            {
+                var entity = entry.Entity as DomainModelBase;
+
+                if (entry.State == EntityState.Added)
+                {
+                    entity?.PreCreate();
+                }
+
+                entity?.PreUpdate();
+            }
+
+            return base.SaveChangesAsync(cancellationToken);
         }
 
         public DbSet<Idea> Ideas { get; set; }

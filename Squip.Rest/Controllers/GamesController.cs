@@ -33,7 +33,6 @@ namespace Squip.Rest.Controllers
             var (leftIdea, rightIdea) = await _squipRepository.GetRandomIdeaPair();
 
             var game = new Game { Left = leftIdea, Right = rightIdea };
-            game.PreCreate();
             await _context.AddAsync(game);
             await _context.SaveChangesAsync();
 
@@ -53,7 +52,6 @@ namespace Squip.Rest.Controllers
                 return BadRequest();
 
             game.SetWinner(winner);
-            game.PreUpdate();
             await _context.SaveChangesAsync();
 
             var gameDto = _mapper.Map<Game, GameDto>(game);
