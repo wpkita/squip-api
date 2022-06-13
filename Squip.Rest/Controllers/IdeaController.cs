@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +29,9 @@ namespace Squip.Rest.Controllers
         {
             var ideasFromRepo = await _ideaRepository.GetAll();
 
-            return _mapper.Map<IEnumerable<IdeaDto>>(ideasFromRepo);
+            var ideaDtos = ideasFromRepo.Select(IdeasProfile.MapIdeaToDto);
+
+            return ideaDtos;
         }
 
         [HttpGet("{ideaId}", Name = "GetIdea")]
