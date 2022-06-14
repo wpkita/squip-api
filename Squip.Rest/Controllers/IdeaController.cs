@@ -49,7 +49,7 @@ namespace Squip.Rest.Controllers
         [HttpPost]
         public async Task<ActionResult<IdeaDto>> CreateIdea(IdeaForCreationDto idea)
         {
-            var ideaEntity = _mapper.Map<Idea>(idea);
+            var ideaEntity = IdeasProfile.MapDtoToIdea(idea);
             await _ideaRepository.Create(ideaEntity);
 
             var ideaToReturn = _mapper.Map<IdeaDto>(ideaEntity);

@@ -16,6 +16,16 @@ namespace Squip.Rest.Dtos
             );
         }
 
+        public static Idea MapDtoToIdea(IdeaForCreationDto idea)
+        {
+            return new Idea
+            {
+                Title = idea.Title,
+                Content = idea.Content,
+                Tags = idea.Tags.Select(tag => new Tag { Name = tag }).ToList()
+            };
+        }
+
         public IdeasProfile()
         {
             CreateMap<Idea, IdeaDto>()
@@ -28,7 +38,6 @@ namespace Squip.Rest.Dtos
                     dest => dest.Tags,
                     opt => opt.MapFrom(src => src.Tags.Select(t => new Tag { Name = t }))
                 );
-            CreateMap<IdeaForCreationDto, Idea>();
         }
     }
 }
