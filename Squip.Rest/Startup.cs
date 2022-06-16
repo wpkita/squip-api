@@ -29,7 +29,7 @@ namespace Squip.Rest
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddDbContext<SquipContext>(
                 options =>
-                    options.UseSqlServer(
+                    options.UseNpgsql(
                         Configuration.GetConnectionString("SquipDatabase"),
                         x => x.UseNodaTime()
                     )
