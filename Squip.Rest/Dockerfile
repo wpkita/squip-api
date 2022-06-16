@@ -7,10 +7,10 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["Squip.Rest/Squip.Rest.csproj", "Squip.Rest/"]
-RUN dotnet restore "Squip.Rest/Squip.Rest.csproj"
+COPY ["Squip.Rest.csproj", "./"]
+RUN dotnet restore
 COPY . .
-WORKDIR "/src/Squip.Rest"
+WORKDIR /src/.
 RUN dotnet build "Squip.Rest.csproj" -c Release -o /app/build
 
 FROM build AS publish
