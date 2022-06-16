@@ -49,10 +49,8 @@ namespace Squip.Rest
             }
             else
             {
-                services.AddScoped<IRepository<Tile>, TileCosmosRepository>();
-                services.AddApplicationInsightsTelemetry(
-                    Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]
-                );
+                services.AddScoped<IRepository<Idea>, EfIdeaRepository>();
+                services.AddScoped<ISquipRepository, EfIdeaRepository>();
             }
             services.AddSwaggerGen();
         }
