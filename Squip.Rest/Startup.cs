@@ -48,7 +48,17 @@ namespace Squip.Rest
                 services.AddScoped<ISquipRepository, EfIdeaRepository>();
                 services.AddSwaggerGen();
             }
-            else { }
+
+            services.AddCors(
+                options =>
+                    options.AddDefaultPolicy(
+                        policy =>
+                            policy
+                                .WithOrigins("https://squip-project.web.app")
+                                .AllowAnyMethod()
+                                .AllowAnyHeader()
+                    )
+            );
             services.AddScoped<IRepository<Idea>, EfIdeaRepository>();
             services.AddScoped<ISquipRepository, EfIdeaRepository>();
         }
@@ -66,11 +76,7 @@ namespace Squip.Rest
 
             app.UseRouting();
 
-            // "The call to UseCors must be placed after UseRouting, but before UseAuthorization."
-            if (env.IsDevelopment())
-            {
-                app.UseCors();
-            }
+            app.UseCors();
 
             app.UseAuthorization();
 
