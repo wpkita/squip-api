@@ -46,13 +46,11 @@ namespace Squip.Rest
                 services.AddScoped<IRepository<Habit>, InMemoryRepository<Habit>>();
                 services.AddScoped<IRepository<Idea>, EfIdeaRepository>();
                 services.AddScoped<ISquipRepository, EfIdeaRepository>();
+                services.AddSwaggerGen();
             }
-            else
-            {
-                services.AddScoped<IRepository<Idea>, EfIdeaRepository>();
-                services.AddScoped<ISquipRepository, EfIdeaRepository>();
-            }
-            services.AddSwaggerGen();
+            else { }
+            services.AddScoped<IRepository<Idea>, EfIdeaRepository>();
+            services.AddScoped<ISquipRepository, EfIdeaRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,9 +61,8 @@ namespace Squip.Rest
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                app.UseHttpsRedirection();
             }
-
-            app.UseHttpsRedirection();
 
             app.UseRouting();
 
