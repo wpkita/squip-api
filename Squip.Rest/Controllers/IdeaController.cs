@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Squip.Rest.Domain;
 using Squip.Rest.Dtos;
@@ -15,12 +14,10 @@ namespace Squip.Rest.Controllers
     public class IdeaController : ControllerBase
     {
         private readonly IRepository<Idea> _ideaRepository;
-        private readonly IMapper _mapper;
 
-        public IdeaController(IRepository<Idea> ideaRepository, IMapper mapper)
+        public IdeaController(IRepository<Idea> ideaRepository)
         {
             _ideaRepository = ideaRepository;
-            _mapper = mapper;
         }
 
         [HttpGet]
@@ -52,7 +49,7 @@ namespace Squip.Rest.Controllers
             var ideaEntity = IdeasProfile.MapDtoToIdea(idea);
             await _ideaRepository.Create(ideaEntity);
 
-            var ideaToReturn = _mapper.Map<IdeaDto>(ideaEntity);
+            var ideaToReturn = IdeasProfile.MapIdeaToDto(ideaEntity);
             return CreatedAtRoute("GetIdea", new { ideaId = ideaToReturn.Id }, ideaToReturn);
         }
 
@@ -64,7 +61,7 @@ namespace Squip.Rest.Controllers
                 return BadRequest();
             }
 
-            var ideaEntity = _mapper.Map<Idea>(idea);
+            var ideaEntity = IdeasProfile.MapDtoToIdea(idea);
 
             await _ideaRepository.Update(ideaEntity);
 

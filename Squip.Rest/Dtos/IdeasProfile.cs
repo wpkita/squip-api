@@ -1,11 +1,15 @@
 using System.Linq;
-using AutoMapper;
 using Squip.Rest.Domain;
 
 namespace Squip.Rest.Dtos
 {
-    public class IdeasProfile : Profile
+    public class IdeasProfile
     {
+        public static GameDto MapGameToDto(Game game)
+        {
+            return new GameDto(game.Id, MapIdeaToDto(game.Left), MapIdeaToDto(game.Right));
+        }
+
         public static IdeaDto MapIdeaToDto(Idea idea)
         {
             return new IdeaDto(
@@ -26,18 +30,15 @@ namespace Squip.Rest.Dtos
             };
         }
 
-        public IdeasProfile()
+        public static Idea MapDtoToIdea(IdeaDto idea)
         {
-            CreateMap<Idea, IdeaDto>()
-                .ForMember(
-                    dest => dest.Tags,
-                    opt => opt.MapFrom(src => src.Tags.Select(t => t.Name))
-                )
-                .ReverseMap()
-                .ForMember(
-                    dest => dest.Tags,
-                    opt => opt.MapFrom(src => src.Tags.Select(t => new Tag { Name = t }))
-                );
+            return new Idea
+            {
+                Id = idea.Id,
+                Title = idea.Title,
+                Content = idea.Content,
+                Tags = idea.Tags.Select(tag => new Tag { Name = tag }).ToList()
+            };
         }
     }
 }

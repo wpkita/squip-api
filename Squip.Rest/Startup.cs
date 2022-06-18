@@ -26,7 +26,6 @@ namespace Squip.Rest
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddDbContext<SquipContext>(
                 options =>
                     options.UseNpgsql(
@@ -42,23 +41,24 @@ namespace Squip.Rest
                             policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
                         )
                 );
-                services.AddScoped<IRepository<Tile>, InMemoryRepository<Tile>>();
-                services.AddScoped<IRepository<Habit>, InMemoryRepository<Habit>>();
                 services.AddScoped<IRepository<Idea>, EfIdeaRepository>();
                 services.AddScoped<ISquipRepository, EfIdeaRepository>();
                 services.AddSwaggerGen();
             }
+            else
+            {
+                services.AddCors(
+                    options =>
+                        options.AddDefaultPolicy(
+                            policy =>
+                                policy
+                                    .WithOrigins("https://squip-project.web.app")
+                                    .AllowAnyMethod()
+                                    .AllowAnyHeader()
+                        )
+                );
+            }
 
-            services.AddCors(
-                options =>
-                    options.AddDefaultPolicy(
-                        policy =>
-                            policy
-                                .WithOrigins("https://squip-project.web.app")
-                                .AllowAnyMethod()
-                                .AllowAnyHeader()
-                    )
-            );
             services.AddScoped<IRepository<Idea>, EfIdeaRepository>();
             services.AddScoped<ISquipRepository, EfIdeaRepository>();
         }

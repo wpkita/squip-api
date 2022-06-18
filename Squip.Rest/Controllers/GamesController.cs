@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Squip.Rest.Domain;
 using Squip.Rest.Dtos;
@@ -13,17 +12,11 @@ namespace Squip.Rest.Controllers
     public class GamesController : ControllerBase
     {
         private readonly ISquipRepository _squipRepository;
-        private readonly IMapper _mapper;
         private readonly SquipContext _context;
 
-        public GamesController(
-            ISquipRepository squipRepository,
-            IMapper mapper,
-            SquipContext context
-        )
+        public GamesController(ISquipRepository squipRepository, SquipContext context)
         {
             _squipRepository = squipRepository;
-            _mapper = mapper;
             _context = context;
         }
 
@@ -36,7 +29,7 @@ namespace Squip.Rest.Controllers
             await _context.AddAsync(game);
             await _context.SaveChangesAsync();
 
-            var gameDto = _mapper.Map<Game, GameDto>(game);
+            var gameDto = IdeasProfile.MapGameToDto(game);
 
             return gameDto;
         }
@@ -54,7 +47,7 @@ namespace Squip.Rest.Controllers
             game.SetWinner(winner);
             await _context.SaveChangesAsync();
 
-            var gameDto = _mapper.Map<Game, GameDto>(game);
+            var gameDto = IdeasProfile.MapGameToDto(game);
 
             return Ok(gameDto);
         }
