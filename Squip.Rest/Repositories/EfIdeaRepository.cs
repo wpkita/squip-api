@@ -32,7 +32,9 @@ namespace Squip.Rest.Repositories
 
         public async Task<IEnumerable<Idea>> GetAll()
         {
-            var ideas = await _context.Ideas.ToListAsync();
+            var ideas = await _context.Ideas
+                .OrderByDescending(idea => idea.EloRating)
+                .ToListAsync();
 
             return ideas;
         }

@@ -61,6 +61,13 @@ namespace Squip.Rest.Controllers
                 );
             }
 
+            foreach (var idea in _context.Ideas)
+            {
+                idea.EloRating = ratings[idea];
+            }
+
+            await _context.SaveChangesAsync();
+
             var ratingDtos = ratings
                 .Select(
                     rating => new IdeaRatingDto(IdeasProfile.MapIdeaToDto(rating.Key), rating.Value)
