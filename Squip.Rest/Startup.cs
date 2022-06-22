@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Squip.Rest.Domain;
 using Squip.Rest.Repositories;
 
@@ -37,6 +39,12 @@ namespace Squip.Rest
                 {
                     options.Authority = Configuration["Auth0:Authority"];
                     options.Audience = Configuration["Auth0:Audience"];
+
+                    // This makes the UserId present in the User.Identity.Name property
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        NameClaimType = ClaimTypes.NameIdentifier
+                    };
                 });
             services.AddAuthorization();
 
