@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Okta.AspNetCore;
 using Squip.Rest.Domain;
 using Squip.Rest.Repositories;
 
@@ -30,18 +30,14 @@ namespace Squip.Rest
             services
                 .AddAuthentication(options =>
                 {
-                    options.DefaultAuthenticateScheme = OktaDefaults.ApiAuthenticationScheme;
-                    options.DefaultChallengeScheme = OktaDefaults.ApiAuthenticationScheme;
-                    options.DefaultSignInScheme = OktaDefaults.ApiAuthenticationScheme;
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
-                .AddOktaWebApi(
-                    new OktaWebApiOptions
-                    {
-                        OktaDomain = Configuration["Okta:OktaDomain"],
-                        AuthorizationServerId = Configuration["Okta:AuthorizationServerId"],
-                        Audience = Configuration["Okta:Audience"]
-                    }
-                );
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = Configuration["Auth0:Authority"];
+                    options.Audience = Configuration["Auth0:Audience"];
+                });
             services.AddAuthorization();
 
             services.AddMvc(o =>
