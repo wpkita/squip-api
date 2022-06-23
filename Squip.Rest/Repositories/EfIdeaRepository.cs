@@ -92,6 +92,9 @@ namespace Squip.Rest.Repositories
         public async Task<Tuple<Idea, Idea>> GetRandomIdeaPair()
         {
             var ideas = await _context.Ideas.ToListAsync();
+            if (ideas.Count < 2)
+                return new Tuple<Idea, Idea>(new Idea(), new Idea());
+
             var random = new Random();
 
             var randomIndex = random.Next(0, ideas.Count);

@@ -3,12 +3,19 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Squip.Rest.Domain;
+using Squip.Rest.Services;
 
 namespace Squip.Rest.Repositories
 {
     public class SquipContext : DbContext
     {
-        public SquipContext(DbContextOptions options) : base(options) { }
+        private readonly IUserIdProvider _userIdProvider;
+
+        public SquipContext(DbContextOptions options, IUserIdProvider userIdProvider)
+            : base(options)
+        {
+            _userIdProvider = userIdProvider;
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -20,6 +27,9 @@ namespace Squip.Rest.Repositories
 
             modelBuilder.Entity<Idea>().Navigation(idea => idea.Tags).AutoInclude();
             modelBuilder.Entity<Idea>().HasQueryFilter(idea => !idea.IsArchived);
+            modelBuilder
+                .Entity<Idea>()
+                .HasQueryFilter(idea => idea.User.OidcSub == _userIdProvider.GetCurrentUserId());
             modelBuilder.Entity<Idea>().Property(idea => idea.UserId).IsRequired();
 
             modelBuilder.Entity<User>().HasAlternateKey(user => user.OidcSub);

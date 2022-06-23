@@ -11,5 +11,6 @@ namespace Squip.Rest.Domain
         public double EloRating { get; set; }
         public ICollection<Tag> Tags { get; set; }
         public Guid UserId { get; set; }
+        public User User { get; set; }
     }
 }
