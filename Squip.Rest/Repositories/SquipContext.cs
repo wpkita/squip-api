@@ -19,8 +19,10 @@ namespace Squip.Rest.Repositories
             modelBuilder.Entity<Tag>().HasIndex(tag => tag.Name);
 
             modelBuilder.Entity<Idea>().Navigation(idea => idea.Tags).AutoInclude();
-
             modelBuilder.Entity<Idea>().HasQueryFilter(idea => !idea.IsArchived);
+            modelBuilder.Entity<Idea>().Property(idea => idea.UserId).IsRequired();
+
+            modelBuilder.Entity<User>().HasAlternateKey(user => user.OidcSub);
         }
 
         public override Task<int> SaveChangesAsync(
@@ -49,5 +51,6 @@ namespace Squip.Rest.Repositories
         public DbSet<Idea> Ideas { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }

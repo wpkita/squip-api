@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,10 @@ using Squip.Rest.Repositories;
 namespace Squip.Rest.Migrations
 {
     [DbContext(typeof(SquipContext))]
-    partial class SquipContextModelSnapshot : ModelSnapshot
+    [Migration("20220623035031_AddUsers")]
+    partial class AddUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,12 +86,7 @@ namespace Squip.Rest.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Ideas");
                 });
@@ -172,15 +169,6 @@ namespace Squip.Rest.Migrations
                     b.Navigation("Winner");
                 });
 
-            modelBuilder.Entity("Squip.Rest.Domain.Idea", b =>
-                {
-                    b.HasOne("Squip.Rest.Domain.User", null)
-                        .WithMany("Ideas")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Squip.Rest.Domain.Tag", b =>
                 {
                     b.HasOne("Squip.Rest.Domain.Idea", "Idea")
@@ -195,11 +183,6 @@ namespace Squip.Rest.Migrations
             modelBuilder.Entity("Squip.Rest.Domain.Idea", b =>
                 {
                     b.Navigation("Tags");
-                });
-
-            modelBuilder.Entity("Squip.Rest.Domain.User", b =>
-                {
-                    b.Navigation("Ideas");
                 });
 #pragma warning restore 612, 618
         }
