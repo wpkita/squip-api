@@ -26,10 +26,12 @@ namespace Squip.Rest.Repositories
             modelBuilder.Entity<Tag>().HasIndex(tag => tag.Name);
 
             modelBuilder.Entity<Idea>().Navigation(idea => idea.Tags).AutoInclude();
-            modelBuilder.Entity<Idea>().HasQueryFilter(idea => !idea.IsArchived);
             modelBuilder
                 .Entity<Idea>()
-                .HasQueryFilter(idea => idea.User.OidcSub == _userIdProvider.GetCurrentUserId());
+                .HasQueryFilter(
+                    idea =>
+                        !idea.IsArchived && idea.User.OidcSub == _userIdProvider.GetCurrentUserId()
+                );
             modelBuilder.Entity<Idea>().Property(idea => idea.UserId).IsRequired();
 
             modelBuilder.Entity<User>().HasAlternateKey(user => user.OidcSub);
