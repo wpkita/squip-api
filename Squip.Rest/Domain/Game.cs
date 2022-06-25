@@ -16,6 +16,23 @@ namespace Squip.Rest.Domain
 
             Winner = winner;
             Loser = Left == winner ? Right : Left;
+
+            UpdateRatings();
+        }
+
+        private void UpdateRatings()
+        {
+            var winnerExpectedScore = EloCalculator.GetExpectedScore(
+                Winner.EloRating,
+                Loser.EloRating
+            );
+            var loserExpectedScore = EloCalculator.GetExpectedScore(
+                Loser.EloRating,
+                Winner.EloRating
+            );
+
+            Winner.EloRating = EloCalculator.GetNewRating(Winner.EloRating, winnerExpectedScore, 1);
+            Loser.EloRating = EloCalculator.GetNewRating(Loser.EloRating, loserExpectedScore, 0);
         }
     }
 }

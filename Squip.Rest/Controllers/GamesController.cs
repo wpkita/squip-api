@@ -45,24 +45,6 @@ namespace Squip.Rest.Controllers
                 return BadRequest();
 
             game.SetWinner(winner);
-            var winnerExpectedScore = EloCalculator.GetExpectedScore(
-                game.Winner.EloRating,
-                game.Loser.EloRating
-            );
-            var loserExpectedScore = EloCalculator.GetExpectedScore(
-                game.Loser.EloRating,
-                game.Winner.EloRating
-            );
-            game.Winner.EloRating = EloCalculator.GetNewRating(
-                game.Winner.EloRating,
-                winnerExpectedScore,
-                1
-            );
-            game.Loser.EloRating = EloCalculator.GetNewRating(
-                game.Loser.EloRating,
-                loserExpectedScore,
-                0
-            );
             await _context.SaveChangesAsync();
 
             var gameDto = IdeasProfile.MapGameToDto(game);
