@@ -25,18 +25,15 @@ namespace Squip.Rest.Controllers
         public async Task<IEnumerable<IdeaRatingDto>> GetRatings()
         {
             var games = await _context.Games
-                .Where(
-                    game =>
-                        game.Loser != null
-                        && game.Winner != null
-                        && !game.Loser.IsArchived
-                        && !game.Winner.IsArchived
-                )
+                .IgnoreQueryFilters()
+                .Where(game => game.Loser != null && game.Winner != null)
                 .OrderBy(game => game.InstantCreatedAt)
                 .ToListAsync();
 
             var ratings = new Dictionary<Idea, double>(
-                _context.Ideas.Select(idea => new KeyValuePair<Idea, double>(idea, 400))
+                _context.Ideas
+                    .IgnoreQueryFilters()
+                    .Select(idea => new KeyValuePair<Idea, double>(idea, 400))
             );
 
             foreach (var game in games)
