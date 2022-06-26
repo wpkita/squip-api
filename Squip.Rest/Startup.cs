@@ -83,7 +83,10 @@ namespace Squip.Rest
                         options.AddDefaultPolicy(
                             policy =>
                                 policy
-                                    .WithOrigins("https://squip-project.web.app")
+                                    .WithOrigins(
+                                        "https://squip-project.web.app",
+                                        "https://app.thawta.co"
+                                    )
                                     .AllowAnyMethod()
                                     .AllowAnyHeader()
                         )
