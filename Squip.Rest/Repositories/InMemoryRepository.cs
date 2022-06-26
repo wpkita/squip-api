@@ -6,7 +6,7 @@ using Squip.Rest.Domain;
 
 namespace Squip.Rest.Repositories
 {
-    public class InMemoryRepository<T> : IRepository<T> where T : IDomainModel
+    public class InMemoryRepository<T> : IRepository<T> where T : IChangeable
     {
         private readonly IList<T> _entities = new List<T>();
 

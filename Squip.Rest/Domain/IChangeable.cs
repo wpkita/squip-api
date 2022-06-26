@@ -3,7 +3,7 @@ using NodaTime;
 
 namespace Squip.Rest.Domain
 {
-    public interface IDomainModel
+    public interface IChangeable
     {
         Guid Id { get; set; }
         Instant InstantCreatedAt { get; set; }

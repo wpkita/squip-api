@@ -19,6 +19,13 @@ namespace Squip.Rest.Repositories
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.AddQueryFilterToAllEntitiesAssignableFrom<IArchivable>(
+                x => x.IsArchived == false
+            );
+            modelBuilder.AddQueryFilterToAllEntitiesAssignableFrom<IUserOwnable>(
+                x => x.User.OidcSub == _userIdProvider.GetCurrentUserId()
+            );
+
             modelBuilder.Entity<Game>().Navigation(game => game.Left).AutoInclude();
             modelBuilder.Entity<Game>().Navigation(game => game.Right).AutoInclude();
 
@@ -26,12 +33,6 @@ namespace Squip.Rest.Repositories
             modelBuilder.Entity<Tag>().HasIndex(tag => tag.Name);
 
             modelBuilder.Entity<Idea>().Navigation(idea => idea.Tags).AutoInclude();
-            modelBuilder
-                .Entity<Idea>()
-                .HasQueryFilter(
-                    idea =>
-                        !idea.IsArchived && idea.User.OidcSub == _userIdProvider.GetCurrentUserId()
-                );
             modelBuilder.Entity<Idea>().Property(idea => idea.UserId).IsRequired();
 
             modelBuilder.Entity<User>().HasAlternateKey(user => user.OidcSub);
@@ -47,7 +48,7 @@ namespace Squip.Rest.Repositories
 
             foreach (var entry in modifiedEntries)
             {
-                var entity = entry.Entity as DomainModelBase;
+                var entity = entry.Entity as IChangeable;
 
                 if (entry.State == EntityState.Added)
                 {
@@ -55,6 +56,18 @@ namespace Squip.Rest.Repositories
                 }
 
                 entity?.PreUpdate();
+            }
+
+            var deletedEntries = ChangeTracker
+                .Entries()
+                .Where(entry => entry.State is EntityState.Deleted);
+            foreach (var entry in deletedEntries)
+            {
+                if (entry.Entity is not IArchivable entity)
+                    continue;
+
+                entry.State = EntityState.Modified;
+                entity.IsArchived = true;
             }
 
             return base.SaveChangesAsync(cancellationToken);

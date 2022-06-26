@@ -12,7 +12,7 @@ using StackExchange.Redis;
 
 namespace Squip.Rest.Repositories
 {
-    public abstract class RedisRepository<T> : IRepository<T> where T : IDomainModel
+    public abstract class RedisRepository<T> : IRepository<T> where T : IChangeable
     {
         private readonly JsonSerializerSettings _jsonSerializerSettings;
         protected readonly IDatabase RedisDb;
