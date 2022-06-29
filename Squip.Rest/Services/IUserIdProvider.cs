@@ -1,4 +1,4 @@
-﻿namespace Squip.Rest.Services;
+namespace Squip.Rest.Services;
 
 public interface IUserIdProvider
 {

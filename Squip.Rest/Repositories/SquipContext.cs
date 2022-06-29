@@ -53,6 +53,13 @@ namespace Squip.Rest.Repositories
                 if (entry.State == EntityState.Added)
                 {
                     entity?.PreCreate();
+
+                    if (entity is IUserOwnable ownable)
+                    {
+                        ownable.User = Users.Single(
+                            user => user.OidcSub == _userIdProvider.GetCurrentUserId()
+                        );
+                    }
                 }
 
                 entity?.PreUpdate();
