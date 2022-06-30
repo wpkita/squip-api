@@ -56,9 +56,11 @@ namespace Squip.Rest.Repositories
 
                     if (entity is IUserOwnable ownable)
                     {
-                        ownable.User = Users.Single(
-                            user => user.OidcSub == _userIdProvider.GetCurrentUserId()
-                        );
+                        var userId = _userIdProvider.GetCurrentUserId();
+                        var user =
+                            Users.SingleOrDefault(u => u.OidcSub == userId)
+                            ?? new User { OidcSub = userId };
+                        ownable.User = user;
                     }
                 }
 
