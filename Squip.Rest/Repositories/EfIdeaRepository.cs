@@ -41,6 +41,7 @@ namespace Squip.Rest.Repositories
 
         public async Task<bool> Create(Idea idea)
         {
+            idea.EloRating = 400;
             _context.Add(idea);
             await _context.SaveChangesAsync();
 
