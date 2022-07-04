@@ -10,12 +10,12 @@ using Squip.Rest.Repositories;
 namespace Squip.Rest.Controllers
 {
     [ApiController]
-    [Route("api/rankings")]
-    public class RatingController : ControllerBase
+    [Route("api/[controller]")]
+    public class RatingsController : ControllerBase
     {
         private readonly SquipContext _context;
 
-        public RatingController(SquipContext context)
+        public RatingsController(SquipContext context)
         {
             _context = context;
         }
@@ -58,7 +58,7 @@ namespace Squip.Rest.Controllers
                 );
             }
 
-            foreach (var idea in _context.Ideas)
+            foreach (var idea in _context.Ideas.IgnoreQueryFilters())
             {
                 idea.EloRating = ratings[idea];
             }
