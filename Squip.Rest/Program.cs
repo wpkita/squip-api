@@ -36,6 +36,7 @@ namespace Squip.Rest
         {
             var configuration = new ConfigurationBuilder()
                 .AddUserSecrets(Assembly.GetExecutingAssembly())
+                .AddEnvironmentVariables()
                 .Build();
 
             Log.Logger = new LoggerConfiguration().MinimumLevel
@@ -53,7 +54,7 @@ namespace Squip.Rest
                                 configuration["Elasticsearch:Password"]
                             ),
                         IndexFormat =
-                            $"{Assembly.GetExecutingAssembly().GetName().Name.ToLower()}-{"local".Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}",
+                            $"{Assembly.GetExecutingAssembly().GetName().Name.ToLower()}-{configuration["Environment"].Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}",
                     }
                 )
                 .CreateLogger();
