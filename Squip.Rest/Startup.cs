@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using Squip.Rest.Domain;
 using Squip.Rest.Repositories;
 using Squip.Rest.Services;
@@ -110,14 +111,11 @@ namespace Squip.Rest
                 app.UseHttpsRedirection();
             }
 
+            app.UseSerilogRequestLogging();
             app.UseRouting();
-
             app.UseCors();
-
             app.UseAuthentication();
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
