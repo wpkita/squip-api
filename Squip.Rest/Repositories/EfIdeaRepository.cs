@@ -19,14 +19,20 @@ namespace Squip.Rest.Repositories
 
         public async Task<bool> DoesExistByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            var idea = await _context.FindAsync<Idea>(id, cancellationToken);
+            var idea = await _context.FindAsync<Idea>(
+                new object[] { id },
+                cancellationToken: cancellationToken
+            );
 
             return idea != null;
         }
 
         public async Task<Idea> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            var idea = await _context.FindAsync<Idea>(id, cancellationToken);
+            var idea = await _context.FindAsync<Idea>(
+                new object[] { id },
+                cancellationToken: cancellationToken
+            );
 
             return idea;
         }
@@ -51,7 +57,10 @@ namespace Squip.Rest.Repositories
 
         public async Task<bool> UpdateAsync(Idea idea, CancellationToken cancellationToken)
         {
-            var ideaFromDatabase = await _context.FindAsync<Idea>(idea.Id, cancellationToken);
+            var ideaFromDatabase = await _context.FindAsync<Idea>(
+                new object[] { idea.Id },
+                cancellationToken: cancellationToken
+            );
             if (ideaFromDatabase == null)
                 return false;
 
@@ -73,7 +82,10 @@ namespace Squip.Rest.Repositories
 
         public async Task<bool> ArchiveAsync(Guid id, CancellationToken cancellationToken)
         {
-            var idea = await _context.Ideas.FindAsync(id, cancellationToken);
+            var idea = await _context.Ideas.FindAsync(
+                new object[] { id },
+                cancellationToken: cancellationToken
+            );
             if (idea == null)
                 return false;
 

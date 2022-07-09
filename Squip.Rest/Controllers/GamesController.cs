@@ -43,12 +43,15 @@ namespace Squip.Rest.Controllers
             CancellationToken cancellationToken
         )
         {
-            var game = await _context.FindAsync<Game>(gameForUpdateDto.Id, cancellationToken);
+            var game = await _context.FindAsync<Game>(
+                new object[] { gameForUpdateDto.Id },
+                cancellationToken: cancellationToken
+            );
             if (game == null)
                 return NotFound();
             var winner = await _context.FindAsync<Idea>(
-                gameForUpdateDto.WinnerId,
-                cancellationToken
+                new object[] { gameForUpdateDto.WinnerId },
+                cancellationToken: cancellationToken
             );
             if (winner == null)
                 return BadRequest();
