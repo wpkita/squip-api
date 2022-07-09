@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Squip.Rest.Domain;
 
@@ -6,15 +7,18 @@ namespace Squip.Rest.Repositories
 {
     public class InMemorySquipRepository : ISquipRepository
     {
-        public Task<Idea> GetRandomIdea()
+        public Task<Idea> GetRandomIdeaAsync(CancellationToken cancellationToken)
         {
             return Task.FromResult(new Idea { Id = Guid.NewGuid(), Content = "Hello world!" });
         }
 
-        public Task<Tuple<Idea, Idea>> GetRandomIdeaPair()
+        public Task<Tuple<Idea, Idea>> GetRandomIdeaPairAsync(CancellationToken cancellationToken)
         {
             return Task.FromResult(
-                new Tuple<Idea, Idea>(GetRandomIdea().Result, GetRandomIdea().Result)
+                new Tuple<Idea, Idea>(
+                    GetRandomIdeaAsync(cancellationToken).Result,
+                    GetRandomIdeaAsync(cancellationToken).Result
+                )
             );
         }
     }

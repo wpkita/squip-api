@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Squip.Rest.Domain;
@@ -21,13 +22,15 @@ namespace Squip.Rest.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<GameDto>> Get()
+        public async Task<ActionResult<GameDto>> GetAsync(CancellationToken cancellationToken)
         {
-            var (leftIdea, rightIdea) = await _squipRepository.GetRandomIdeaPair();
+            var (leftIdea, rightIdea) = await _squipRepository.GetRandomIdeaPairAsync(
+                cancellationToken
+            );
 
             var game = new Game { Left = leftIdea, Right = rightIdea };
-            await _context.AddAsync(game);
-            await _context.SaveChangesAsync();
+            await _context.AddAsync(game, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
 
             var gameDto = IdeasProfile.MapGameToDto(game);
 
@@ -35,17 +38,23 @@ namespace Squip.Rest.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<GameDto>> Put([FromBody] GameForUpdateDto gameForUpdateDto)
+        public async Task<ActionResult<GameDto>> PutAsync(
+            [FromBody] GameForUpdateDto gameForUpdateDto,
+            CancellationToken cancellationToken
+        )
         {
-            var game = await _context.FindAsync<Game>(gameForUpdateDto.Id);
+            var game = await _context.FindAsync<Game>(gameForUpdateDto.Id, cancellationToken);
             if (game == null)
                 return NotFound();
-            var winner = await _context.FindAsync<Idea>(gameForUpdateDto.WinnerId);
+            var winner = await _context.FindAsync<Idea>(
+                gameForUpdateDto.WinnerId,
+                cancellationToken
+            );
             if (winner == null)
                 return BadRequest();
 
             game.SetWinner(winner);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
 
             var gameDto = IdeasProfile.MapGameToDto(game);
 

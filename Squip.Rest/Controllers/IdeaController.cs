@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Squip.Rest.Domain;
@@ -22,9 +23,9 @@ namespace Squip.Rest.Controllers
 
         [HttpGet]
         [HttpHead]
-        public async Task<IEnumerable<IdeaDto>> GetIdeas()
+        public async Task<IEnumerable<IdeaDto>> GetAsync(CancellationToken cancellationToken)
         {
-            var ideasFromRepo = await _ideaRepository.GetAll();
+            var ideasFromRepo = await _ideaRepository.GetAllAsync(cancellationToken);
 
             var ideaDtos = ideasFromRepo.Select(IdeasProfile.MapIdeaToDto);
 
@@ -32,9 +33,9 @@ namespace Squip.Rest.Controllers
         }
 
         [HttpGet("{ideaId}", Name = "GetIdea")]
-        public async Task<IActionResult> GetIdea(Guid ideaId)
+        public async Task<IActionResult> GetAsync(Guid ideaId, CancellationToken cancellationToken)
         {
-            var ideaFromRepo = await _ideaRepository.GetById(ideaId);
+            var ideaFromRepo = await _ideaRepository.GetByIdAsync(ideaId, cancellationToken);
 
             if (ideaFromRepo == null)
                 return NotFound();
@@ -44,17 +45,24 @@ namespace Squip.Rest.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<IdeaDto>> CreateIdea(IdeaForCreationDto idea)
+        public async Task<ActionResult<IdeaDto>> CreateAsync(
+            IdeaForCreationDto idea,
+            CancellationToken cancellationToken
+        )
         {
             var ideaEntity = IdeasProfile.MapDtoToIdea(idea);
-            await _ideaRepository.Create(ideaEntity);
+            await _ideaRepository.CreateAsync(ideaEntity, cancellationToken);
 
             var ideaToReturn = IdeasProfile.MapIdeaToDto(ideaEntity);
             return CreatedAtRoute("GetIdea", new { ideaId = ideaToReturn.Id }, ideaToReturn);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutIdea(Guid id, IdeaDto idea)
+        public async Task<IActionResult> PutAsync(
+            Guid id,
+            IdeaDto idea,
+            CancellationToken cancellationToken
+        )
         {
             if (id != idea.Id)
             {
@@ -63,18 +71,21 @@ namespace Squip.Rest.Controllers
 
             var ideaEntity = IdeasProfile.MapDtoToIdea(idea);
 
-            await _ideaRepository.Update(ideaEntity);
+            await _ideaRepository.UpdateAsync(ideaEntity, cancellationToken);
 
             return NoContent();
         }
 
         [HttpDelete("{ideaId}")]
-        public async Task<IActionResult> DeleteIdea(Guid ideaId)
+        public async Task<IActionResult> DeleteAsync(
+            Guid ideaId,
+            CancellationToken cancellationToken
+        )
         {
-            if (!await _ideaRepository.DoesExistById(ideaId))
+            if (!await _ideaRepository.DoesExistByIdAsync(ideaId, cancellationToken))
                 return NotFound();
 
-            await _ideaRepository.Archive(ideaId);
+            await _ideaRepository.ArchiveAsync(ideaId, cancellationToken);
 
             return NoContent();
         }

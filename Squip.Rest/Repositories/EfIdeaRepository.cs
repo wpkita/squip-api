@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Squip.Rest.Domain;
 using System.Linq;
+using System.Threading;
 
 namespace Squip.Rest.Repositories
 {
@@ -16,41 +17,41 @@ namespace Squip.Rest.Repositories
             _context = context;
         }
 
-        public async Task<bool> DoesExistById(Guid id)
+        public async Task<bool> DoesExistByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            var idea = await _context.FindAsync<Idea>(id);
+            var idea = await _context.FindAsync<Idea>(id, cancellationToken);
 
             return idea != null;
         }
 
-        public async Task<Idea> GetById(Guid id)
+        public async Task<Idea> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            var idea = await _context.FindAsync<Idea>(id);
+            var idea = await _context.FindAsync<Idea>(id, cancellationToken);
 
             return idea;
         }
 
-        public async Task<IEnumerable<Idea>> GetAll()
+        public async Task<IEnumerable<Idea>> GetAllAsync(CancellationToken cancellationToken)
         {
             var ideas = await _context.Ideas
                 .OrderByDescending(idea => idea.EloRating)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             return ideas;
         }
 
-        public async Task<bool> Create(Idea idea)
+        public async Task<bool> CreateAsync(Idea idea, CancellationToken cancellationToken)
         {
             idea.EloRating = 400;
             _context.Add(idea);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
 
             return true;
         }
 
-        public async Task<bool> Update(Idea idea)
+        public async Task<bool> UpdateAsync(Idea idea, CancellationToken cancellationToken)
         {
-            var ideaFromDatabase = await _context.FindAsync<Idea>(idea.Id);
+            var ideaFromDatabase = await _context.FindAsync<Idea>(idea.Id, cancellationToken);
             if (ideaFromDatabase == null)
                 return false;
 
@@ -65,34 +66,36 @@ namespace Squip.Rest.Repositories
 
             _context.RemoveRange(tagsToRemove);
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
 
             return true;
         }
 
-        public async Task<bool> Archive(Guid id)
+        public async Task<bool> ArchiveAsync(Guid id, CancellationToken cancellationToken)
         {
-            var idea = await _context.Ideas.FindAsync(id);
+            var idea = await _context.Ideas.FindAsync(id, cancellationToken);
             if (idea == null)
                 return false;
 
             idea.IsArchived = true;
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
 
             return true;
         }
 
-        public async Task<Idea> GetRandomIdea()
+        public async Task<Idea> GetRandomIdeaAsync(CancellationToken cancellationToken)
         {
-            var ideasArray = await _context.Ideas.ToArrayAsync();
+            var ideasArray = await _context.Ideas.ToArrayAsync(cancellationToken);
             var random = new Random();
             var randomIndex = random.Next(0, ideasArray.Length);
             return ideasArray[randomIndex];
         }
 
-        public async Task<Tuple<Idea, Idea>> GetRandomIdeaPair()
+        public async Task<Tuple<Idea, Idea>> GetRandomIdeaPairAsync(
+            CancellationToken cancellationToken
+        )
         {
-            var ideas = await _context.Ideas.ToListAsync();
+            var ideas = await _context.Ideas.ToListAsync(cancellationToken);
             if (ideas.Count < 2)
                 return new Tuple<Idea, Idea>(new Idea(), new Idea());
 

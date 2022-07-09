@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Squip.Rest.Domain;
 
@@ -7,7 +7,7 @@ namespace Squip.Rest.Repositories
 {
     public interface ISquipRepository
     {
-        Task<Idea> GetRandomIdea();
-        Task<Tuple<Idea, Idea>> GetRandomIdeaPair();
+        Task<Idea> GetRandomIdeaAsync(CancellationToken cancellationToken);
+        Task<Tuple<Idea, Idea>> GetRandomIdeaPairAsync(CancellationToken cancellationToken);
     }
 }

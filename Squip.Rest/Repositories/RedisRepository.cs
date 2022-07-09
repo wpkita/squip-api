@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -34,14 +35,14 @@ namespace Squip.Rest.Repositories
 
         protected string ActiveEntityIdsSetName => $"{EntityName}Ids";
 
-        public async Task<bool> DoesExistById(Guid id)
+        public async Task<bool> DoesExistByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             var doesExist = await RedisDb.KeyExistsAsync(EntityRedisKey(id));
 
             return doesExist;
         }
 
-        public async Task<T> GetById(Guid id)
+        public async Task<T> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             var entity = default(T);
 
@@ -53,27 +54,27 @@ namespace Squip.Rest.Repositories
             catch
             {
                 // This is technically business logic? Hmm
-                await Archive(id);
+                await ArchiveAsync(id, cancellationToken);
             }
 
             return entity;
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken)
         {
             ICollection<T> entities = new Collection<T>();
 
             var entityIds = await RedisDb.SetMembersAsync(ActiveEntityIdsSetName);
             foreach (var entityId in entityIds)
             {
-                var entity = await GetById(Guid.Parse(entityId));
+                var entity = await GetByIdAsync(Guid.Parse(entityId), cancellationToken);
                 entities.Add(entity);
             }
 
             return entities;
         }
 
-        public async Task<bool> Create(T entity)
+        public async Task<bool> CreateAsync(T entity, CancellationToken cancellationToken)
         {
             entity.PreCreate();
             var entityJson = JsonConvert.SerializeObject(entity, _jsonSerializerSettings);
@@ -86,7 +87,7 @@ namespace Squip.Rest.Repositories
             return true;
         }
 
-        public async Task<bool> Update(T entity)
+        public async Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken)
         {
             entity.PreUpdate();
             var entityJson = JsonConvert.SerializeObject(entity, _jsonSerializerSettings);
@@ -96,7 +97,7 @@ namespace Squip.Rest.Repositories
             return true;
         }
 
-        public async Task<bool> Archive(Guid id)
+        public async Task<bool> ArchiveAsync(Guid id, CancellationToken cancellationToken)
         {
             var didSucceed = await RedisDb.SetMoveAsync(
                 ActiveEntityIdsSetName,
