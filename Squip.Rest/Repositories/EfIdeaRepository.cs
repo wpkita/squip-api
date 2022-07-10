@@ -64,6 +64,7 @@ namespace Squip.Rest.Repositories
             if (ideaFromDatabase == null)
                 return false;
 
+            ideaFromDatabase.Title = idea.Title;
             ideaFromDatabase.Content = idea.Content;
             var tagsToRemove = ideaFromDatabase.Tags.Except(idea.Tags, new TagEqualityComparer());
             var tagsToAdd = idea.Tags.Except(ideaFromDatabase.Tags, new TagEqualityComparer());
