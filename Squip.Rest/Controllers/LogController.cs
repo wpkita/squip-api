@@ -1,6 +1,5 @@
-using System;
+using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Squip.Rest.Domain;
 using Squip.Rest.Dtos;
@@ -20,11 +19,15 @@ namespace Squip.Rest.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(LogDto logDto)
+        public async Task<IActionResult> PostAsync(
+            LogDto logDto,
+            CancellationToken cancellationToken
+        )
         {
             var log = new Log { Message = logDto.Message };
             _context.Logs.Add(log);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
+
             return NoContent();
         }
     }
