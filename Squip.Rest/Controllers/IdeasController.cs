@@ -11,12 +11,12 @@ using Squip.Rest.Repositories;
 namespace Squip.Rest.Controllers
 {
     [ApiController]
-    [Route("api/ideas")]
-    public class IdeaController : ControllerBase
+    [Route("api/[controller]")]
+    public class IdeasController : ControllerBase
     {
         private readonly IRepository<Idea> _ideaRepository;
 
-        public IdeaController(IRepository<Idea> ideaRepository)
+        public IdeasController(IRepository<Idea> ideaRepository)
         {
             _ideaRepository = ideaRepository;
         }
