@@ -86,7 +86,8 @@ namespace Squip.Rest
                                 policy
                                     .WithOrigins(
                                         "https://squip-project.web.app",
-                                        "https://app.thawta.co"
+                                        "https://app.thawta.co",
+                                        "http://localhost:4200"
                                     )
                                     .AllowAnyMethod()
                                     .AllowAnyHeader()
