@@ -32,10 +32,10 @@ namespace Squip.Rest.Controllers
             return ideaDtos;
         }
 
-        [HttpGet("{ideaId}", Name = "GetIdea")]
-        public async Task<IActionResult> GetAsync(Guid ideaId, CancellationToken cancellationToken)
+        [HttpGet("{id}", Name = "GetIdea")]
+        public async Task<IActionResult> GetAsync(Guid id, CancellationToken cancellationToken)
         {
-            var ideaFromRepo = await _ideaRepository.GetByIdAsync(ideaId, cancellationToken);
+            var ideaFromRepo = await _ideaRepository.GetByIdAsync(id, cancellationToken);
 
             if (ideaFromRepo == null)
                 return NotFound();
@@ -76,16 +76,16 @@ namespace Squip.Rest.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{ideaId}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(
-            Guid ideaId,
+            Guid id,
             CancellationToken cancellationToken
         )
         {
-            if (!await _ideaRepository.DoesExistByIdAsync(ideaId, cancellationToken))
+            if (!await _ideaRepository.DoesExistByIdAsync(id, cancellationToken))
                 return NotFound();
 
-            await _ideaRepository.ArchiveAsync(ideaId, cancellationToken);
+            await _ideaRepository.ArchiveAsync(id, cancellationToken);
 
             return NoContent();
         }
