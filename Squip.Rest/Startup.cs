@@ -20,14 +20,14 @@ namespace Squip.Rest
     public class Startup
     {
         private readonly IWebHostEnvironment _env;
+        private readonly IConfiguration _configuration;
 
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             _env = env;
-            Configuration = configuration;
+            _configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -40,8 +40,8 @@ namespace Squip.Rest
                 })
                 .AddJwtBearer(options =>
                 {
-                    options.Authority = Configuration["Auth0:Authority"];
-                    options.Audience = Configuration["Auth0:Audience"];
+                    options.Authority = _configuration["Auth0:Authority"];
+                    options.Audience = _configuration["Auth0:Audience"];
 
                     // This makes the UserId present in the User.Identity.Name property
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -61,7 +61,7 @@ namespace Squip.Rest
             services.AddDbContext<SquipContext>(
                 options =>
                     options.UseNpgsql(
-                        Configuration.GetConnectionString("SquipDatabase"),
+                        _configuration.GetConnectionString("SquipDatabase"),
                         x => x.UseNodaTime()
                     )
             );
