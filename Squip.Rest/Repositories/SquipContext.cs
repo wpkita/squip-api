@@ -39,9 +39,11 @@ namespace Squip.Rest.Repositories
         }
 
         public override Task<int> SaveChangesAsync(
-            CancellationToken cancellationToken = new CancellationToken()
+            CancellationToken cancellationToken = new()
         )
         {
+            var user = GetOrAddUser();
+
             var modifiedEntries = ChangeTracker
                 .Entries()
                 .Where(entry => entry.State is EntityState.Added or EntityState.Modified);
@@ -56,10 +58,6 @@ namespace Squip.Rest.Repositories
 
                     if (entity is IUserOwnable ownable)
                     {
-                        var userId = _userIdProvider.GetCurrentUserId();
-                        var user =
-                            Users.SingleOrDefault(u => u.OidcSub == userId)
-                            ?? new User { OidcSub = userId };
                         ownable.User = user;
                     }
                 }
@@ -80,6 +78,17 @@ namespace Squip.Rest.Repositories
             }
 
             return base.SaveChangesAsync(cancellationToken);
+        }
+
+        private User GetOrAddUser()
+        {
+            var userId = _userIdProvider.GetCurrentUserId();
+            var user = Users.SingleOrDefault(u => u.OidcSub == userId);
+            if (user != null) return user;
+
+            user = new User { OidcSub = userId };
+            Users.Add(user);
+            return user;
         }
 
         public DbSet<Idea> Ideas { get; set; }

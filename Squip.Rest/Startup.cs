@@ -50,11 +50,14 @@ namespace Squip.Rest
                 });
             services.AddAuthorization();
 
-            services.AddMvc(o =>
+            if (!_env.IsDevelopment())
             {
-                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-                o.Filters.Add(new AuthorizeFilter(policy));
-            });
+                services.AddMvc(o =>
+                {
+                    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                    o.Filters.Add(new AuthorizeFilter(policy));
+                });
+            }
 
             services.AddControllers();
             services.AddDbContext<SquipContext>(
@@ -74,6 +77,7 @@ namespace Squip.Rest
                 );
                 services.AddScoped<IRepository<Idea>, EfIdeaRepository>();
                 services.AddScoped<ISquipRepository, EfIdeaRepository>();
+                services.AddScoped<IUserIdProvider, DevUserIdProvider>();
                 services.AddSwaggerGen();
             }
             else
@@ -91,11 +95,11 @@ namespace Squip.Rest
                                     .AllowAnyHeader()
                         )
                 );
+                services.AddScoped<IUserIdProvider, UserIdProvider>();
             }
 
             services.AddScoped<IRepository<Idea>, EfIdeaRepository>();
             services.AddScoped<ISquipRepository, EfIdeaRepository>();
-            services.AddScoped<IUserIdProvider, UserIdProvider>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
