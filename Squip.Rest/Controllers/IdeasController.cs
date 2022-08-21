@@ -54,7 +54,7 @@ namespace Squip.Rest.Controllers
             await _ideaRepository.CreateAsync(ideaEntity, cancellationToken);
 
             var ideaToReturn = IdeasProfile.MapIdeaToDto(ideaEntity);
-            return CreatedAtRoute("GetIdea", new { ideaId = ideaToReturn.Id }, ideaToReturn);
+            return CreatedAtRoute("GetIdea", new { id = ideaToReturn.Id }, ideaToReturn);
         }
 
         [HttpPut("{id}")]
