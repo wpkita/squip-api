@@ -1,9 +1,6 @@
-using System.Collections.Generic;
+namespace Squip.Rest.Domain;
 
-namespace Squip.Rest.Domain
+public class Log : DomainModelBase
 {
-    public class Log : DomainModelBase
-    {
-        public string Message { get; set; }
-    }
+    public string Message { get; set; }
 }

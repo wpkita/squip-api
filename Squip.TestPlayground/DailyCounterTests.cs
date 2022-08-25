@@ -1,30 +1,29 @@
 using FluentAssertions;
 using Xunit;
 
-namespace Squip.TestPlayground
+namespace Squip.TestPlayground;
+
+public class DailyCounterTests
 {
-    public class DailyCounterTests
+    [Fact]
+    public void Activate_CurrentlyAt0_JumpsTo1()
     {
-        [Fact]
-        public void Activate_CurrentlyAt0_JumpsTo1()
-        {
-            var dailyCounter = new DailyCounter();
+        var dailyCounter = new DailyCounter();
 
-            dailyCounter.Activate();
+        dailyCounter.Activate();
 
-            dailyCounter.Value.Should().Be(1);
-        }
+        dailyCounter.Value.Should().Be(1);
+    }
 
-        [Fact]
-        public void Activate_CurrentlyAt0_JumpsTo1_ThenJumpsTo2()
-        {
-            var dailyCounter = new DailyCounter();
+    [Fact]
+    public void Activate_CurrentlyAt0_JumpsTo1_ThenJumpsTo2()
+    {
+        var dailyCounter = new DailyCounter();
 
-            dailyCounter.Activate();
-            dailyCounter.Value.Should().Be(1);
+        dailyCounter.Activate();
+        dailyCounter.Value.Should().Be(1);
 
-            dailyCounter.Activate();
-            dailyCounter.Value.Should().Be(2);
-        }
+        dailyCounter.Activate();
+        dailyCounter.Value.Should().Be(2);
     }
 }

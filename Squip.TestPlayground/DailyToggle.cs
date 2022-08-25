@@ -1,17 +1,16 @@
-namespace Squip.TestPlayground
+namespace Squip.TestPlayground;
+
+public class DailyToggle
 {
-    public class DailyToggle
+    public DailyToggle(bool isOn)
     {
-        public DailyToggle(bool isOn)
-        {
-            IsOn = isOn;
-        }
+        IsOn = isOn;
+    }
 
-        public bool IsOn { get; private set; }
+    public bool IsOn { get; private set; }
 
-        public void Toggle()
-        {
-            IsOn = !IsOn;
-        }
+    public void Toggle()
+    {
+        IsOn = !IsOn;
     }
 }

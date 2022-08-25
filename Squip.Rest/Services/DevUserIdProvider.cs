@@ -1,10 +1,9 @@
-namespace Squip.Rest.Services
+namespace Squip.Rest.Services;
+
+public class DevUserIdProvider : IUserIdProvider
 {
-    public class DevUserIdProvider : IUserIdProvider
+    public string GetCurrentUserId()
     {
-        public string GetCurrentUserId()
-        {
-            return "anonymous";
-        }
+        return "anonymous";
     }
 }

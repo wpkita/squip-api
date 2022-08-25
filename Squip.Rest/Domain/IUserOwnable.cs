@@ -1,10 +1,9 @@
 using System;
 
-namespace Squip.Rest.Domain
+namespace Squip.Rest.Domain;
+
+public interface IUserOwnable
 {
-    public interface IUserOwnable
-    {
-        public Guid UserId { get; set; }
-        public User User { get; set; }
-    }
+    public Guid UserId { get; set; }
+    public User User { get; set; }
 }

@@ -1,14 +1,13 @@
 using System;
 using NodaTime;
 
-namespace Squip.Rest.Domain
+namespace Squip.Rest.Domain;
+
+public interface IChangeable
 {
-    public interface IChangeable
-    {
-        Guid Id { get; set; }
-        Instant InstantCreatedAt { get; set; }
-        Instant InstantUpdatedAt { get; set; }
-        void PreCreate();
-        void PreUpdate();
-    }
+    Guid Id { get; set; }
+    Instant InstantCreatedAt { get; set; }
+    Instant InstantUpdatedAt { get; set; }
+    void PreCreate();
+    void PreUpdate();
 }

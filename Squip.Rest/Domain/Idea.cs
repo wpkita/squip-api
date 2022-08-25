@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 
-namespace Squip.Rest.Domain
+namespace Squip.Rest.Domain;
+
+public class Idea : DomainModelBase, IArchivable
 {
-    public class Idea : DomainModelBase, IArchivable
-    {
-        public string Title { get; set; }
-        public string Content { get; set; }
-        public bool IsArchived { get; set; }
-        public double EloRating { get; set; }
-        public ICollection<Tag> Tags { get; set; }
-    }
+    public string Title { get; set; }
+    public string Content { get; set; }
+    public double EloRating { get; set; }
+    public ICollection<Tag> Tags { get; set; }
+    public bool IsArchived { get; set; }
 }

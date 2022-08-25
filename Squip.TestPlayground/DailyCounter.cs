@@ -1,17 +1,16 @@
-namespace Squip.TestPlayground
+namespace Squip.TestPlayground;
+
+public class DailyCounter
 {
-    public class DailyCounter
+    public DailyCounter(int value = 0)
     {
-        public DailyCounter(int value = 0)
-        {
-            Value = value;
-        }
+        Value = value;
+    }
 
-        public int Value { get; private set; }
+    public int Value { get; private set; }
 
-        public void Activate()
-        {
-            Value += 1;
-        }
+    public void Activate()
+    {
+        Value += 1;
     }
 }

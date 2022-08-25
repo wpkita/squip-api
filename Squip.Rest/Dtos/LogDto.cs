@@ -1,6 +1,3 @@
-using System;
+namespace Squip.Rest.Dtos;
 
-namespace Squip.Rest.Dtos
-{
-    public record LogDto(string Message);
-}
+public record LogDto(string Message);

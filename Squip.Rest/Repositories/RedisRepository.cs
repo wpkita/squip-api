@@ -11,106 +11,105 @@ using NodaTime.Serialization.JsonNet;
 using Squip.Rest.Domain;
 using StackExchange.Redis;
 
-namespace Squip.Rest.Repositories
+namespace Squip.Rest.Repositories;
+
+public abstract class RedisRepository<T> : IRepository<T> where T : IChangeable
 {
-    public abstract class RedisRepository<T> : IRepository<T> where T : IChangeable
+    private readonly JsonSerializerSettings _jsonSerializerSettings;
+    protected readonly IDatabase RedisDb;
+
+    protected RedisRepository(IConfiguration config)
     {
-        private readonly JsonSerializerSettings _jsonSerializerSettings;
-        protected readonly IDatabase RedisDb;
+        var redis = ConnectionMultiplexer.Connect(config["RedisConnectionString"]);
+        RedisDb = redis.GetDatabase();
 
-        protected RedisRepository(IConfiguration config)
+        _jsonSerializerSettings = new JsonSerializerSettings
         {
-            var redis = ConnectionMultiplexer.Connect(config["RedisConnectionString"]);
-            RedisDb = redis.GetDatabase();
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        }.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+    }
 
-            _jsonSerializerSettings = new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            }.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+    protected abstract string EntityName { get; }
+
+    private string ArchivedEntityIdsSetName => $"{EntityName}IdsArchived";
+
+    protected string ActiveEntityIdsSetName => $"{EntityName}Ids";
+
+    public async Task<bool> DoesExistByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var doesExist = await RedisDb.KeyExistsAsync(EntityRedisKey(id));
+
+        return doesExist;
+    }
+
+    public async Task<T> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var entity = default(T);
+
+        try
+        {
+            var entityJson = await RedisDb.StringGetAsync(EntityRedisKey(id));
+            entity = JsonConvert.DeserializeObject<T>(entityJson, _jsonSerializerSettings);
+        }
+        catch
+        {
+            // This is technically business logic? Hmm
+            await ArchiveAsync(id, cancellationToken);
         }
 
-        protected abstract string EntityName { get; }
+        return entity;
+    }
 
-        private string ArchivedEntityIdsSetName => $"{EntityName}IdsArchived";
+    public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        ICollection<T> entities = new Collection<T>();
 
-        protected string ActiveEntityIdsSetName => $"{EntityName}Ids";
-
-        public async Task<bool> DoesExistByIdAsync(Guid id, CancellationToken cancellationToken)
+        var entityIds = await RedisDb.SetMembersAsync(ActiveEntityIdsSetName);
+        foreach (var entityId in entityIds)
         {
-            var doesExist = await RedisDb.KeyExistsAsync(EntityRedisKey(id));
-
-            return doesExist;
+            var entity = await GetByIdAsync(Guid.Parse(entityId), cancellationToken);
+            entities.Add(entity);
         }
 
-        public async Task<T> GetByIdAsync(Guid id, CancellationToken cancellationToken)
-        {
-            var entity = default(T);
+        return entities;
+    }
 
-            try
-            {
-                var entityJson = await RedisDb.StringGetAsync(EntityRedisKey(id));
-                entity = JsonConvert.DeserializeObject<T>(entityJson, _jsonSerializerSettings);
-            }
-            catch
-            {
-                // This is technically business logic? Hmm
-                await ArchiveAsync(id, cancellationToken);
-            }
+    public async Task<bool> CreateAsync(T entity, CancellationToken cancellationToken)
+    {
+        entity.PreCreate();
+        var entityJson = JsonConvert.SerializeObject(entity, _jsonSerializerSettings);
 
-            return entity;
-        }
+        await RedisDb.StringSetAsync(EntityRedisKey(entity.Id), entityJson);
 
-        public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken)
-        {
-            ICollection<T> entities = new Collection<T>();
+        // Cache Id for random selection later
+        await RedisDb.SetAddAsync(ActiveEntityIdsSetName, entity.Id.ToString());
 
-            var entityIds = await RedisDb.SetMembersAsync(ActiveEntityIdsSetName);
-            foreach (var entityId in entityIds)
-            {
-                var entity = await GetByIdAsync(Guid.Parse(entityId), cancellationToken);
-                entities.Add(entity);
-            }
+        return true;
+    }
 
-            return entities;
-        }
+    public async Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken)
+    {
+        entity.PreUpdate();
+        var entityJson = JsonConvert.SerializeObject(entity, _jsonSerializerSettings);
 
-        public async Task<bool> CreateAsync(T entity, CancellationToken cancellationToken)
-        {
-            entity.PreCreate();
-            var entityJson = JsonConvert.SerializeObject(entity, _jsonSerializerSettings);
+        await RedisDb.StringSetAsync(EntityRedisKey(entity.Id), entityJson);
 
-            await RedisDb.StringSetAsync(EntityRedisKey(entity.Id), entityJson);
+        return true;
+    }
 
-            // Cache Id for random selection later
-            await RedisDb.SetAddAsync(ActiveEntityIdsSetName, entity.Id.ToString());
+    public async Task<bool> ArchiveAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var didSucceed = await RedisDb.SetMoveAsync(
+            ActiveEntityIdsSetName,
+            ArchivedEntityIdsSetName,
+            id.ToString()
+        );
 
-            return true;
-        }
+        return didSucceed;
+    }
 
-        public async Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken)
-        {
-            entity.PreUpdate();
-            var entityJson = JsonConvert.SerializeObject(entity, _jsonSerializerSettings);
-
-            await RedisDb.StringSetAsync(EntityRedisKey(entity.Id), entityJson);
-
-            return true;
-        }
-
-        public async Task<bool> ArchiveAsync(Guid id, CancellationToken cancellationToken)
-        {
-            var didSucceed = await RedisDb.SetMoveAsync(
-                ActiveEntityIdsSetName,
-                ArchivedEntityIdsSetName,
-                id.ToString()
-            );
-
-            return didSucceed;
-        }
-
-        private string EntityRedisKey(Guid id)
-        {
-            return $"{EntityName}:{id}";
-        }
+    private string EntityRedisKey(Guid id)
+    {
+        return $"{EntityName}:{id}";
     }
 }

@@ -15,114 +15,108 @@ using Squip.Rest.Domain;
 using Squip.Rest.Repositories;
 using Squip.Rest.Services;
 
-namespace Squip.Rest
+namespace Squip.Rest;
+
+public class Startup
 {
-    public class Startup
+    private readonly IConfiguration _configuration;
+    private readonly IWebHostEnvironment _env;
+
+    public Startup(IConfiguration configuration, IWebHostEnvironment env)
     {
-        private readonly IWebHostEnvironment _env;
-        private readonly IConfiguration _configuration;
+        _env = env;
+        _configuration = configuration;
+    }
 
-        public Startup(IConfiguration configuration, IWebHostEnvironment env)
-        {
-            _env = env;
-            _configuration = configuration;
-        }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services
-                .AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(options =>
-                {
-                    options.Authority = _configuration["Auth0:Authority"];
-                    options.Audience = _configuration["Auth0:Audience"];
-
-                    // This makes the UserId present in the User.Identity.Name property
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        NameClaimType = ClaimTypes.NameIdentifier
-                    };
-                });
-            services.AddAuthorization();
-
-            if (!_env.IsDevelopment())
+    // This method gets called by the runtime. Use this method to add services to the container.
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services
+            .AddAuthentication(options =>
             {
-                services.AddMvc(o =>
-                {
-                    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-                    o.Filters.Add(new AuthorizeFilter(policy));
-                });
-            }
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.Authority = _configuration["Auth0:Authority"];
+                options.Audience = _configuration["Auth0:Audience"];
 
-            services.AddControllers();
-            services.AddDbContext<SquipContext>(
+                // This makes the UserId present in the User.Identity.Name property
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = ClaimTypes.NameIdentifier
+                };
+            });
+        services.AddAuthorization();
+
+        if (!_env.IsDevelopment())
+            services.AddMvc(o =>
+            {
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                o.Filters.Add(new AuthorizeFilter(policy));
+            });
+
+        services.AddControllers();
+        services.AddDbContext<SquipContext>(
+            options =>
+                options.UseNpgsql(
+                    _configuration.GetConnectionString("SquipDatabase"),
+                    x => x.UseNodaTime()
+                )
+        );
+        if (_env.IsDevelopment())
+        {
+            services.AddCors(
                 options =>
-                    options.UseNpgsql(
-                        _configuration.GetConnectionString("SquipDatabase"),
-                        x => x.UseNodaTime()
+                    options.AddDefaultPolicy(
+                        policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
                     )
             );
-            if (_env.IsDevelopment())
-            {
-                services.AddCors(
-                    options =>
-                        options.AddDefaultPolicy(
-                            policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
-                        )
-                );
-                services.AddScoped<IRepository<Idea>, EfIdeaRepository>();
-                services.AddScoped<ISquipRepository, EfIdeaRepository>();
-                services.AddScoped<IUserIdProvider, DevUserIdProvider>();
-                services.AddSwaggerGen();
-            }
-            else
-            {
-                services.AddCors(
-                    options =>
-                        options.AddDefaultPolicy(
-                            policy =>
-                                policy
-                                    .WithOrigins(
-                                        "https://squip-project.web.app",
-                                        "https://app.thawta.co"
-                                    )
-                                    .AllowAnyMethod()
-                                    .AllowAnyHeader()
-                        )
-                );
-                services.AddScoped<IUserIdProvider, UserIdProvider>();
-            }
-
             services.AddScoped<IRepository<Idea>, EfIdeaRepository>();
             services.AddScoped<ISquipRepository, EfIdeaRepository>();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IUserIdProvider, DevUserIdProvider>();
+            services.AddSwaggerGen();
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        else
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI();
-                app.UseHttpsRedirection();
-            }
-
-            app.UseSerilogRequestLogging();
-            app.UseRouting();
-            app.UseCors();
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            services.AddCors(
+                options =>
+                    options.AddDefaultPolicy(
+                        policy =>
+                            policy
+                                .WithOrigins(
+                                    "https://squip-project.web.app",
+                                    "https://app.thawta.co"
+                                )
+                                .AllowAnyMethod()
+                                .AllowAnyHeader()
+                    )
+            );
+            services.AddScoped<IUserIdProvider, UserIdProvider>();
         }
+
+        services.AddScoped<IRepository<Idea>, EfIdeaRepository>();
+        services.AddScoped<ISquipRepository, EfIdeaRepository>();
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+    }
+
+    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI();
+            app.UseHttpsRedirection();
+        }
+
+        app.UseSerilogRequestLogging();
+        app.UseRouting();
+        app.UseCors();
+        app.UseAuthentication();
+        app.UseAuthorization();
+        app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
     }
 }
