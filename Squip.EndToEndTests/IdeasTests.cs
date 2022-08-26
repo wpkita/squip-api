@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net;
 using FluentAssertions;
 using Newtonsoft.Json;
@@ -25,6 +26,13 @@ public class IdeasTests
         var id = responseContent.Id;
         responseContent.Title.Should().Be("Title goes here");
         responseContent.Content.Should().Be("Content goes here");
+
+        var getAllRequest = new RestRequest("ideas");
+        var getAllResponse = await restClient.GetAsync(getAllRequest);
+        getAllResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        var getAllResponseContent = JsonConvert.DeserializeObject<IdeaDto[]>(getAllResponse.Content);
+        var idea = getAllResponseContent.FirstOrDefault(i => i.Id == id);
+        idea.Should().NotBeNull();
 
         var getRequest = new RestRequest($"ideas/{id}");
         var getResponse = await restClient.GetAsync(getRequest);
