@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using NodaTime;
+using NodaTime.Serialization.SystemTextJson;
 using Serilog;
 using Squip.Rest.Domain;
 using Squip.Rest.Repositories;
@@ -57,7 +59,11 @@ public class Startup
                 o.Filters.Add(new AuthorizeFilter(policy));
             });
 
-        services.AddControllers();
+        services.AddControllers().AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+        });
+        ;
         services.AddDbContext<SquipContext>(
             options =>
                 options.UseNpgsql(

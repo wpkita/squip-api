@@ -25,7 +25,7 @@ public class HabitsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<HabitDto>>> GetHabits()
     {
-        var habitsFromDatabase =  await _context.Habits.ToListAsync();
+        var habitsFromDatabase = await _context.Habits.ToListAsync();
 
         var habitDtos = habitsFromDatabase.Select(IdeasProfile.MapHabitToDto);
 

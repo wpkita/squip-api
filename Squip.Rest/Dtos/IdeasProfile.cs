@@ -20,46 +20,69 @@ public class IdeasProfile
         );
     }
 
-    public static Idea MapDtoToIdea(IdeaForCreationDto idea)
+    public static Idea MapDtoToIdea(IdeaForCreationDto ideaForCreationDto)
     {
         return new Idea
         {
-            Title = idea.Title,
-            Content = idea.Content,
-            Tags = idea.Tags.Select(tag => new Tag { Name = tag }).ToList()
+            Title = ideaForCreationDto.Title,
+            Content = ideaForCreationDto.Content,
+            Tags = ideaForCreationDto.Tags.Select(tag => new Tag { Name = tag }).ToList()
         };
     }
 
-    public static Idea MapDtoToIdea(IdeaDto idea)
+    public static Idea MapDtoToIdea(IdeaDto ideaDto)
     {
         return new Idea
         {
-            Id = idea.Id,
-            Title = idea.Title,
-            Content = idea.Content,
-            Tags = idea.Tags.Select(tag => new Tag { Name = tag }).ToList()
+            Id = ideaDto.Id,
+            Title = ideaDto.Title,
+            Content = ideaDto.Content,
+            Tags = ideaDto.Tags.Select(tag => new Tag { Name = tag }).ToList()
         };
     }
 
-    public static Habit MapDtoToHabit(HabitDto habit)
+    public static Habit MapDtoToHabit(HabitDto habitDto)
     {
         return new Habit
         {
-            Id = habit.Id,
-            Name = habit.Name
+            Id = habitDto.Id,
+            Name = habitDto.Name
         };
     }
 
-    public static Habit MapDtoToHabit(HabitForCreationDto habit)
+    public static Habit MapDtoToHabit(HabitForCreationDto habitForCreationDto)
     {
         return new Habit
         {
-            Name = habit.Name
+            Name = habitForCreationDto.Name
         };
     }
 
     public static HabitDto MapHabitToDto(Habit habit)
     {
         return new HabitDto(habit.Id, habit.Name);
+    }
+
+    public static Hibit MapDtoToHibit(HibitDto hibitDto)
+    {
+        return new Hibit
+        {
+            Id = hibitDto.Id,
+            HabitId = hibitDto.HabitId,
+            InstantCreatedAt = hibitDto.InstantOccurredAt
+        };
+    }
+
+    public static Hibit MapDtoToHibit(HibitForCreationDto hibitForCreationDto)
+    {
+        return new Hibit
+        {
+            HabitId = hibitForCreationDto.HabitId
+        };
+    }
+
+    public static HibitDto MapHibitToDto(Hibit hibit)
+    {
+        return new HibitDto(hibit.Id, hibit.HabitId, hibit.InstantOccurredAt);
     }
 }
