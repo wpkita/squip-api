@@ -22,6 +22,7 @@ public class SquipContext : DbContext
     public DbSet<Tag> Tags { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Log> Logs { get; set; }
+    public DbSet<Habit> Habits { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -40,4 +40,26 @@ public class IdeasProfile
             Tags = idea.Tags.Select(tag => new Tag { Name = tag }).ToList()
         };
     }
+
+    public static Habit MapDtoToHabit(HabitDto habit)
+    {
+        return new Habit
+        {
+            Id = habit.Id,
+            Name = habit.Name
+        };
+    }
+
+    public static Habit MapDtoToHabit(HabitForCreationDto habit)
+    {
+        return new Habit
+        {
+            Name = habit.Name
+        };
+    }
+
+    public static HabitDto MapHabitToDto(Habit habit)
+    {
+        return new HabitDto(habit.Id, habit.Name);
+    }
 }
