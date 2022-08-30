@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
-using Serilog.Sinks.Elasticsearch;
 
 namespace Squip.Rest;
 
@@ -44,19 +43,6 @@ public class Program
             .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
             .Enrich.FromLogContext()
             .WriteTo.Console()
-            .WriteTo.Elasticsearch(
-                new ElasticsearchSinkOptions(new Uri(configuration["Elasticsearch:Uri"]))
-                {
-                    TypeName = null,
-                    ModifyConnectionSettings = x =>
-                        x.BasicAuthentication(
-                            configuration["Elasticsearch:Username"],
-                            configuration["Elasticsearch:Password"]
-                        ),
-                    IndexFormat =
-                        $"{Assembly.GetExecutingAssembly().GetName().Name.ToLower()}-{configuration["Environment"].Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}"
-                }
-            )
             .CreateLogger();
     }
 
