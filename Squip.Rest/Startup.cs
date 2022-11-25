@@ -81,7 +81,7 @@ public class Startup
             );
             services.AddScoped<IRepository<Idea>, EfIdeaRepository>();
             services.AddScoped<ISquipRepository, EfIdeaRepository>();
-            services.AddScoped<IUserIdProvider, DevUserIdProvider>();
+            services.AddScoped<IUserIdProvider, UserIdProvider>();
             services.AddSwaggerGen();
         }
         else
