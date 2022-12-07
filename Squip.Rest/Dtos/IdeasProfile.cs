@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Squip.Rest.Domain;
 
@@ -26,7 +27,7 @@ public class IdeasProfile
         {
             Title = ideaForCreationDto.Title,
             Content = ideaForCreationDto.Content,
-            Tags = ideaForCreationDto.Tags.Select(tag => new Tag { Name = tag }).ToList()
+            Tags = ideaForCreationDto.Tags == null ? new List<Tag>() : ideaForCreationDto.Tags.Select(tag => new Tag { Name = tag }).ToList()
         };
     }
 
