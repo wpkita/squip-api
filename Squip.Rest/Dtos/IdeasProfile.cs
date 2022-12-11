@@ -86,4 +86,17 @@ public class IdeasProfile
     {
         return new HibitDto(hibit.Id, hibit.HabitId, hibit.InstantOccurredAt);
     }
+
+    public static Mood MapDtoToMood(MoodForCreationDto moodForCreationDto)
+    {
+        return new Mood
+        {
+            Name = moodForCreationDto.Name
+        };
+    }
+
+    public static MoodDto MapMoodToDto(Mood mood)
+    {
+        return new MoodDto(mood.Id, mood.Name);
+    }
 }
