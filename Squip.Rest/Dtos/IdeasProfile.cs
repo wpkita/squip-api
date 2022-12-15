@@ -99,4 +99,13 @@ public class IdeasProfile
     {
         return new MoodDto(mood.Id, mood.Name);
     }
+
+    public static MoodEntry MapDtoToMoodEntry(MoodEntryDto moodEntryDto)
+    {
+        return new MoodEntry
+        {
+            MoodId = moodEntryDto.MoodId,
+            Magnitude = moodEntryDto.Magnitude
+        };
+    }
 }
