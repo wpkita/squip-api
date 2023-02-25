@@ -108,4 +108,17 @@ public class IdeasProfile
             Magnitude = moodEntryDto.Magnitude
         };
     }
+
+    public static TargetDto MapTargetToDto(Target target)
+    {
+        return new TargetDto(target.Id, target.Name);
+    }
+
+    public static Target MapDtoToTarget(TargetForCreationDto targetForCreationDto)
+    {
+        return new Target
+        {
+            Name = targetForCreationDto.Name
+        };
+    }
 }

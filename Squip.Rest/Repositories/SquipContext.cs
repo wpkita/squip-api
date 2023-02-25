@@ -26,6 +26,8 @@ public class SquipContext : DbContext
     public DbSet<Hibit> Hibits { get; set; }
     public DbSet<Mood> Moods { get; set; }
     public DbSet<MoodEntry> MoodEntries { get; set; }
+    public DbSet<Target> Targets { get; set; }
+    public DbSet<TargetEntry> TargetEntries { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
