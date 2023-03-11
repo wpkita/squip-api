@@ -27,7 +27,9 @@ public class IdeasProfile
         {
             Title = ideaForCreationDto.Title,
             Content = ideaForCreationDto.Content,
-            Tags = ideaForCreationDto.Tags == null ? new List<Tag>() : ideaForCreationDto.Tags.Select(tag => new Tag { Name = tag }).ToList()
+            Tags = ideaForCreationDto.Tags == null
+                ? new List<Tag>()
+                : ideaForCreationDto.Tags.Select(tag => new Tag { Name = tag }).ToList()
         };
     }
 
@@ -120,5 +122,21 @@ public class IdeasProfile
         {
             Name = targetForCreationDto.Name
         };
+    }
+
+    public static TargetEntry MapDtoToTargetEntry(TargetEntryForCreationDto targetEntryForCreationDto)
+    {
+        return new TargetEntry
+        {
+            TargetId = targetEntryForCreationDto.TargetId,
+            Magnitude = targetEntryForCreationDto.Magnitude,
+            DidEngage = targetEntryForCreationDto.DidEngage
+        };
+    }
+
+    public static TargetEntryDto MapTargetEntryToDto(TargetEntry targetEntry)
+    {
+        return new TargetEntryDto(targetEntry.Id, targetEntry.TargetId, targetEntry.Magnitude, targetEntry.DidEngage,
+            targetEntry.InstantOccurredAt);
     }
 }
