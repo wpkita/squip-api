@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squip.TestPlayground", "Squip.TestPlayground\Squip.TestPlayground.csproj", "{7E6FE4E1-F551-4B8B-993F-458B922919EE}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squip.Rest", "Squip.Rest\Squip.Rest.csproj", "{D1A5936C-3842-4EF5-AE59-440302DD8E0E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squip.Rest.Tests", "Squip.Rest.Tests\Squip.Rest.Tests.csproj", "{A25E8306-067D-4E19-80F2-CAD03E5FB24E}"
@@ -27,18 +25,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7E6FE4E1-F551-4B8B-993F-458B922919EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7E6FE4E1-F551-4B8B-993F-458B922919EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7E6FE4E1-F551-4B8B-993F-458B922919EE}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{7E6FE4E1-F551-4B8B-993F-458B922919EE}.Debug|x64.Build.0 = Debug|Any CPU
-		{7E6FE4E1-F551-4B8B-993F-458B922919EE}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{7E6FE4E1-F551-4B8B-993F-458B922919EE}.Debug|x86.Build.0 = Debug|Any CPU
-		{7E6FE4E1-F551-4B8B-993F-458B922919EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7E6FE4E1-F551-4B8B-993F-458B922919EE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7E6FE4E1-F551-4B8B-993F-458B922919EE}.Release|x64.ActiveCfg = Release|Any CPU
-		{7E6FE4E1-F551-4B8B-993F-458B922919EE}.Release|x64.Build.0 = Release|Any CPU
-		{7E6FE4E1-F551-4B8B-993F-458B922919EE}.Release|x86.ActiveCfg = Release|Any CPU
-		{7E6FE4E1-F551-4B8B-993F-458B922919EE}.Release|x86.Build.0 = Release|Any CPU
 		{D1A5936C-3842-4EF5-AE59-440302DD8E0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D1A5936C-3842-4EF5-AE59-440302DD8E0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1A5936C-3842-4EF5-AE59-440302DD8E0E}.Debug|x64.ActiveCfg = Debug|Any CPU
