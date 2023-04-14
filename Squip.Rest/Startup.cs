@@ -59,10 +59,12 @@ public class Startup
                 o.Filters.Add(new AuthorizeFilter(policy));
             });
 
-        services.AddControllers().AddJsonOptions(options =>
-        {
-            options.JsonSerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
-        });
+        services
+            .AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+            });
         ;
         services.AddDbContext<SquipContext>(
             options =>
@@ -93,7 +95,7 @@ public class Startup
                             policy
                                 .WithOrigins(
                                     "https://squip-project.web.app",
-                                    "https://app.thawta.co"
+                                    "https://app.squip.ai"
                                 )
                                 .AllowAnyMethod()
                                 .AllowAnyHeader()
@@ -123,6 +125,9 @@ public class Startup
         app.UseCors();
         app.UseAuthentication();
         app.UseAuthorization();
-        app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+        });
     }
 }
