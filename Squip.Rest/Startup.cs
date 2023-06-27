@@ -13,9 +13,10 @@ using Microsoft.IdentityModel.Tokens;
 using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
 using Serilog;
-using Squip.Rest.Domain;
-using Squip.Rest.Repositories;
-using Squip.Rest.Services;
+using Squip.Rest.Ideas.Domain;
+using Squip.Rest.Infrastructure.Common;
+using Squip.Rest.Infrastructure.EntityFramework;
+using Squip.Rest.Users.Services;
 
 namespace Squip.Rest;
 

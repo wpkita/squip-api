@@ -5,11 +5,11 @@ using FluentAssertions;
 using NodaTime;
 using NodaTime.Serialization.JsonNet;
 using RestSharp;
-using Squip.Rest.Dtos;
 using Xunit;
 using System.Text.Json;
 using NodaTime.Serialization.SystemTextJson;
 using RestSharp.Serializers.Json;
+using Squip.Rest.Habits.Dtos;
 
 namespace Squip.EndToEndTests;
 

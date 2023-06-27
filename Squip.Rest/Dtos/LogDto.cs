@@ -1,3 +1,0 @@
-namespace Squip.Rest.Dtos;
-
-public record LogDto(string Message);

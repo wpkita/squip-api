@@ -1,5 +1,5 @@
 using FluentAssertions;
-using Squip.Rest.Domain;
+using Squip.Rest.Ideas.Domain;
 using Xunit;
 
 namespace Squip.Rest.Tests.Domain;

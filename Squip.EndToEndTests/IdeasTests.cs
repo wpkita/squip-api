@@ -4,7 +4,7 @@ using System.Net;
 using FluentAssertions;
 using Newtonsoft.Json;
 using RestSharp;
-using Squip.Rest.Dtos;
+using Squip.Rest.Ideas.Dtos;
 using Xunit;
 
 namespace Squip.EndToEndTests;
