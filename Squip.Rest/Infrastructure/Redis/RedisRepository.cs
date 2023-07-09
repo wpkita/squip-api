@@ -114,6 +114,11 @@ public abstract class RedisRepository<T> : IRepository<T> where T : IChangeable
         return didSucceed;
     }
 
+    public Task<IEnumerable<string>> GetAllTagsAsync(CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
     private string EntityRedisKey(Guid id)
     {
         return $"{EntityName}:{id}";

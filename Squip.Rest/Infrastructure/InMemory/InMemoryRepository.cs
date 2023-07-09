@@ -54,4 +54,9 @@ public class InMemoryRepository<T> : IRepository<T> where T : IChangeable
         _entities.Remove(entity);
         return Task.FromResult(true);
     }
+
+    public Task<IEnumerable<string>> GetAllTagsAsync(CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }

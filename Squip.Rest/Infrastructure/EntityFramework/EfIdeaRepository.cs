@@ -134,4 +134,14 @@ public class EfIdeaRepository : IRepository<Idea>, ISquipRepository
 
         return new Tuple<Idea, Idea>(firstIdea, secondIdea);
     }
+
+    public async Task<IEnumerable<string>> GetAllTagsAsync(CancellationToken cancellationToken)
+    {
+        var tags = await _context.Tags
+            .Select(tag => tag.Name)
+            .Distinct()
+            .ToListAsync(cancellationToken);
+
+        return tags;
+    }
 }

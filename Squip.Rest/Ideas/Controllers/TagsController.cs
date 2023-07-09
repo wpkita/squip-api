@@ -20,6 +20,14 @@ public class TagsController : ControllerBase
         _ideaRepository = ideaRepository;
     }
 
+    [HttpGet]
+    public async Task<IEnumerable<string>> GetAll(CancellationToken cancellationToken)
+    {
+        var tags = await _ideaRepository.GetAllTagsAsync(cancellationToken);
+
+        return tags;
+    }
+
     [HttpGet("{tagName}/ideas")]
     public async Task<IEnumerable<IdeaDto>> GetByTagAsync(string tagName, CancellationToken cancellationToken)
     {
