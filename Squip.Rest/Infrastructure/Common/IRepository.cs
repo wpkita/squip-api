@@ -11,6 +11,7 @@ public interface IRepository<T> where T : IChangeable
     Task<bool> DoesExistByIdAsync(Guid id, CancellationToken cancellationToken);
     Task<T> GetByIdAsync(Guid id, CancellationToken cancellationToken);
     Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken);
+    Task<IEnumerable<T>> GetByTagAsync(string tagName, CancellationToken cancellationToken);
     Task<bool> CreateAsync(T t, CancellationToken cancellationToken);
     Task<bool> UpdateAsync(T t, CancellationToken cancellationToken);
     Task<bool> ArchiveAsync(Guid id, CancellationToken cancellationToken);

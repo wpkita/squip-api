@@ -75,6 +75,11 @@ public abstract class RedisRepository<T> : IRepository<T> where T : IChangeable
         return entities;
     }
 
+    public async Task<IEnumerable<T>> GetByTagAsync(string tagName, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<bool> CreateAsync(T entity, CancellationToken cancellationToken)
     {
         entity.PreCreate();

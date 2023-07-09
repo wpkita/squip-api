@@ -48,6 +48,18 @@ public class EfIdeaRepository : IRepository<Idea>, ISquipRepository
         return ideas;
     }
 
+    public async Task<IEnumerable<Idea>> GetByTagAsync(string tagName, CancellationToken cancellationToken)
+    {
+        var ideasByTag = await _context.Tags
+            .Where(tag => tag.Name == tagName)
+            .Select(tag => tag.Idea)
+            .Distinct()
+            .OrderByDescending(idea => idea.EloRating)
+            .ToListAsync(cancellationToken);
+
+        return ideasByTag;
+    }
+
     public async Task<bool> CreateAsync(Idea idea, CancellationToken cancellationToken)
     {
         idea.EloRating = 400;

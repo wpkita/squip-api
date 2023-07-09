@@ -27,6 +27,11 @@ public class InMemoryRepository<T> : IRepository<T> where T : IChangeable
         return Task.FromResult(_entities.AsEnumerable());
     }
 
+    public Task<IEnumerable<T>> GetByTagAsync(string tagName, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<bool> CreateAsync(T t, CancellationToken cancellationToken)
     {
         t.Id = Guid.NewGuid();
