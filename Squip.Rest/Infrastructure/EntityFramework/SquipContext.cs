@@ -47,7 +47,6 @@ public class SquipContext : DbContext
         modelBuilder.Entity<Game>().Navigation(game => game.Left).AutoInclude();
         modelBuilder.Entity<Game>().Navigation(game => game.Right).AutoInclude();
 
-        modelBuilder.Entity<Tag>().HasAlternateKey(tag => new { tag.IdeaId, tag.Name });
         modelBuilder.Entity<Tag>().HasIndex(tag => tag.Name);
 
         modelBuilder.Entity<Idea>().Navigation(idea => idea.Tags).AutoInclude();
