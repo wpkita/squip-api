@@ -42,6 +42,7 @@ public class EfIdeaRepository : IRepository<Idea>, ISquipRepository
     public async Task<IEnumerable<Idea>> GetAllAsync(CancellationToken cancellationToken)
     {
         var ideas = await _context.Ideas
+            .Where(idea => !idea.Tags.Any())
             .OrderByDescending(idea => idea.EloRating)
             .ToListAsync(cancellationToken);
 
@@ -138,6 +139,7 @@ public class EfIdeaRepository : IRepository<Idea>, ISquipRepository
     public async Task<IEnumerable<string>> GetAllTagsAsync(CancellationToken cancellationToken)
     {
         var tags = await _context.Tags
+            .Where(tag => tag.Idea != null)
             .Select(tag => tag.Name.ToLower())
             .Distinct()
             .ToListAsync(cancellationToken);
