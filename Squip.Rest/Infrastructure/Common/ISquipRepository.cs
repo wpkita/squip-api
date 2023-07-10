@@ -8,5 +8,5 @@ namespace Squip.Rest.Infrastructure.Common;
 public interface ISquipRepository
 {
     Task<Idea> GetRandomIdeaAsync(CancellationToken cancellationToken);
-    Task<Tuple<Idea, Idea>> GetRandomIdeaPairAsync(CancellationToken cancellationToken);
+    Task<Tuple<Idea, Idea>> GetRandomIdeaPairAsync(string filter, CancellationToken cancellationToken);
 }

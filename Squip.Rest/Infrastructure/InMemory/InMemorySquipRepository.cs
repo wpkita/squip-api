@@ -13,7 +13,7 @@ public class InMemorySquipRepository : ISquipRepository
         return Task.FromResult(new Idea { Id = Guid.NewGuid(), Content = "Hello world!" });
     }
 
-    public Task<Tuple<Idea, Idea>> GetRandomIdeaPairAsync(CancellationToken cancellationToken)
+    public Task<Tuple<Idea, Idea>> GetRandomIdeaPairAsync(string filter, CancellationToken cancellationToken)
     {
         return Task.FromResult(
             new Tuple<Idea, Idea>(

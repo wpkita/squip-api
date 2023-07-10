@@ -23,9 +23,10 @@ public class GamesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<GameDto>> GetAsync(CancellationToken cancellationToken)
+    public async Task<ActionResult<GameDto>> GetAsync([FromQuery] string filter, CancellationToken cancellationToken)
     {
         var (leftIdea, rightIdea) = await _squipRepository.GetRandomIdeaPairAsync(
+            filter,
             cancellationToken
         );
 

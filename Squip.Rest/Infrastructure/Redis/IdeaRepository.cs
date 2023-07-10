@@ -24,7 +24,7 @@ public class IdeaRepository : RedisRepository<Idea>, ISquipRepository
         return randomIdea;
     }
 
-    public Task<Tuple<Idea, Idea>> GetRandomIdeaPairAsync(CancellationToken cancellationToken)
+    public Task<Tuple<Idea, Idea>> GetRandomIdeaPairAsync(string filter, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

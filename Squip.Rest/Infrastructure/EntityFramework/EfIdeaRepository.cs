@@ -117,10 +117,24 @@ public class EfIdeaRepository : IRepository<Idea>, ISquipRepository
     }
 
     public async Task<Tuple<Idea, Idea>> GetRandomIdeaPairAsync(
+        string filter,
         CancellationToken cancellationToken
     )
     {
-        var ideas = await _context.Ideas.ToListAsync(cancellationToken);
+        IList<Idea> ideas;
+        if (string.IsNullOrWhiteSpace(filter))
+        {
+            ideas = await _context.Ideas
+                .Where(idea => !idea.Tags.Any())
+                .ToListAsync(cancellationToken);
+        }
+        else
+        {
+            ideas = await _context.Tags
+                .Where(tag => tag.Name.ToLower() == filter.ToLower())
+                .Select(tag => tag.Idea)
+                .ToListAsync(cancellationToken);
+        }
         if (ideas.Count < 2)
             return new Tuple<Idea, Idea>(new Idea(), new Idea());
 
