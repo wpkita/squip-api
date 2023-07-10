@@ -51,7 +51,7 @@ public class EfIdeaRepository : IRepository<Idea>, ISquipRepository
     public async Task<IEnumerable<Idea>> GetByTagAsync(string tagName, CancellationToken cancellationToken)
     {
         var ideasByTag = await _context.Tags
-            .Where(tag => tag.Name == tagName)
+            .Where(tag => tag.Name.ToLower() == tagName.ToLower())
             .Select(tag => tag.Idea)
             .Distinct()
             .OrderByDescending(idea => idea.EloRating)
@@ -138,7 +138,7 @@ public class EfIdeaRepository : IRepository<Idea>, ISquipRepository
     public async Task<IEnumerable<string>> GetAllTagsAsync(CancellationToken cancellationToken)
     {
         var tags = await _context.Tags
-            .Select(tag => tag.Name)
+            .Select(tag => tag.Name.ToLower())
             .Distinct()
             .ToListAsync(cancellationToken);
 
