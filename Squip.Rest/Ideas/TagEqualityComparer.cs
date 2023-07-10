@@ -15,7 +15,7 @@ public class TagEqualityComparer : IEqualityComparer<Tag>
             return false;
         if (x.GetType() != y.GetType())
             return false;
-        return x.Name == y.Name;
+        return x.Name.ToLower() == y.Name.ToLower();
     }
 
     public int GetHashCode(Tag obj)
