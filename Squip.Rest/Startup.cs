@@ -1,3 +1,4 @@
+using System;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
 using Serilog;
@@ -85,7 +87,37 @@ public class Startup
             services.AddScoped<IRepository<Idea>, EfIdeaRepository>();
             services.AddScoped<ISquipRepository, EfIdeaRepository>();
             services.AddScoped<IUserIdProvider, UserIdProvider>();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Squip", Version = "v1" });
+                c.AddSecurityDefinition(
+                    "token",
+                    new OpenApiSecurityScheme
+                    {
+                        Type = SecuritySchemeType.ApiKey,
+                        BearerFormat = "JWT",
+                        Scheme = "Bearer",
+                        In = ParameterLocation.Header,
+                        Name = "Authorization"
+                    }
+                );
+                c.AddSecurityRequirement(
+                    new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "token"
+                                },
+                            },
+                            Array.Empty<string>()
+                        }
+                    }
+                );
+            });
         }
         else
         {
