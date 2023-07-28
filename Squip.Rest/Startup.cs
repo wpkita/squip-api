@@ -74,7 +74,7 @@ public class Startup
                 options.UseNpgsql(
                     _configuration.GetConnectionString("SquipDatabase"),
                     x => x.UseNodaTime()
-                )
+                ).UseSnakeCaseNamingConvention()
         );
         if (_env.IsDevelopment())
         {
