@@ -5,7 +5,7 @@ using Squip.Rest.Ideas.Dtos;
 
 namespace Squip.Rest.Ideas;
 
-public class IdeasProfile
+public static class IdeasProfile
 {
     public static GameDto MapGameToDto(Game game)
     {
