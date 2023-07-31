@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using Squip.Rest.Habits.Dtos;
 using Squip.Rest.Infrastructure.EntityFramework;
+using Squip.Rest.Users.Services;
 
 namespace Squip.Rest.Habits.Controllers;
 
@@ -15,10 +16,12 @@ namespace Squip.Rest.Habits.Controllers;
 public class DailySummariesController : ControllerBase
 {
     private readonly SquipContext _context;
+    private readonly IUserIdProvider _userIdProvider;
 
-    public DailySummariesController(SquipContext context)
+    public DailySummariesController(SquipContext context, IUserIdProvider userIdProvider)
     {
         _context = context;
+        _userIdProvider = userIdProvider;
     }
 
     [HttpGet]
@@ -34,9 +37,13 @@ public class DailySummariesController : ControllerBase
             hibit => hibit.InstantOccurredAt >= startOfDate && hibit.InstantOccurredAt < endOfDate
         );
 
-        var targetTotalCount = 0;
+        var percentile = 0.5;
 
-        var dailySummaryDto = new DailySummaryDto(targetTotalCount, dailyTotalCount);
+        var dailyHabitGoal = await _context.DailyHabitSummaries
+            .FromSqlInterpolated(
+                $"select get_daily_habit_total_by_percentile({percentile}, {new Guid("55ce7706-7cac-47d0-90ca-1273d28bb1b6")}) as goal")
+            .FirstAsync();
+        var dailySummaryDto = new DailySummaryDto((int)Math.Ceiling(dailyHabitGoal.Goal), dailyTotalCount);
 
         return Ok(dailySummaryDto);
     }

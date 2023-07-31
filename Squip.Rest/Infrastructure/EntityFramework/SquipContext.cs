@@ -34,6 +34,7 @@ public class SquipContext : DbContext
     public DbSet<MoodEntry> MoodEntries { get; set; }
     public DbSet<Target> Targets { get; set; }
     public DbSet<TargetEntry> TargetEntries { get; set; }
+    public DbSet<DailyHabitSummary> DailyHabitSummaries { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -53,6 +54,8 @@ public class SquipContext : DbContext
         modelBuilder.Entity<Idea>().Property(idea => idea.UserId).IsRequired();
 
         modelBuilder.Entity<User>().HasAlternateKey(user => user.OidcSub);
+
+        modelBuilder.Entity<DailyHabitSummary>().HasNoKey();
     }
 
     public override Task<int> SaveChangesAsync(
