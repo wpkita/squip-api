@@ -8,7 +8,7 @@ namespace Squip.Rest.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            var dailyHabitTotalByPercentileFunction = """
+            var dailyHabitTotalByPercentileFunction = @"
                 CREATE OR REPLACE FUNCTION get_daily_habit_total_by_percentile(input_percentile double precision, input_user_id uuid)
                 RETURNS double precision AS
                 $$
@@ -24,7 +24,7 @@ namespace Squip.Rest.Migrations
                       group by date(hib.instant_occurred_at - interval '5 hours')) as c
                 $$
                 LANGUAGE SQL;
-                """;
+                ";
             migrationBuilder.Sql(dailyHabitTotalByPercentileFunction);
         }
 
