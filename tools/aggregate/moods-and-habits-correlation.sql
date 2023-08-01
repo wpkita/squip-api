@@ -14,7 +14,6 @@ from (select mods.*,
             from hibits as hib
                      inner join habits as hab on hab.id = hib.habit_id
                 and hab.is_archived = false
-                and date(hib.instant_created_at) <> '2022-08-27'
             group by date(hib.instant_created_at)) habs
                inner join (select date(me.instant_created_at) moodDate,
                                   avg(me.magnitude) filter (
@@ -57,6 +56,5 @@ from (select mods.*,
                                     inner join moods as mo on mo.id = me.mood_id
                                and mo.user_id = '55ce7706-7cac-47d0-90ca-1273d28bb1b6'
                                and mo.is_archived = false
-                               and date(me.instant_created_at) <> '2022-08-27'
                            group by date(me.instant_created_at)) mods on habs.habitDate = mods.moodDate
       order by mods.moodDate) dailyTotals

@@ -9,7 +9,6 @@ from (select date(d),
                left outer join hibits as hib
                inner join habits as hab on hab.id = hib.habit_id on hib.instant_created_at :: Date = date(d)
           and hab.is_archived = false
-          and date(hib.instant_created_at) <> '2022-08-27'
       group by date(d)) habs
          inner join (select date(d),
                             avg(me.magnitude) filter (
@@ -58,5 +57,4 @@ from (select date(d),
                          and mo.user_id = '55ce7706-7cac-47d0-90ca-1273d28bb1b6'
                                          on me.instant_created_at :: Date = date(d)
                                              and mo.is_archived = false
-                                             and date(me.instant_created_at) <> '2022-08-27'
                      group by date(d)) mods on habs.date = mods.date

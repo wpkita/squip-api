@@ -9,6 +9,5 @@ from generate_series(
          inner join habits as hab
                     on hab.id = hib.habit_id on hib.instant_created_at :: Date = date(d)
     and hab.is_archived = false
-    and date(hib.instant_created_at) <> '2022-08-27'
 group by date(d)
 order by date(d) asc
