@@ -37,7 +37,7 @@ public class DailySummariesController : ControllerBase
             hibit => hibit.InstantOccurredAt >= startOfDate && hibit.InstantOccurredAt < endOfDate
         );
 
-        const double percentile = 0.7;
+        const double percentile = 0.9;
 
         var dailyHabitGoal = await _context.DailyHabitSummaries
             .FromSqlInterpolated(
