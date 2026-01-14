@@ -19,7 +19,7 @@ public class IdeaRepository : RedisRepository<Idea>, ISquipRepository
     {
         var randomIdeaId = await RedisDb.SetRandomMemberAsync(ActiveEntityIdsSetName);
 
-        var randomIdea = await GetByIdAsync(Guid.Parse(randomIdeaId), cancellationToken);
+        var randomIdea = await GetByIdAsync(Guid.Parse((string)randomIdeaId!), cancellationToken);
 
         return randomIdea;
     }

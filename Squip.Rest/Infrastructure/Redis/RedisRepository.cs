@@ -68,7 +68,7 @@ public abstract class RedisRepository<T> : IRepository<T> where T : IChangeable
         var entityIds = await RedisDb.SetMembersAsync(ActiveEntityIdsSetName);
         foreach (var entityId in entityIds)
         {
-            var entity = await GetByIdAsync(Guid.Parse(entityId), cancellationToken);
+            var entity = await GetByIdAsync(Guid.Parse((string)entityId!), cancellationToken);
             entities.Add(entity);
         }
 
