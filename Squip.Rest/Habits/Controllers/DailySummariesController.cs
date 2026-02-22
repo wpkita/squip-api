@@ -39,9 +39,12 @@ public class DailySummariesController : ControllerBase
 
         const double percentile = 0.9;
 
+        var oidcSub = _userIdProvider.GetCurrentUserId();
+        var user = await _context.Users.SingleAsync(u => u.OidcSub == oidcSub);
+
         var dailyHabitGoal = await _context.DailyHabitSummaries
             .FromSqlInterpolated(
-                $"select habit_total_by_percentile({percentile}, {timeZone}, {new Guid("55ce7706-7cac-47d0-90ca-1273d28bb1b6")}) as goal")
+                $"select habit_total_by_percentile({percentile}, {timeZone}, {user.Id}) as goal")
             .FirstAsync();
         var dailySummaryDto = new DailySummaryDto((int)Math.Ceiling(dailyHabitGoal.Goal), dailyTotalCount);
 
