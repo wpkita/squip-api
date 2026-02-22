@@ -38,7 +38,7 @@ from (select date(me.instant_created_at),
                  ) as "Anger"
       from moods m
                inner join mood_entries me on m.id = me.mood_id
-      where m.user_id = '55ce7706-7cac-47d0-90ca-1273d28bb1b6'
+      where m.user_id = :'user_id'
         and m.is_archived = false
         and me.is_archived = false
       group by date(me.instant_created_at)

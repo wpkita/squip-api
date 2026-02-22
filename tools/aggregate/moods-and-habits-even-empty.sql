@@ -54,7 +54,7 @@ from (select date(d),
                               ) as gs(d)
                               left outer join mood_entries as me
                               inner join moods as mo on mo.id = me.mood_id
-                         and mo.user_id = '55ce7706-7cac-47d0-90ca-1273d28bb1b6'
+                         and mo.user_id = :'user_id'
                                          on me.instant_created_at :: Date = date(d)
                                              and mo.is_archived = false
                      group by date(d)) mods on habs.date = mods.date

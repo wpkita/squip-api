@@ -60,6 +60,3 @@ where m.user_id = input_user_id
 group by date(me.instant_created_at at time zone input_time_zone)
 order by date(me.instant_created_at at time zone input_time_zone)
 $$ language sql;
-
-
-select * from mood_entries_by_day('America/Chicago', '55ce7706-7cac-47d0-90ca-1273d28bb1b6')

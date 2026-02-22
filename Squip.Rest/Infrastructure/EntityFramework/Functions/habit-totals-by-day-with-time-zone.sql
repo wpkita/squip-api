@@ -17,6 +17,3 @@ where habits.is_archived = false
 group by date(instant_occurred_at at time zone input_time_zone)
 $$
     language sql;
-
-select *
-from habit_totals_by_day_with_time_zone('America/Chicago', '55ce7706-7cac-47d0-90ca-1273d28bb1b6')
