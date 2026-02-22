@@ -1,7 +1,28 @@
+## Build output
 bin/
 obj/
+
+## IDE / editor
 .vscode/
 .vs/
-*.user
-*.pubxml
 .idea/
+*.user
+*.suo
+*.sln.DotSettings.user
+
+## Publish profiles
+*.pubxml
+*.pubxml.user
+
+## Secrets and local config
+.env
+appsettings.*.local.json
+*.pfx
+*.pem
+
+## Docker
+docker-compose.override.yml
+
+## OS files
+Thumbs.db
+.DS_Store

@@ -45,8 +45,10 @@ public class Startup
             })
             .AddJwtBearer(options =>
             {
-                options.Authority = _configuration["Auth0:Authority"];
-                options.Audience = _configuration["Auth0:Audience"];
+                options.Authority = _configuration["Auth0:Authority"]
+                    ?? throw new InvalidOperationException("Auth0:Authority configuration is required.");
+                options.Audience = _configuration["Auth0:Audience"]
+                    ?? throw new InvalidOperationException("Auth0:Audience configuration is required.");
 
                 // This makes the UserId present in the User.Identity.Name property
                 options.TokenValidationParameters = new TokenValidationParameters
@@ -115,15 +117,14 @@ public class Startup
         }
         else
         {
+            var corsOrigins = _configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+                ?? throw new InvalidOperationException("Cors:AllowedOrigins configuration is required in production.");
             services.AddCors(
                 options =>
                     options.AddDefaultPolicy(
                         policy =>
                             policy
-                                .WithOrigins(
-                                    "https://squip-project.web.app",
-                                    "https://app.squip.ai"
-                                )
+                                .WithOrigins(corsOrigins)
                                 .AllowAnyMethod()
                                 .AllowAnyHeader()
                     )
