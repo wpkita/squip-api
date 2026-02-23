@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Squip.Rest.Verify.Individual;
 using Squip.Rest.Verify.EndToEnd;
+using Squip.Rest.Verify.SearchVerification;
 
 namespace Squip.Rest.Verify;
 
@@ -14,6 +15,11 @@ class Program
         Console.WriteLine("Target: https://localhost:8080");
 
         var runner = new TestRunner();
+
+        // Search verification tests
+        Console.WriteLine("\n=== Search Verification Tests ===");
+
+        await new SearchVerificationTests(runner).RunAll();
 
         // Individual endpoint tests
         Console.WriteLine("\n=== Individual Endpoint Tests ===");

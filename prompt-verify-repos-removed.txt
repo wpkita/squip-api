@@ -1,0 +1,9 @@
+Add a new folder to Squip.Rest.Verify called SearchVerification that includes a test for each of the following:
+
+- Verify a file exists that matches "*SquipService*" inside Squip.Rest/ or its subdirectories
+- Verify that every file that matches "*Controller.cs" contains the text "SquipService"
+- Verify that every file that matches "*Controller.cs" contains neither: "EntityFramework" nor "SquipContext"
+- Verify that no files inside Squip.Rest/ or its subdirectories match the pattern "*Repository*"
+- Verify that the "Startup.cs" file does not contain the text "UseNpgsql"
+- Verify that Squip.Rest.csproj does NOT contain "Npgsql.EntityFrameworkCore.PostgreSQL"
+- Verify that Squip.Rest.csproj contains "Pomelo.EntityFrameworkCore.MySql"
