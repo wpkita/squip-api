@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd:*)",
+      "Bash(cd /c/Users/wpkit/lib/squip/squip-api && dotnet build Squip.Rest.Verify/Squip.Rest.Verify.csproj 2>&1)"
+    ]
+  }
+}
