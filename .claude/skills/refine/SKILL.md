@@ -21,7 +21,7 @@ Improve this repository one focused change at a time, working from the priority-
 
 Run when the backlog is empty, or when instructed to refresh it.
 
-**Recon first** (Haiku). Establish what kind of repo this is: languages, test and lint tooling, lockfiles and manifests, databases, whether it ships to users, whether it is a published package. Read the target repo's own CLAUDE.md and README — they are the source of repo-specific values, so no separate Refine configuration exists or should. Then select the applicable lenses from the catalog below. Never run the whole catalog: an inapplicable lens produces noise candidates and burns unattended budget.
+**Recon first** (Haiku). Establish what kind of repo this is: languages, test and lint tooling, lockfiles and manifests, databases, whether it ships to users, whether it is a published package, and its shape — library, application, CLI, or docs site — because the maturity ladder's rank conditioning depends on it. Read the target repo's own CLAUDE.md and README — they are the source of repo-specific values, so no separate Refine configuration exists or should. Then select the applicable lenses from the catalog below. Never run the whole catalog: an inapplicable lens produces noise candidates and burns unattended budget.
 
 **Lens catalog.** Each lens says how to check, when it applies, and Refine's stance — what "better" means. Stances are Refine's opinions; never ask the user to configure thresholds. Mechanical checks delegate to Haiku; judgment lenses run on Sonnet.
 
@@ -42,10 +42,17 @@ Run when the backlog is empty, or when instructed to refresh it.
 | Missing DB indexes | Schema vs. query patterns | The repo owns a database schema | Index what queries filter and join on |
 | Architecture / readability | Judgment pass over core or recently-touched files | Always | Code is read more than written |
 | Gap analysis | Decisions without artifacts; principles without mechanisms | Always | A stated principle with no mechanism is a bug in the project, not the prose |
+| Maturity ladder | Walk the ranked checklist in [maturity.md](maturity.md) top-down; report gaps with tier and rung | Always — community rungs only when the repo has outside users or contributors | Rank is the opinion: catastrophe > velocity > aesthetics; where a rung overlaps another lens, that lens is the check and the ladder supplies the rank |
 
 Lenses surface candidates; they never set priority. The scoring rubric prices every finding, which is what makes subjective lenses safe — a finding that isn't really a problem in this repo scores low and sinks. The catalog is a floor, not a ceiling: recon may improvise a repo-specific lens when the repo's nature demands one.
 
 **Scoring rubric.** Rate each candidate's `impact` (high/medium/low — user-visible value, or how much it unblocks future iterations) and `effort` (small/medium/large — expected size of the iteration). Qualitative ratings only; numeric scores are false precision. Priority order: impact first, lower effort breaks ties, bugs beat features on equal footing. An item too large for one iteration must be split before it enters the backlog.
+
+Three rules from [maturity.md](maturity.md) bind all scoring, not just ladder findings:
+
+- **Gates, not points.** A failing Tier 0 gate (committed secret, no license, known high/critical CVE) is a high-impact `type: bug` that goes to the top of the backlog; no other candidate outranks it.
+- **Tier anchors impact.** Ladder gaps default to impact by tier — Tier 1 high, Tier 2 medium, Tiers 3–4 low-to-medium — then adjust for this repo's type and stated values.
+- **Enforcement beats documentation.** When two candidates close the same gap, the one that makes a machine enforce the rule (CI gate, hook, architecture test) outranks the one that writes the rule down.
 
 **Diminishing-returns hook.** If a full pass yields only low-impact candidates, evaluate the Stopping Criterion rather than silently continuing.
 
