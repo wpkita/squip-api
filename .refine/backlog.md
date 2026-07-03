@@ -4,12 +4,6 @@ Candidate improvements, one per entry, ordered by priority (topmost is next). It
 
 ## Items
 
-### Fix async void E2E test methods (xUnit1048)
-- type: bug
-- impact: medium — `HabitsTests.cs:16`, `IdeasTests.cs:16`, `HibitsTests.cs:22` can silently swallow assertion failures under `async void`; breaks under xUnit v3.
-- effort: small — mechanical `async void` → `async Task` across 3 files.
-- notes: pure signature change, no logic changes. "Hibit" is a domain term (logged occurrence of a Habit), not a typo.
-
 ### Enforce zero-warning builds
 - type: feature
 - impact: medium — converts the zero-warning state into a machine gate instead of a fact that can rot; enforcement beats documentation.

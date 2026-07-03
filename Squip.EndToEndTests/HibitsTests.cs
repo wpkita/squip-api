@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NodaTime;
 using NodaTime.Serialization.JsonNet;
@@ -19,7 +20,7 @@ public class HibitsTests
     private JsonSerializerOptions serializerSettings = new JsonSerializerOptions { PropertyNameCaseInsensitive = true }.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
 
     [Fact]
-    public async void CreateReadUpdateDelete()
+    public async Task CreateReadUpdateDelete()
     {
         var restClient = new RestClient("https://localhost:8080/api");
         var postHabitRequest = new RestRequest("habits");

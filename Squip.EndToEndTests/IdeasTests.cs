@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Newtonsoft.Json;
 using RestSharp;
@@ -13,7 +14,7 @@ namespace Squip.EndToEndTests;
 public class IdeasTests
 {
     [Fact]
-    public async void CreateReadUpdateDelete()
+    public async Task CreateReadUpdateDelete()
     {
         var restClient = new RestClient("https://localhost:8080/api");
         var postRequest = new RestRequest("ideas");
