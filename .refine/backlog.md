@@ -2,17 +2,6 @@
 
 File order is priority order.
 
-### Upgrade vulnerable NuGet packages (High-severity CVEs)
-type: bug
-impact: high — `Microsoft.OpenApi` 2.3.0 (GHSA-v5pm-xwqc-g5wc) is a direct reference actually used in production (`Startup.cs` Swagger setup), not just a dev-time tool; the rubric treats known CVEs in shipped deps as bugs by definition.
-effort: small — version bumps across a handful of `.csproj` files; `Microsoft.OpenApi` usage in `Startup.cs` is narrow (OpenApiInfo/OpenApiSecurityScheme/OpenApiSecurityRequirement), so a major-version bump is contained to one file.
-notes: |
-  Confirmed via `dotnet list package --vulnerable --include-transitive` on all 4 projects:
-  - `Microsoft.OpenApi` 2.3.0 → High (GHSA-v5pm-xwqc-g5wc). Direct reference in `Squip.Rest/Squip.Rest.csproj`. Latest is 3.7.0 (major bump — check `Squip.Rest/Startup.cs` lines ~93-147 for `OpenApiInfo`, `OpenApiSecurityScheme`, `OpenApiSecuritySchemeReference`, `OpenApiSecurityRequirement` API compat after bumping).
-  - `System.Security.Cryptography.Xml` 9.0.0 → High (GHSA-37gx-xxp4-5rgx, GHSA-w3x6-4m5h-cxqf). Transitive via `Microsoft.NET.Test.Sdk` 18.0.1 in `Squip.Rest.Tests.csproj` / `Squip.EndToEndTests.csproj` (test-only, not shipped in the API). Fix by bumping `Microsoft.NET.Test.Sdk` to 18.7.0 (latest).
-  - `NuGet.Packaging`/`NuGet.Protocol` 6.12.1 → Low (GHSA-g4vj-cjjj-v7hg). Same transitive chain as above; should resolve with the Test SDK bump.
-  Command to re-verify after changes: `dotnet list <csproj> package --vulnerable --include-transitive` for each of the 4 `.csproj` files.
-
 ### Add end-to-end tests for Logs and Moods controllers
 type: feature
 impact: high — `LogsController` (recording Habit occurrences — the core loop the app is named for) and `MoodsController`/`CheckInsController` currently have zero test coverage of any kind, unit or E2E.
@@ -44,13 +33,6 @@ impact: medium — `TargetsController`, `TargetEntriesController`, `TargetSummar
 effort: medium — 3 controllers, ~173 lines of controller code, same mechanical pattern as the Logs/Moods item.
 notes: |
   Same pattern as the Logs/Moods item above: base it on `Squip.EndToEndTests/HabitsTests.cs`, tag `[Trait("Category", "End-to-end")]`. Covers `Squip.Rest/Targets/Controllers/TargetsController.cs`, `TargetEntriesController.cs`, `TargetSummariesController.cs`. Check `Squip.Rest/Targets/Dtos` for request/response shapes — `TargetSummariesController` may be read-only (summary/aggregation endpoint) rather than full CRUD, so its test should only cover the actual verbs it exposes.
-
-### Resolve NU1608 Microsoft.CodeAnalysis version conflicts
-type: bug
-impact: low — pure build-warning noise from a transitive version mismatch (`Microsoft.CodeAnalysis.CSharp.Features` 4.14.0 wants `Microsoft.CodeAnalysis.Common` 4.14.0, resolved to 5.0.0); compile-time only, no runtime behavior affected.
-effort: small — likely a side effect of bumping `Microsoft.NET.Test.Sdk` in the CVE item above; otherwise an explicit transitive pin in the affected `.csproj`.
-notes: |
-  Re-run `dotnet list Squip.Rest.Tests/Squip.Rest.Tests.csproj package --include-transitive 2>&1 | grep NU1608` after the CVE item lands — if it already cleared, delete this item instead of doing extra work. If not, pin `Microsoft.CodeAnalysis.Common`/`Microsoft.CodeAnalysis.CSharp`/`Microsoft.CodeAnalysis.Workspaces.Common`/`Microsoft.CodeAnalysis.CSharp.Workspaces` to matching versions via explicit `PackageReference` entries in `Squip.Rest.Tests.csproj`.
 
 ### Enable .NET built-in analyzers
 type: feature
