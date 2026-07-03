@@ -4,12 +4,6 @@ Candidate improvements, one per entry, ordered by priority (topmost is next). It
 
 ## Items
 
-### Fix obsolete EF Core `GetQueryFilter()` call (CS0618)
-- type: bug
-- impact: medium — `Squip.Rest/Infrastructure/EntityFramework/EntityFrameworkExtensions.cs:28` is load-bearing for every entity's query filter; the obsolete API will break on a future EF Core bump.
-- effort: small — single file, one method.
-- notes: swap `entityType.GetQueryFilter()` for `GetDeclaredQueryFilters()` (returns a collection — combine with `AndAlso` across declared filters). Verify with `dotnet test` since query filters affect every EF query.
-
 ### Fix async void E2E test methods (xUnit1048)
 - type: bug
 - impact: medium — `HabitsTests.cs:16`, `IdeasTests.cs:16`, `HibitsTests.cs:22` can silently swallow assertion failures under `async void`; breaks under xUnit v3.

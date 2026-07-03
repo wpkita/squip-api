@@ -25,13 +25,12 @@ public static class EntityFrameworkExtensions
                 expression.Body
             );
 
-            var currentQueryFilter = entityType.GetQueryFilter();
-            if (currentQueryFilter != null)
+            foreach (var currentQueryFilter in entityType.GetDeclaredQueryFilters())
             {
                 var currentExpressionFilter = ReplacingExpressionVisitor.Replace(
-                    currentQueryFilter.Parameters.Single(),
+                    currentQueryFilter.Expression.Parameters.Single(),
                     parameterType,
-                    currentQueryFilter.Body
+                    currentQueryFilter.Expression.Body
                 );
                 expressionFilter = Expression.AndAlso(currentExpressionFilter, expressionFilter);
             }
